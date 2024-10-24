@@ -1,0 +1,29 @@
+From fb50482711dcce7d1765b5074c8679a481dece1b Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Mon, 2 Sep 2024 11:41:04 +0300
+Subject: [PATCH 12/13] Sitra: Replace privacy policy link on admin page footer
+
+---
+ client-admin/src/components/landers/lander-footer.js | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/client-admin/src/components/landers/lander-footer.js b/client-admin/src/components/landers/lander-footer.js
+index 6755c3d7..4225931c 100644
+--- a/client-admin/src/components/landers/lander-footer.js
++++ b/client-admin/src/components/landers/lander-footer.js
+@@ -29,9 +29,9 @@ const Footer = () => {
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column'}}>
+             <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
+                 <li><h3 style={{ margin: '0'}}>{t('footer.provider')}</h3></li>
+-                <li><p style={{ margin: '0'}}>DigiFinland Oy</p></li>
+-                <li><p style={{ margin: '0'}}>Kuntatalo, Toinen linja 14</p></li>
+-                <li><p style={{ margin: '0'}}>00180 Helsinki</p></li>
++                <li><p style={{ margin: '0'}}>Sitra</p></li>
++                <li><p style={{ margin: '0'}}>Itämerenkatu 11-13, PL 160,</p></li>
++                <li><p style={{ margin: '0'}}>00181 Helsinki</p></li>
+             </ul>
+         </div>
+       </div>
+-- 
+2.47.0
+

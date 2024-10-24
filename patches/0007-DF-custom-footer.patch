@@ -1,0 +1,370 @@
+From 8aebb489be5dad4b24720d078e1f709440d98195 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:29:41 +0300
+Subject: [PATCH 07/13] DF: custom footer
+
+---
+ .../css/polis/modules/_footer.scss            | 131 +++++++++++-------
+ client-participation/css/polis/polis.scss     |   2 +-
+ client-participation/js/strings/en_us.js      |  10 ++
+ .../js/templates/footer.handlebars            |  53 ++++++-
+ .../js/templates/participation.handlebars     |  30 +---
+ .../src/components/framework/Footer.js        |  43 ++++--
+ 6 files changed, 179 insertions(+), 90 deletions(-)
+
+diff --git a/client-participation/css/polis/modules/_footer.scss b/client-participation/css/polis/modules/_footer.scss
+index 2b476616..063bda43 100644
+--- a/client-participation/css/polis/modules/_footer.scss
++++ b/client-participation/css/polis/modules/_footer.scss
+@@ -1,67 +1,98 @@
+ // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-// STICKY FOOTER
+-
+-// TO MAKE SHORT FOOTER STICKY...
+-
+-//// for #footer-conversation-view, root needs height: 100%;
+-//// but for #footer, it needs height: auto;
+-//// if [data-view-name="root"] ~ #footer then height: auto;
+-//[data-view-name="root"] {
+-  // height: 100%;
+-//}
+-
+-.wrap {
+-  min-height: 100%;
+-  margin: 0 auto (-$short-footer-height);
+-  height: auto;
++.css-mxl0c {
++    position: absolute;
++    left: 0px;
++    font-family: Arial, Helvetica, sans-serif;
++    line-height: 1.5;
++    width: 100%;
+ }
+-
+-.wrap:after {
+-  height: 100px; /*short footerheight plus... svg translate plus a lil*/
+-  content: "";
+-  display: block;
++.css-1oqccy5 {
++    box-sizing: border-box;
++    margin: 0px;
++    min-width: 0px;
++    display: flex;
++    align-items: flex-start;
++    flex-wrap: wrap;
++    background-color: rgb(0, 61, 109);
++    color: rgb(255, 255, 255);
++    font-size: 0.875rem;
++    position: relative;
++    bottom: 0px;
++    padding-top: 20px;
++    padding-bottom: 20px;
+ }
+-
+-.participationView {
+-  height: 100%;
++.css-1l5tfyw {
++    box-sizing: border-box;
++    margin: 0px 0px 0px 32px;
++    width: 30%;
++    min-width: 300px;
++    display: flex;
++    flex-direction: column;
++}
++.css-1236x0c {
++    box-sizing: border-box;
++    margin: 0px;
++    width: 30%;
++    min-width: 300px;
++    display: flex;
++    flex-direction: column;
++    -webkit-box-align: center;
++    align-items: center;
++}
++.css-v3dnd6 {
++    box-sizing: border-box;
++    margin: 0px;
++    width: 30%;
++    min-width: 300px;
++    display: flex;
++    flex-direction: column;
++}
++.css-u7hqrd {
++    display: flex;
++    flex-direction: column;
++    list-style: none;
++}
++.css-eaeacs {
++    margin: 10px;
+ }
+ 
+-// SHORT FOOTER
+-#footer-conversation-view {
+-  margin-top: 30px;
+-  margin-bottom: 30px;
+-  // height: $short-footer-height;
+-  background-color: transparent;
+-  // border-color: #e7e7e7;
+-  // border-top: 1px solid lightgrey;
++.css-121oj52 {
++    box-sizing: border-box;
++    margin: 0px;
++    min-width: 0px;
++    text-decoration: none;
++    font-weight: 400;
++    cursor: pointer;
++    color: #fff;
++    border: 0px;
++    font-size: 14px;
+ }
+ 
+-.footer-conversation-view-item {
+-  position: relative;
+-  top: 14px;
++footer a, footer a:link {
++    color: #fff;
++    text-decoration: underline;
++}
++footer a:hover {
++    color: #0565a6;
+ }
+ 
+-// TALL FOOTER
+-#footer {
+-  height: $tall-footer-height;
+-  background-color: $header-footer-color;
+-  padding-top: 30px;
+-  border-color: #e7e7e7;
+-  border-top: 1px solid transparent;
++footer .css-u7hqrd h3 {
++    font-size: 1em;
+ }
+ 
+-.footer_item {
+-  margin-inline-end: 40px;
+-  position: relative;
+-  top: 14px;
++footer h3 {
++    margin-top: 1em;
+ }
+ 
+-.footerCol {
+-  padding-top: 17px;
++footer p {
++    font-size: 14px;
+ }
+ 
+-.footerSocial {
+-  display: block;
+-  vertical-align: middle;
++.css-1uk1gs8 {
++    margin: 0px;
+ }
++
++html {
++background-color: rgb(0, 61, 109);
++}
+\ No newline at end of file
+diff --git a/client-participation/css/polis/polis.scss b/client-participation/css/polis/polis.scss
+index 67056c8a..67d7be1a 100644
+--- a/client-participation/css/polis/polis.scss
++++ b/client-participation/css/polis/polis.scss
+@@ -18,7 +18,7 @@
+ //MODULES
+ // @import 'modules/accordion';
+ // @import 'modules/buttons';
+-// @import 'modules/footer';
++@import 'modules/footer';
+ // @import 'modules/forms';
+ // @import 'modules/formSwitch';
+ // @import 'modules/header';
+diff --git a/client-participation/js/strings/en_us.js b/client-participation/js/strings/en_us.js
+index b8fcfc37..5b333b23 100644
+--- a/client-participation/js/strings/en_us.js
++++ b/client-participation/js/strings/en_us.js
+@@ -149,6 +149,16 @@ s.topic_bad_01_reason = "people from various teams will be voting on the respons
+ s.topic_bad_02 = "what are our launch blockers?";
+ s.topic_bad_02_reason = "";
+ 
++s.footer_title = "Polis";
++s.footer_desc = "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.";
++s.footer_disclaimer = "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.";
++s.footer_version = "Version";
++s.footer_released = "Release date";
++s.footer_provider = "Service provider";
++s.footer_links_privacy = "DigiFinland Oy data protection";
++s.footer_links_info = "Information";
++s.footer_links_source = "Sourcecode";
++
+ // Old unused error message from when Polis was a demo <3
+ 
+ s.notSentSinceDemo = "(not really, this is a demo)";
+diff --git a/client-participation/js/templates/footer.handlebars b/client-participation/js/templates/footer.handlebars
+index 3c27bccf..192b7e0d 100644
+--- a/client-participation/js/templates/footer.handlebars
++++ b/client-participation/js/templates/footer.handlebars
+@@ -1,2 +1,53 @@
+-{{!-- Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>. --}}
++{{!-- Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or modify it
++under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This
++program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
++of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. You
++should have received a copy of the GNU Affero General Public License along with this program. If not, see
++<http: //www.gnu.org/licenses />. --}}
+ 
++<footer class="css-mxl0c">
++    <div class="css-1oqccy5">
++        <div class="css-1l5tfyw">
++            <h3>{{s.footer_title}}</h3>
++            <p>{{s.footer_desc}}</p>
++            <p>{{s.footer_disclaimer}}</p>
++            <p style="font-size: 10px;">{{s.footer_version}}: 0.1.16   {{s.footer_released}}: 16.9.2024</p>
++        </div>
++        <div class="css-1236x0c">
++            <ul class="css-u7hqrd">
++                <li class="css-eaeacs">
++                    <a target="_blank" href="https://digifinland.fi/tietosuoja/"
++                        class="css-121oj52">{{s.footer_links_privacy}} 🡥</a>
++                </li>
++                <li class="css-eaeacs">
++                    <a target="_blank" href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/"
++                        class="css-121oj52">{{s.footer_links_info}} 🡥</a>
++                </li>
++                <li class="css-eaeacs">
++                    <a target="_blank" href="https://compdemocracy.org/Welcome/" class="css-121oj52">The Computational
++                        Democracy Project 🡥</a>
++                </li>
++                <li class="css-eaeacs">
++                    <a target="_blank" href="https://github.com/polis-digifinland/polis-digifinland"
++                        class="css-121oj52">{{s.footer_links_source}} 🡥</a>
++                </li>
++            </ul>
++        </div>
++        <div class="css-v3dnd6">
++            <ul class="css-u7hqrd">
++                <li>
++                    <h3 class="css-1uk1gs8">{{s.footer_provider}}</h3>
++                </li>
++                <li>
++                    <p class="css-1uk1gs8">DigiFinland Oy</p>
++                </li>
++                <li>
++                    <p class="css-1uk1gs8">Kuntatalo, Toinen linja 14</p>
++                </li>
++                <li>
++                    <p class="css-1uk1gs8">00180 Helsinki</p>
++                </li>
++            </ul>
++        </div>
++    </div>
++</footer>
+diff --git a/client-participation/js/templates/participation.handlebars b/client-participation/js/templates/participation.handlebars
+index 116647d9..24f7e554 100644
+--- a/client-participation/js/templates/participation.handlebars
++++ b/client-participation/js/templates/participation.handlebars
+@@ -187,7 +187,7 @@
+          position: relative;
+          top: -5px;
+          left: 6px;
+-        ">closed</span>
++        ">Keskustelu on suljettu</span>
+       {{/unless}}
+       </h2>
+     {{/ifDefined}}
+@@ -437,35 +437,9 @@
+ {{!  ------------ BEGIN FOOTER ---------------  }}
+ {{#unless no_footer}}
+ 
+-  <div style="margin-top: 40px; margin-bottom: 20px;" data-test-footer>
+-    <a href="https://pol.is" target="_blank" dir="auto">
+-      {{> logo}}
+-    </a>
+-    <div
+-      style="
+-        margin-top: 15px;
+-        text-align: center;
+-      "
+-      >
+-        {{> linkPrivacy}}
+-        {{> linkTos}}
+-    </div>
+-  </div>
++{{> footer}}
+ 
+-  {{!-- <div style="font-size:18px;font-weight:400;color:white;background-color:#03a9f4;display:flex;-webkit-flex-direction:row;-webkit-flex-wrap:nowrap;-webkit-justify-content:space-between;-webkit-align-items:baseline;-webkit-align-content:stretch;-webkit-order:0;-webkit-flex-grow:0;-webkit-flex-shrink:1;-webkit-flex-basis:auto;-webkit-align-self:auto;" data-reactid=".0.0.$=1$=012.0">
+-    <p style="margin-inline-start:20px;font-size:12px;" data-reactid=".0.0.$=1$=012.0.$=1$/=010">© The Authors. 2016 </p>
+-    <div style="margin-inline-end:20px;" data-reactid=".0.0.$=1$=012.0.$=1$/=011">
+-      <a style="text-decoration:none;cursor:pointer;color:white;font-size:12px;" href="/tos" data-reactid=".0.0.$=1$=012.0.$=1$/=011.$/=10">
+-        <span name="file-text-o" class="fa fa-file-text-o" data-reactid=".0.0.$=1$=012.0.$=1$/=011.$/=10.$=10"></span>
+-        <span style="margin-inline-start:5px;" data-reactid=".0.0.$=1$=012.0.$=1$/=011.$/=10.$/=11"> TOS </span>
+-      </a>
+-      <a style="text-decoration:none;cursor:pointer;color:white;font-size:12px;" href="/privacy" data-reactid=".0.0.$=1$=012.0.$=1$/=011.$/=11">
+-        <span style="margin-inline-start:5px;" data-reactid=".0.0.$=1$=012.0.$=1$/=011.$/=11.0"> PRIVACY </span>
+-      </a>
+-    </div>
+-  </div> --}}
+ {{/unless}}
+-  {{! END FOOTER}}
+ {{!  ------------ END FOOTER ---------------  }}
+ 
+ </div> {{! END PARTICIPATION VIEW DIV }}
+diff --git a/client-report/src/components/framework/Footer.js b/client-report/src/components/framework/Footer.js
+index 70e5d7e0..95d2d960 100644
+--- a/client-report/src/components/framework/Footer.js
++++ b/client-report/src/components/framework/Footer.js
+@@ -1,18 +1,41 @@
+ // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import React from "react";
+-import LargeLogo from "./logoLargeShort";
++import { useTranslation } from 'react-i18next';
+ 
+-const Footer = (/*{conversation}*/) => {
++const Footer = () => {
++
++//document.documentElement.style.backgroundColor = "#003d6d"; // Change HTML-elements background color to fit the footer color
++
++ const { t } = useTranslation();
++ 
+  return (
+-   <div style={{
+-       display: "flex",
+-       justifyContent: "center",
+-       marginTop: 40,
+-       marginBottom: 60,
+-     }}>
+-     <LargeLogo/>
+-   </div>
++    <footer style={{ position: 'absolute', left: '0', fontFamily: 'Arial, Helvetica, sans-serif', lineHeight: '1.5', width: '100%'}}>
++      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#003d6d', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', marginLeft: '20px'}}>
++            <h3>{t('footer.title')}</h3>
++            <p>{t('footer.desc')}</p>
++            <p>{t('footer.disclaimer')}</p>
++            <p style={{fontSize: '10px'}}>{t('footer.version', { param1: "0.1.16"})}   {t('footer.released', { param1: "16.9.2024"})}</p>
++        </div>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
++            <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/tietosuoja/">{t('footer.links.privacy')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/">{t('footer.links.info')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://compdemocracy.org/Welcome/">The Computational Democracy Project 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://github.com/polis-digifinland/polis-digifinland">{t('footer.links.source')} 🡥</a></li>
++            </ul>
++        </div>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column'}}>
++            <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
++                <li><h3 style={{ margin: '0'}}>{t('footer.provider')}</h3></li>
++                <li><p style={{ margin: '0'}}>DigiFinland Oy</p></li>
++                <li><p style={{ margin: '0'}}>Kuntatalo, Toinen linja 14</p></li>
++                <li><p style={{ margin: '0'}}>00180 Helsinki</p></li>
++            </ul>
++        </div>
++      </div>
++    </footer>
+  )
+ };
+ 
+-- 
+2.47.0
+

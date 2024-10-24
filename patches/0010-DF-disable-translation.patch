@@ -1,0 +1,28 @@
+From 6552cbaca6720461d8dbf333485b14ce38659a59 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:38:38 +0300
+Subject: [PATCH 10/13] DF: disable translation
+
+---
+ client-participation/public/index.ejs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/client-participation/public/index.ejs b/client-participation/public/index.ejs
+index fbd3bed6..215e2aa5 100644
+--- a/client-participation/public/index.ejs
++++ b/client-participation/public/index.ejs
+@@ -1,9 +1,10 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="fi" translate="no">
+   <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <title>Polis</title>
++    <meta name="google" value="notranslate">
+ 
+     <!-- Google tag (gtag.js) -->
+     <% if (gaTrackingId) { %>
+-- 
+2.47.0
+

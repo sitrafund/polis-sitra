@@ -1,0 +1,87 @@
+From 3ed4c4e87d32fd1c3a7e54663f058048278aa23f Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:28:13 +0300
+Subject: [PATCH 06/13] DF: hide TOS link and replace privacy policy link on
+ admin page footer
+
+Also add translations
+---
+ .../src/components/landers/lander-footer.js   | 65 +++++++++++--------
+ 1 file changed, 39 insertions(+), 26 deletions(-)
+
+diff --git a/client-admin/src/components/landers/lander-footer.js b/client-admin/src/components/landers/lander-footer.js
+index 0d047d2c..6755c3d7 100644
+--- a/client-admin/src/components/landers/lander-footer.js
++++ b/client-admin/src/components/landers/lander-footer.js
+@@ -1,29 +1,42 @@
+-/** @jsx jsx */
+-import { Component } from 'react'
+-import { Box, Link, Heading, jsx } from 'theme-ui'
++// Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-import emoji from 'react-easy-emoji'
++import React from "react";
++import { useTranslation } from 'react-i18next';
+ 
+-class Header extends Component {
+-  render() {
+-    return (
+-      <Box sx={{ mt: [3, null, 4] }}>
+-        <Heading
+-          as="h3"
+-          sx={{ fontSize: [4], lineHeight: 'body', my: [2, null, 3] }}>
+-          Legal
+-        </Heading>
+-        <Box sx={{ mb: [2, null, 3], maxWidth: '30em' }}>
+-          Polis is built for the public with {emoji('❤️')} in Seattle{' '}
+-          {emoji('🇺🇸')}, with contributions from around the {emoji('🌍🌏🌎')}
+-        </Box>
+-        <Box sx={{ mb: [2, null, 3] }}>
+-          © {new Date().getFullYear()} The Authors <Link href="tos">TOS</Link>{' '}
+-          <Link href="privacy">Privacy</Link>
+-        </Box>
+-      </Box>
+-    )
+-  }
+-}
++const Footer = () => {
+ 
+-export default Header
++  document.documentElement.style.backgroundColor = "#003d6d"; // Change HTML-elements background color to fit the footer color
++
++ const { t } = useTranslation();
++ 
++ return (
++    <footer style={{ position: 'absolute', left: '0', fontFamily: 'Arial, Helvetica, sans-serif', lineHeight: '1.5', width: '100%'}}>
++      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#003d6d', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', marginLeft: '20px'}}>
++            <h3>{t('footer.title')}</h3>
++            <p>{t('footer.desc')}</p>
++            <p>{t('footer.disclaimer')}</p>
++            <p style={{fontSize: '10px'}}>{t('footer.version', { param1: "0.1.16"})}   {t('footer.released', { param1: "16.9.2024"})}</p>
++        </div>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
++            <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/tietosuoja/">{t('footer.links.privacy')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/">{t('footer.links.info')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://compdemocracy.org/Welcome/">The Computational Democracy Project 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://github.com/polis-digifinland/polis-digifinland">{t('footer.links.source')} 🡥</a></li>
++            </ul>
++        </div>
++        <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column'}}>
++            <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
++                <li><h3 style={{ margin: '0'}}>{t('footer.provider')}</h3></li>
++                <li><p style={{ margin: '0'}}>DigiFinland Oy</p></li>
++                <li><p style={{ margin: '0'}}>Kuntatalo, Toinen linja 14</p></li>
++                <li><p style={{ margin: '0'}}>00180 Helsinki</p></li>
++            </ul>
++        </div>
++      </div>
++    </footer>
++ )
++};
++
++export default Footer;
+-- 
+2.47.0
+

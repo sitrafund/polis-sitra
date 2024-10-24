@@ -1,0 +1,4378 @@
+From 828fca83a21854f5dfce51b642a96a5e1d8d65d8 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:36:08 +0300
+Subject: [PATCH 08/13] DF: add Finnish and Swedish translations
+
+---
+ client-admin/package-lock.json                | 234 ++++++++++++++++--
+ client-admin/package.json                     |   4 +
+ .../public/locales/en/client-admin.json       | 151 +++++++++++
+ .../locales/en/client-admin.json.headersJson  |   1 +
+ .../public/locales/fi/client-admin.json       | 151 +++++++++++
+ .../locales/fi/client-admin.json.headersJson  |   1 +
+ .../public/locales/sv/client-admin.json       | 151 +++++++++++
+ .../locales/sv/client-admin.json.headersJson  |   1 +
+ client-admin/src/app.js                       |  19 +-
+ .../comment-moderation/comment.js             |  16 +-
+ .../comment-moderation/index.js               |  18 +-
+ .../moderate-comments-accepted.js             |  17 +-
+ .../moderate-comments-rejected.js             |  17 +-
+ .../moderate-comments-todo.js                 |  23 +-
+ .../components/conversation-admin/index.js    |  22 +-
+ .../conversation-admin/report/reports-list.js |  19 +-
+ .../conversation-admin/seed-comment.js        |  22 +-
+ .../conversation-admin/share-and-embed.js     |  24 +-
+ .../conversation-admin/stats/commenters.js    |  11 +-
+ .../stats/conversation-stats-number-cards.js  |  22 +-
+ .../conversation-admin/stats/index.js         |  14 +-
+ .../conversation-admin/stats/voters.js        |  11 +-
+ .../conversations-and-account/account.js      |  23 +-
+ .../conversations-and-account/conversation.js |   5 +-
+ .../conversations.js                          |  21 +-
+ .../conversations-and-account/integrate.js    |  39 ++-
+ .../src/components/interior-header.js         |  24 +-
+ .../src/components/landers/createuser.js      |  34 +--
+ .../src/components/landers/lander-header.js   |  27 +-
+ .../landers/password-reset-init-done.js       |  16 +-
+ .../components/landers/password-reset-init.js |  22 +-
+ .../src/components/landers/password-reset.js  |  24 +-
+ .../src/components/landers/signout.js         |  18 +-
+ client-admin/src/i18n.js                      |  34 +++
+ client-admin/src/index.js                     |   7 +-
+ client-participation/js/strings.js            |  15 +-
+ client-participation/js/strings/fi.js         | 136 ++++++++++
+ client-participation/js/strings/sv.js         | 136 ++++++++++
+ .../js/templates/vote-view.handlebars         |   2 +-
+ client-report/locales/en/client-report.json   | 119 +++++++++
+ .../locales/en/client-report.json.headersJson |   1 +
+ client-report/locales/fi/client-report.json   | 119 +++++++++
+ .../locales/fi/client-report.json.headersJson |   1 +
+ client-report/locales/sv/client-report.json   | 119 +++++++++
+ .../locales/sv/client-report.json.headersJson |   1 +
+ client-report/package-lock.json               | 139 ++++++++++-
+ client-report/package.json                    |   4 +
+ .../src/components/beeswarm/beeswarm.js       |  23 +-
+ .../src/components/controls/controls.js       |  22 +-
+ .../src/components/framework/heading.js       |   8 +-
+ .../src/components/framework/legend.js        |  10 +-
+ .../lists/allCommentsModeratedIn.js           |  29 +--
+ .../src/components/lists/commentList.js       |  36 +--
+ .../src/components/lists/majorityStrict.js    |  13 +-
+ .../src/components/lists/metadata.js          |  10 +-
+ .../src/components/lists/participantGroup.js  |  10 +-
+ .../src/components/lists/participantGroups.js |  16 +-
+ .../src/components/lists/uncertainty.js       |  13 +-
+ client-report/src/components/overview.js      |  37 ++-
+ .../participantsGraph/participantsGraph.js    |  36 ++-
+ client-report/src/i18n.js                     |  34 +++
+ client-report/src/index.js                    |   1 +
+ client-report/webpack.common.js               |   1 +
+ 63 files changed, 2019 insertions(+), 315 deletions(-)
+ create mode 100644 client-admin/public/locales/en/client-admin.json
+ create mode 100644 client-admin/public/locales/en/client-admin.json.headersJson
+ create mode 100644 client-admin/public/locales/fi/client-admin.json
+ create mode 100644 client-admin/public/locales/fi/client-admin.json.headersJson
+ create mode 100644 client-admin/public/locales/sv/client-admin.json
+ create mode 100644 client-admin/public/locales/sv/client-admin.json.headersJson
+ create mode 100644 client-admin/src/i18n.js
+ create mode 100644 client-participation/js/strings/fi.js
+ create mode 100644 client-participation/js/strings/sv.js
+ create mode 100644 client-report/locales/en/client-report.json
+ create mode 100644 client-report/locales/en/client-report.json.headersJson
+ create mode 100644 client-report/locales/fi/client-report.json
+ create mode 100644 client-report/locales/fi/client-report.json.headersJson
+ create mode 100644 client-report/locales/sv/client-report.json
+ create mode 100644 client-report/locales/sv/client-report.json.headersJson
+ create mode 100644 client-report/src/i18n.js
+
+diff --git a/client-admin/package-lock.json b/client-admin/package-lock.json
+index c840b64b..5d5fd57d 100644
+--- a/client-admin/package-lock.json
++++ b/client-admin/package-lock.json
+@@ -9,12 +9,16 @@
+       "version": "0.0.1",
+       "dependencies": {
+         "d3-scale": "~3.2.3",
++        "i18next": "^23.7.6",
++        "i18next-browser-languagedetector": "^7.2.0",
++        "i18next-http-backend": "^2.4.1",
+         "jquery": "~2.1.4",
+         "lodash": "~4.17.21",
+         "prop-types": "~15.7.2",
+         "react": "~16.14.0",
+         "react-dom": "~16.14.0",
+         "react-easy-emoji": "~1.8.1",
++        "react-i18next": "^13.5.0",
+         "react-redux": "7.2.2",
+         "react-router-dom": "~5.2.0",
+         "redux": "~4.0.5",
+@@ -1769,11 +1773,11 @@
+       }
+     },
+     "node_modules/@babel/runtime": {
+-      "version": "7.20.7",
+-      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.7.tgz",
+-      "integrity": "sha512-UF0tvkUtxwAgZ5W/KrkHf0Rn0fdnLDU9ScxBrEVNUprE/MzirjK4MJUX1/BVDv00Sv8cljtukVK1aky++X1SjQ==",
++      "version": "7.23.9",
++      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz",
++      "integrity": "sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==",
+       "dependencies": {
+-        "regenerator-runtime": "^0.13.11"
++        "regenerator-runtime": "^0.14.0"
+       },
+       "engines": {
+         "node": ">=6.9.0"
+@@ -3936,6 +3940,14 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/cross-fetch": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
++      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
++      "dependencies": {
++        "node-fetch": "^2.6.12"
++      }
++    },
+     "node_modules/cross-spawn": {
+       "version": "7.0.3",
+       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+@@ -6250,6 +6262,14 @@
+         "node": ">=12"
+       }
+     },
++    "node_modules/html-parse-stringify": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz",
++      "integrity": "sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==",
++      "dependencies": {
++        "void-elements": "3.1.0"
++      }
++    },
+     "node_modules/html-void-elements": {
+       "version": "1.0.5",
+       "resolved": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-1.0.5.tgz",
+@@ -6389,6 +6409,44 @@
+         "node": ">=10.17.0"
+       }
+     },
++    "node_modules/i18next": {
++      "version": "23.8.1",
++      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.8.1.tgz",
++      "integrity": "sha512-Yhe6oiJhigSh64ev7nVVywu7vHjuUG41MRmFKNwphbkadqTL1ozZFBQISflY7/ju+gL6I/SPfI1GgWQh1yYArA==",
++      "funding": [
++        {
++          "type": "individual",
++          "url": "https://locize.com"
++        },
++        {
++          "type": "individual",
++          "url": "https://locize.com/i18next.html"
++        },
++        {
++          "type": "individual",
++          "url": "https://www.i18next.com/how-to/faq#i18next-is-awesome.-how-can-i-support-the-project"
++        }
++      ],
++      "dependencies": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "node_modules/i18next-browser-languagedetector": {
++      "version": "7.2.0",
++      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.0.tgz",
++      "integrity": "sha512-U00DbDtFIYD3wkWsr2aVGfXGAj2TgnELzOX9qv8bT0aJtvPV9CRO77h+vgmHFBMe7LAxdwvT/7VkCWGya6L3tA==",
++      "dependencies": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "node_modules/i18next-http-backend": {
++      "version": "2.4.2",
++      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.4.2.tgz",
++      "integrity": "sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==",
++      "dependencies": {
++        "cross-fetch": "4.0.0"
++      }
++    },
+     "node_modules/iconv-lite": {
+       "version": "0.4.24",
+       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
+@@ -7554,6 +7612,25 @@
+         "tslib": "^2.0.3"
+       }
+     },
++    "node_modules/node-fetch": {
++      "version": "2.7.0",
++      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
++      "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
++      "dependencies": {
++        "whatwg-url": "^5.0.0"
++      },
++      "engines": {
++        "node": "4.x || >=6.0.0"
++      },
++      "peerDependencies": {
++        "encoding": "^0.1.0"
++      },
++      "peerDependenciesMeta": {
++        "encoding": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/node-forge": {
+       "version": "0.10.0",
+       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz",
+@@ -8395,6 +8472,27 @@
+       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz",
+       "integrity": "sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw=="
+     },
++    "node_modules/react-i18next": {
++      "version": "13.5.0",
++      "resolved": "https://registry.npmjs.org/react-i18next/-/react-i18next-13.5.0.tgz",
++      "integrity": "sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==",
++      "dependencies": {
++        "@babel/runtime": "^7.22.5",
++        "html-parse-stringify": "^3.0.1"
++      },
++      "peerDependencies": {
++        "i18next": ">= 23.2.3",
++        "react": ">= 16.8.0"
++      },
++      "peerDependenciesMeta": {
++        "react-dom": {
++          "optional": true
++        },
++        "react-native": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/react-is": {
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+@@ -8638,9 +8736,9 @@
+       }
+     },
+     "node_modules/regenerator-runtime": {
+-      "version": "0.13.11",
+-      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz",
+-      "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg=="
++      "version": "0.14.1",
++      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz",
++      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
+     },
+     "node_modules/regenerator-transform": {
+       "version": "0.15.1",
+@@ -10216,6 +10314,11 @@
+         "node": ">=6"
+       }
+     },
++    "node_modules/tr46": {
++      "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
++      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
++    },
+     "node_modules/trim": {
+       "version": "0.0.1",
+       "resolved": "https://registry.npmjs.org/trim/-/trim-0.0.1.tgz",
+@@ -11209,6 +11312,14 @@
+         "react": "^16.6.0 || ^17.0.0"
+       }
+     },
++    "node_modules/void-elements": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/void-elements/-/void-elements-3.1.0.tgz",
++      "integrity": "sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/watchpack": {
+       "version": "2.4.0",
+       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
+@@ -11241,6 +11352,11 @@
+         "url": "https://github.com/sponsors/wooorm"
+       }
+     },
++    "node_modules/webidl-conversions": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
++      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
++    },
+     "node_modules/webpack": {
+       "version": "5.75.0",
+       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.75.0.tgz",
+@@ -11812,6 +11928,15 @@
+         "node": ">=0.8.0"
+       }
+     },
++    "node_modules/whatwg-url": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
++      "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
++      "dependencies": {
++        "tr46": "~0.0.3",
++        "webidl-conversions": "^3.0.0"
++      }
++    },
+     "node_modules/which": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+@@ -13146,11 +13271,11 @@
+       }
+     },
+     "@babel/runtime": {
+-      "version": "7.20.7",
+-      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.7.tgz",
+-      "integrity": "sha512-UF0tvkUtxwAgZ5W/KrkHf0Rn0fdnLDU9ScxBrEVNUprE/MzirjK4MJUX1/BVDv00Sv8cljtukVK1aky++X1SjQ==",
++      "version": "7.23.9",
++      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz",
++      "integrity": "sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==",
+       "requires": {
+-        "regenerator-runtime": "^0.13.11"
++        "regenerator-runtime": "^0.14.0"
+       }
+     },
+     "@babel/template": {
+@@ -14884,6 +15009,14 @@
+         }
+       }
+     },
++    "cross-fetch": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
++      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
++      "requires": {
++        "node-fetch": "^2.6.12"
++      }
++    },
+     "cross-spawn": {
+       "version": "7.0.3",
+       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+@@ -16677,6 +16810,14 @@
+         "terser": "^5.10.0"
+       }
+     },
++    "html-parse-stringify": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz",
++      "integrity": "sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==",
++      "requires": {
++        "void-elements": "3.1.0"
++      }
++    },
+     "html-void-elements": {
+       "version": "1.0.5",
+       "resolved": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-1.0.5.tgz",
+@@ -16771,6 +16912,30 @@
+       "integrity": "sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==",
+       "dev": true
+     },
++    "i18next": {
++      "version": "23.8.1",
++      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.8.1.tgz",
++      "integrity": "sha512-Yhe6oiJhigSh64ev7nVVywu7vHjuUG41MRmFKNwphbkadqTL1ozZFBQISflY7/ju+gL6I/SPfI1GgWQh1yYArA==",
++      "requires": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "i18next-browser-languagedetector": {
++      "version": "7.2.0",
++      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.0.tgz",
++      "integrity": "sha512-U00DbDtFIYD3wkWsr2aVGfXGAj2TgnELzOX9qv8bT0aJtvPV9CRO77h+vgmHFBMe7LAxdwvT/7VkCWGya6L3tA==",
++      "requires": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "i18next-http-backend": {
++      "version": "2.4.2",
++      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.4.2.tgz",
++      "integrity": "sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==",
++      "requires": {
++        "cross-fetch": "4.0.0"
++      }
++    },
+     "iconv-lite": {
+       "version": "0.4.24",
+       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
+@@ -17609,6 +17774,14 @@
+         "tslib": "^2.0.3"
+       }
+     },
++    "node-fetch": {
++      "version": "2.7.0",
++      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
++      "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
++      "requires": {
++        "whatwg-url": "^5.0.0"
++      }
++    },
+     "node-forge": {
+       "version": "0.10.0",
+       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz",
+@@ -18237,6 +18410,15 @@
+       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz",
+       "integrity": "sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw=="
+     },
++    "react-i18next": {
++      "version": "13.5.0",
++      "resolved": "https://registry.npmjs.org/react-i18next/-/react-i18next-13.5.0.tgz",
++      "integrity": "sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==",
++      "requires": {
++        "@babel/runtime": "^7.22.5",
++        "html-parse-stringify": "^3.0.1"
++      }
++    },
+     "react-is": {
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+@@ -18427,9 +18609,9 @@
+       }
+     },
+     "regenerator-runtime": {
+-      "version": "0.13.11",
+-      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz",
+-      "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg=="
++      "version": "0.14.1",
++      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz",
++      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
+     },
+     "regenerator-transform": {
+       "version": "0.15.1",
+@@ -19675,6 +19857,11 @@
+       "integrity": "sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==",
+       "dev": true
+     },
++    "tr46": {
++      "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
++      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
++    },
+     "trim": {
+       "version": "0.0.1",
+       "resolved": "https://registry.npmjs.org/trim/-/trim-0.0.1.tgz",
+@@ -20479,6 +20666,11 @@
+         "victory-core": "^35.11.4"
+       }
+     },
++    "void-elements": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/void-elements/-/void-elements-3.1.0.tgz",
++      "integrity": "sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w=="
++    },
+     "watchpack": {
+       "version": "2.4.0",
+       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
+@@ -20504,6 +20696,11 @@
+       "integrity": "sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==",
+       "dev": true
+     },
++    "webidl-conversions": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
++      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
++    },
+     "webpack": {
+       "version": "5.75.0",
+       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.75.0.tgz",
+@@ -20896,6 +21093,15 @@
+       "integrity": "sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==",
+       "dev": true
+     },
++    "whatwg-url": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
++      "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
++      "requires": {
++        "tr46": "~0.0.3",
++        "webidl-conversions": "^3.0.0"
++      }
++    },
+     "which": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+diff --git a/client-admin/package.json b/client-admin/package.json
+index 69740106..7e7736ed 100644
+--- a/client-admin/package.json
++++ b/client-admin/package.json
+@@ -54,12 +54,16 @@
+   },
+   "dependencies": {
+     "d3-scale": "~3.2.3",
++    "i18next": "^23.7.6",
++    "i18next-browser-languagedetector": "^7.2.0",
++    "i18next-http-backend": "^2.4.1",
+     "jquery": "~2.1.4",
+     "lodash": "~4.17.21",
+     "prop-types": "~15.7.2",
+     "react": "~16.14.0",
+     "react-dom": "~16.14.0",
+     "react-easy-emoji": "~1.8.1",
++    "react-i18next": "^13.5.0",
+     "react-redux": "7.2.2",
+     "react-router-dom": "~5.2.0",
+     "redux": "~4.0.5",
+diff --git a/client-admin/public/locales/en/client-admin.json b/client-admin/public/locales/en/client-admin.json
+new file mode 100644
+index 00000000..578a26cb
+--- /dev/null
++++ b/client-admin/public/locales/en/client-admin.json
+@@ -0,0 +1,151 @@
++{
++  "file_desc": "Translations in English",
++  "app": {
++    "nav": {
++      "conversations": "Conversations",
++      "integrate": "Integrate",
++      "account": "Account"
++    },
++    "loading": "Loading ..."
++  },
++  "header": {
++    "signin": "Sign In",
++    "signout": "Sign out"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "disclaimer": "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
++    "version": "Version: {{param1}}",
++    "released": "Release date: {{param1}}",
++    "provider": "Service provider",
++    "links": {
++      "privacy": "DigiFinland Oy data protection",
++      "info": "Information",
++      "source": "Sourcecode"
++    }
++  },
++  "signout": {
++    "signingout": "Signing Out"
++  },
++  "signin": {
++    "signin": "Sign In",
++    "signingin": "Signing in...",
++    "test_warning_title": "TEST ENVIROMENT",
++    "test_warning_text": "Use only for testing, do not share links.",
++    "email": "email",
++    "password": "password",
++    "forgot": "Forgot your password?",
++    "reset": "Reset Password"
++  },
++  "password": {
++    "title": "Password Reset",
++    "reset_check_email_link": "Check your email for a password reset link",
++    "send_email": "Send password reset email",
++    "email": "email",
++    "new": "new password",
++    "new_repeat": "repeat new password",
++    "new_set": "Set new password"
++  },
++  "createuser": {
++    "title": "Create Account",
++    "name": "name",
++    "email": "email",
++    "password": "password",
++    "password_repeat": "repeat password",
++    "agree": "I agree to the",
++    "agree_tos": "pol.is terms",
++    "agree_and": "and",
++    "agree_privacy": "privacy agreement",
++    "create": "Create Account",
++    "creating": "Creating Account...",
++    "already_have_account": "Already have an account?",
++    "signin": "Sign in"
++  },
++  "account": {
++    "title": "Account",
++    "welcome": "Hi"
++  },
++  "conversations": {
++    "title": "All Conversations",
++    "create_new": "Create new conversation",
++    "loading": "Loading conversations...",
++    "loading_error": "Error loading conversations: ",
++    "participants": "participants"
++  },
++  "integrate": {
++    "title": "Integrate",
++    "text1": "Copy and paste this code into your content management template. Each page (article, post) requires a unique string in the 'PAGE_ID' field. This should be consistent over time and unique to each of your pages (like the article title).",
++    "text2": "When this embed code loads on your website, it will either create a new conversation (if one is not already associated with the string passed into PAGE_ID) or load an existing conversation.",
++    "text3": "This embed code will keep track of what conversations belongs on what pages via the data-page_id HTML attribute.",
++    "text4": "Simply replace 'PAGE_ID', either manually or in your templates, to create new conversations and load existing ones in the right place."
++  },
++  "reports": {
++    "loading": "Loading Reports...",
++    "title": "Report",
++    "create_new": "Create report url"
++  },
++  "moderate": {
++    "title": "Moderate",
++    "unmoderated": "Unmoderated",
++    "accepted": "Accepted",
++    "rejected": "Rejected",
++    "display_max": "Displays maximum {{param1}} comments",
++    "accept": "accept",
++    "reject": "reject",
++    "metadata": "metadata",
++    "loading_unmoderated": "Loading unmoderated comments...",
++    "loading_accepted": "Loading accepted comments...",
++    "loading_rejected": "Loading rejected comments..."
++  },
++  "configure": {
++    "title": "Configure",
++    "saving": "Saving",
++    "up_to_date": "Up to date",
++    "error": "Error Saving",
++    "conversation_open": "Conversation is open. Unchecking disables both voting and commenting.",
++    "topic": "Topic",
++    "description": "Description",
++    "seed_comments": "Seed Comments",
++    "customize_ui": "Customize the user interface",
++    "vis_type": "Participants can see the visualization",
++    "write_type": "Participants can submit comments",
++    "help_type": "Show explanation text above voting and visualization",
++    "schemes": "Schemes",
++    "strict_moderation": "No comments shown without moderator approval"
++  },
++  "conv_nav": {
++    "all": "All conversations",
++    "configure": "Configure",
++    "distribute": "Distribute",
++    "moderate": "Moderate",
++    "monitor": "Monitor",
++    "report": "Report"
++  },
++  "seed": {
++    "submit": "Submit",
++    "success": "Success!",
++    "saving": "Saving...",
++    "add": "Add",
++    "comments": "seed comments",
++    "to_vote_on": "for participants to vote on:"
++  },
++  "distribute": {
++    "title": "Distribute",
++    "share": "Share",
++    "embed": "Embed",
++    "desc": "This embed code can only be used to embed a single conversation.",
++    "link": "I want to integrate pol.is on my entire site."
++  },
++  "stats": {
++    "title": "Monitor",
++    "loading": "Loading...",
++    "voted": "participants voted",
++    "votes": "votes were cast",
++    "average_votes": "votes per participant on average",
++    "commented": "commented",
++    "comments_submitted": "comments submitted",
++    "commenters": "Commenters over time, by time of first comment",
++    "voters": "Voters over time, by time of first vote"
++  }
++}
+\ No newline at end of file
+diff --git a/client-admin/public/locales/en/client-admin.json.headersJson b/client-admin/public/locales/en/client-admin.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-admin/public/locales/en/client-admin.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-admin/public/locales/fi/client-admin.json b/client-admin/public/locales/fi/client-admin.json
+new file mode 100644
+index 00000000..716b302e
+--- /dev/null
++++ b/client-admin/public/locales/fi/client-admin.json
+@@ -0,0 +1,151 @@
++{
++  "file_desc": "Käännökset suomeksi",
++  "app": {
++    "nav": {
++      "conversations": "Keskustelut",
++      "integrate": "Upotus",
++      "account": "Tili"
++    },
++    "loading": "Lataa ..."
++  },
++  "header": {
++    "signin": "Kirjaudu sisään",
++    "signout": "Kirjaudu ulos"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "disclaimer": "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
++    "version": "Versio: {{param1}}",
++    "released": "Julkaisu pvm: {{param1}}",
++    "provider": "Palveluntuottaja",
++    "links": {
++      "privacy": "DigiFinland Oy tietosuoja",
++      "info": "Tietoa palvelusta",
++      "source": "Lähdekoodi"
++    }
++  },
++  "signout": {
++    "signingout": "Kirjaudutaan ulos"
++  },
++  "signin": {
++    "signin": "Kirjaudu sisään",
++    "signingin": "Kirjaudutaan sisään...",
++    "test_warning_title": "TESTIYMPÄRISTÖ",
++    "test_warning_text": "Käytä vain testaukseen. Älä jaa linkkejä.",
++    "email": "Sähköpostiosoite",
++    "password": "Salasana",
++    "forgot": "Unohditko salasanasi?",
++    "reset": "Resetoi salasanasi"
++  },
++  "password": {
++    "title": "Salasanan vaihto",
++    "reset_check_email_link": "Tarkista linkki sähköpostista",
++    "send_email": "Lähetä salasanan vaihto sähköposti",
++    "email": "Sähköpostiosoite",
++    "new": "uusi salasana",
++    "new_repeat": "toista uusi salasana",
++    "new_set": "Aseta uusi salasana"
++  },
++  "createuser": {
++    "title": "Luo tili",
++    "name": "tunnus",
++    "email": "sähköpostiosoite",
++    "password": "salasana",
++    "password_repeat": "toista salasana",
++    "agree": "Hyväksyn",
++    "agree_tos": "pol.is ehdot",
++    "agree_and": "ja",
++    "agree_privacy": "tietosuojaselosteen",
++    "create": "Luo tili",
++    "creating": "Luodaan tiliä...",
++    "already_have_account": "Onko sinulla jo tili?",
++    "signin": "Kirjaudu sisään"
++  },
++  "account": {
++    "title": "Tili",
++    "welcome": "Hei"
++  },
++  "conversations": {
++    "title": "Kaikki keskustelut",
++    "create_new": "Luo uusi keskustelu",
++    "loading": "Ladataan keskusteluja...",
++    "loading_error": "Virhe keskustelujen lataamisessa: ",
++    "participants": "osallistujaa"
++  },
++  "integrate": {
++    "title": "Upotuskoodi",
++    "text1": "Kopioi ja liitä tämä koodi sisällönhallintamalliisi. Jokainen sivu (artikkeli, viesti) vaatii yksilöllisen merkkijonon PAGE_ID-kentässä. Tämän tulee olla johdonmukainen ajan mittaan ja yksilöllinen jokaiselle sivullesi (kuten artikkelin otsikko).",
++    "text2": "Kun tämä upotuskoodi latautuu verkkosivustollesi, se joko luo uuden keskustelun (jos sellaista ei ole jo liitetty sivulle PAGE_ID siirrettyyn merkkijonoon) tai lataa olemassa olevan keskustelun.",
++    "text3": "Tämä upotuskoodi seuraa, mitkä keskustelut kuuluvat millekin sivulle data-page_id HTML-attribuutin avulla.",
++    "text4": "Vaihda vain 'PAGE_ID' joko manuaalisesti tai malleissasi luodaksesi uusia keskusteluja ja ladataksesi olemassa olevat oikeaan paikkaan."
++  },
++  "reports": {
++    "loading": "Ladataan raportteja...",
++    "title": "Raportit",
++    "create_new": "Luo uusi raportti osoite"
++  },
++  "moderate": {
++    "title": "Moderointi",
++    "unmoderated": "Moderoimattomat",
++    "accepted": "Hyväksytyt",
++    "rejected": "Hylätyt",
++    "display_max": "Listaa maksimissaan {{param1}} kommenttia",
++    "accept": "hyväksy",
++    "reject": "hylkää",
++    "metadata": "metatieto",
++    "loading_unmoderated": "Ladataan käsittelemättömiä kommentteja...",
++    "loading_accepted": "Ladataan hyväksyttyjä kommentteja...",
++    "loading_rejected": "Ladataan hylättyjä kommentteja..."
++  },
++  "configure": {
++    "title": "Asetukset",
++    "saving": "Tallentaa",
++    "up_to_date": "Ajan tasalla",
++    "error": "Virhe tallennuksessa",
++    "conversation_open": "Keskustelu on auki. Valinnan poistaminen sulkee äänestyksen ja uusien väittämien kirjoittamisen.",
++    "topic": "Aihe",
++    "description": "Kuvaus",
++    "seed_comments": "Aloitus väittämät",
++    "customize_ui": "Muokkaa käyttöliittymää",
++    "vis_type": "Osallistujat näkevät visuaalisaation",
++    "write_type": "Osallistujat voivat lähettää väittämiä",
++    "help_type": "Näytä äänestyksen ja visuaalisaation yhteydessä kuvaus.",
++    "schemes": "Järjestelmä",
++    "strict_moderation": "Väittämiä ei näytetä äänestäjille ilman moderoinnin hyväksyntää."
++  },
++  "conv_nav": {
++    "all": "Keskustelut",
++    "configure": "Asetukset",
++    "distribute": "Jakelu",
++    "moderate": "Moderointi",
++    "monitor": "Statistiikka",
++    "report": "Raportit"
++  },
++  "seed": {
++    "submit": "Lähetä",
++    "success": "Onnistui!",
++    "saving": "Tallentaa...",
++    "add": "Lisää",
++    "comments": "väittämiä",
++    "to_vote_on": "äänestettäväksi:"
++  },
++  "distribute": {
++    "title": "Jakelu",
++    "share": "Jakaminen",
++    "embed": "Upotuskoodi",
++    "desc": "Tämä koodi toimii vain yhden keskustelun upottamiseen.",
++    "link": "Haluan liittää pol.is koko sivustolleni."
++  },
++  "stats": {
++    "title": "Statistiikka",
++    "loading": "Lataa...",
++    "voted": "osallistujaa äänesti",
++    "votes": "annettua ääntä",
++    "average_votes": "keskimäärin ääniä äänestäjää kohden",
++    "commented": "kannanottojen lähettäjiä",
++    "comments_submitted": "kannanottoa lähetetty",
++    "commenters": "Kommentoijia ajan kuluessa, alkaen ensimmäisestä kommentista",
++    "voters": "Äänestäjiä ajan kuluessa, alkaen ensimmäisestä äänestä"
++  }
++}
+\ No newline at end of file
+diff --git a/client-admin/public/locales/fi/client-admin.json.headersJson b/client-admin/public/locales/fi/client-admin.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-admin/public/locales/fi/client-admin.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-admin/public/locales/sv/client-admin.json b/client-admin/public/locales/sv/client-admin.json
+new file mode 100644
+index 00000000..0ccaa65f
+--- /dev/null
++++ b/client-admin/public/locales/sv/client-admin.json
+@@ -0,0 +1,151 @@
++{
++  "file_desc": "Översättningar på svenska",
++  "app": {
++    "nav": {
++      "conversations": "Samtal",
++      "integrate": "Integrera",
++      "account": "Konto"
++    },
++    "loading": "Laddar ..."
++  },
++  "header": {
++    "signin": "Logga in",
++    "signout": "Logga ut"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "disclaimer": "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
++    "version": "Version: {{param1}}",
++    "released": "Publiceringsdatum: {{param1}}",
++    "provider": "Tjänsteleverantör",
++    "links": {
++      "privacy": "DigiFinland Oy dataskydd",
++      "info": "Information",
++      "source": "Källkod"
++    }
++  },
++  "signout": {
++    "signingout": "Loggar ut"
++  },
++  "signin": {
++    "signin": "Logga in",
++    "signingin": "Loggar in...",
++    "test_warning_title": "TESTMILJÖ",
++    "test_warning_text": "Använd endast för testning, dela inte länkar.",
++    "email": "e-post",
++    "password": "lösenord",
++    "forgot": "Glömt ditt lösenord?",
++    "reset": "Återställ lösenord"
++  },
++  "password": {
++    "title": "Återställ lösenord",
++    "reset_check_email_link": "Kontrollera din e-post för en länk för att återställa lösenordet",
++    "send_email": "Skicka återställnings-e-post",
++    "email": "e-post",
++    "new": "nytt lösenord",
++    "new_repeat": "upprepa nya lösenordet",
++    "new_set": "Ange nytt lösenord"
++  },
++  "createuser": {
++    "title": "Skapa konto",
++    "name": "namn",
++    "email": "e-post",
++    "password": "lösenord",
++    "password_repeat": "upprepa lösenord",
++    "agree": "Jag godkänner",
++    "agree_tos": "policy för pol.is",
++    "agree_and": "och",
++    "agree_privacy": "sekretessavtalet",
++    "create": "Skapa konto",
++    "creating": "Skapar konto...",
++    "already_have_account": "Har redan ett konto?",
++    "signin": "Logga in"
++  },
++  "account": {
++    "title": "Konto",
++    "welcome": "Hej"
++  },
++  "conversations": {
++    "title": "Alla Samtal",
++    "create_new": "Skapa nytt samtal",
++    "loading": "Laddar samtal...",
++    "loading_error": "Fel vid laddning av samtal: ",
++    "participants": "deltagare"
++  },
++  "integrate": {
++    "title": "Integrera",
++    "text1": "Kopiera och klistra in denna kod i din innehållshantering mall. Varje sida (artikel, inlägg) kräver en unik sträng i fältet 'PAGE_ID'. Detta bör vara konsekvent över tiden och unikt för var och en av dina sidor (som artikelns titel).",
++    "text2": "När denna inbäddningskod laddas på din webbplats kommer den antingen att skapa en ny konversation (om det inte redan finns en kopplad till strängen som skickas till PAGE_ID) eller ladda en befintlig konversation.",
++    "text3": "Denna inbäddningskod kommer att hålla reda på vilka samtal som hör till vilka sidor via attributet data-page_id i HTML.",
++    "text4": "Byt helt enkelt ut 'PAGE_ID', antingen manuellt eller i dina mallar, för att skapa nya samtal och ladda befintliga samtal på rätt plats."
++  },
++  "reports": {
++    "loading": "Laddar rapporter...",
++    "title": "Rapport",
++    "create_new": "Skapa rapport-url"
++  },
++  "moderate": {
++    "title": "Modererad",
++    "unmoderated": "Omodererad",
++    "accepted": "Accepterad",
++    "rejected": "Avfärdad",
++    "display_max": "Visar maximalt {{param1}} kommentarer",
++    "accept": "acceptera",
++    "reject": "avvisa",
++    "metadata": "metadata",
++    "loading_unmoderated": "Laddar omodererade kommentarer...",
++    "loading_accepted": "Laddar accepterade kommentarer...",
++    "loading_rejected": "Laddar avvisade kommentarer..."
++  },
++  "configure": {
++    "title": "Konfigurera",
++    "saving": "Sparar",
++    "up_to_date": "Uppdaterad",
++    "error": "Fel vid sparning",
++    "conversation_open": "Samtalet är öppet. Om du avmarkerar kan varken röstande eller kommentarer användas.",
++    "topic": "Ämne",
++    "description": "Beskrivning",
++    "seed_comments": "Fördefinierade kommentarer",
++    "customize_ui": "Anpassa användargränssnittet",
++    "vis_type": "Deltagare kan se visualiseringen",
++    "write_type": "Deltagare kan skicka kommentarer",
++    "help_type": "Visa förklaringstext över röstning och visualisering",
++    "schemes": "Scheman",
++    "strict_moderation": "Inga kommentarer visas utan moderatorns godkännande"
++  },
++  "conv_nav": {
++    "all": "Alla samtal",
++    "configure": "Konfigurera",
++    "distribute": "Distribuera",
++    "moderate": "Moderera",
++    "monitor": "Följ",
++    "report": "Rapportera"
++  },
++  "seed": {
++    "submit": "Skicka",
++    "success": "Lyckades!",
++    "saving": "Sparar...",
++    "add": "Lägg till",
++    "comments": "fördefinierade kommentarer",
++    "to_vote_on": "för deltagarna att rösta på:"
++  },
++  "distribute": {
++    "title": "Distribuera",
++    "share": "Dela",
++    "embed": "Bädda in",
++    "desc": "Denna inbäddningskod kan bara användas för att bädda in ett enskilt samtal.",
++    "link": "Jag vill integrera pol.is på hela min webbplats."
++  },
++  "stats": {
++    "title": "Följ",
++    "loading": "Laddar...",
++    "voted": "deltagare röstade",
++    "votes": "röster avgavs",
++    "average_votes": "röster per deltagare i genomsnitt",
++    "commented": "kommenterade",
++    "comments_submitted": "skickade kommentarer",
++    "commenters": "Kommenterare över tid, efter tidpunkt för första kommentaren",
++    "voters": "Röstare över tid, efter tidpunkt för första röstningen"
++  }
++}
+\ No newline at end of file
+diff --git a/client-admin/public/locales/sv/client-admin.json.headersJson b/client-admin/public/locales/sv/client-admin.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-admin/public/locales/sv/client-admin.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-admin/src/app.js b/client-admin/src/app.js
+index b050b22f..f5bb3512 100644
+--- a/client-admin/src/app.js
++++ b/client-admin/src/app.js
+@@ -29,7 +29,10 @@ import Conversations from './components/conversations-and-account/conversations'
+ import Account from './components/conversations-and-account/account'
+ import Integrate from './components/conversations-and-account/integrate'
+ 
++import { withTranslation } from 'react-i18next';
++
+ import InteriorHeader from './components/interior-header'
++import Footer from './components/landers/lander-footer'
+ 
+ const PrivateRoute = ({ component: Component, isLoading, authed, ...rest }) => {
+   if (isLoading) {
+@@ -61,7 +64,7 @@ PrivateRoute.propTypes = {
+ @connect((state) => {
+   return state.user
+ })
+-class App extends React.Component {
++class AppTranslated extends React.Component {
+   constructor(props) {
+     super(props)
+     this.state = {
+@@ -128,6 +131,7 @@ class App extends React.Component {
+ 
+   render() {
+     const { location } = this.props
++    const { t } = this.props;
+     return (
+       <>
+         <Switch>
+@@ -177,17 +181,17 @@ class App extends React.Component {
+                     <Box sx={{ mr: [5], p: [4], flex: '0 0 auto' }}>
+                       <Box sx={{ mb: [3] }}>
+                         <Link sx={{ variant: 'links.nav' }} to={`/`}>
+-                          Conversations
++                          {t('app.nav.conversations')}
+                         </Link>
+                       </Box>
+                       <Box sx={{ mb: [3] }}>
+                         <Link sx={{ variant: 'links.nav' }} to={`/integrate`}>
+-                          Integrate
++                          {t('app.nav.integrate')}
+                         </Link>
+                       </Box>
+                       <Box sx={{ mb: [3] }}>
+                         <Link sx={{ variant: 'links.nav' }} to={`/account`}>
+-                          Account
++                          {t('app.nav.account')}
+                         </Link>
+                       </Box>
+                     </Box>
+@@ -240,12 +244,13 @@ class App extends React.Component {
+             />
+           </InteriorHeader>
+         </Switch>
++        <Footer />
+       </>
+     )
+   }
+ }
+ 
+-App.propTypes = {
++AppTranslated.propTypes = {
+   dispatch: PropTypes.func,
+   isLoggedIn: PropTypes.bool,
+   location: PropTypes.shape({
+@@ -259,4 +264,6 @@ App.propTypes = {
+   })
+ }
+ 
+-export default App
++// export default App
++const App = withTranslation()(AppTranslated);
++export default withTranslation()(App);
+diff --git a/client-admin/src/components/conversation-admin/comment-moderation/comment.js b/client-admin/src/components/conversation-admin/comment-moderation/comment.js
+index af51b377..d040aa4d 100644
+--- a/client-admin/src/components/conversation-admin/comment-moderation/comment.js
++++ b/client-admin/src/components/conversation-admin/comment-moderation/comment.js
+@@ -5,12 +5,14 @@ import PropTypes from 'prop-types'
+ import { connect } from 'react-redux'
+ import { Flex, Box, Text, Button, Card, Link } from 'theme-ui'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => {
+   return {
+     conversation: state.zid_metadata.zid_metadata
+   }
+ })
+-class Comment extends React.Component {
++class CommentTranslated extends React.Component {
+   onAcceptClicked() {
+     this.props.acceptClickHandler(this.props.comment)
+   }
+@@ -24,6 +26,7 @@ class Comment extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <Card sx={{ mb: [3], minWidth: '35em' }}>
+         <Box>
+@@ -53,12 +56,12 @@ class Comment extends React.Component {
+                 target="_blank"
+                 sx={{ mr: [2] }}
+                 href="https://compdemocracy.org/metadata">
+-                {this.props.isMetaCheckbox ? 'metadata' : null}
++                {this.props.isMetaCheckbox ? t('moderate.metadata') : null}
+               </Link>
+               {this.props.isMetaCheckbox ? (
+                 <input
+                   type="checkbox"
+-                  label="metadata"
++                  label={t('moderate.metadata')}
+                   ref={(c) => (this.is_meta = c)}
+                   checked={this.props.comment.is_meta}
+                   onChange={this.onIsMetaClicked.bind(this)}
+@@ -72,7 +75,7 @@ class Comment extends React.Component {
+   }
+ }
+ 
+-Comment.propTypes = {
++CommentTranslated.propTypes = {
+   dispatch: PropTypes.func,
+   acceptClickHandler: PropTypes.func,
+   rejectClickHandler: PropTypes.func,
+@@ -82,10 +85,13 @@ Comment.propTypes = {
+   rejectButton: PropTypes.bool,
+   rejectButtonText: PropTypes.string,
+   isMetaCheckbox: PropTypes.bool,
++  t: PropTypes.func.isRequired,
+   comment: PropTypes.shape({
+     txt: PropTypes.string,
+     is_meta: PropTypes.bool
+   })
+ }
+ 
+-export default Comment
++// export default Comment
++const Comment = withTranslation()(CommentTranslated);
++export default withTranslation()(Comment);
+\ No newline at end of file
+diff --git a/client-admin/src/components/conversation-admin/comment-moderation/index.js b/client-admin/src/components/conversation-admin/comment-moderation/index.js
+index 012b4980..caba3616 100644
+--- a/client-admin/src/components/conversation-admin/comment-moderation/index.js
++++ b/client-admin/src/components/conversation-admin/comment-moderation/index.js
+@@ -15,6 +15,8 @@ import ModerateCommentsRejected from './moderate-comments-rejected'
+ 
+ import { Switch, Route, Link } from 'react-router-dom'
+ 
++import { withTranslation } from 'react-i18next';
++
+ const mapStateToProps = (state, ownProps) => {
+   return {
+     unmoderated: state.mod_comments_unmoderated,
+@@ -28,7 +30,7 @@ const pollFrequency = 60000
+ 
+ @connect((state) => state.zid_metadata)
+ @connect(mapStateToProps)
+-class CommentModeration extends React.Component {
++class CommentModerationTranslated extends React.Component {
+   loadComments() {
+     const { match } = this.props
+     this.props.dispatch(populateAllCommentStores(match.params.conversation_id))
+@@ -55,6 +57,8 @@ class CommentModeration extends React.Component {
+     const { match, location } = this.props
+ 
+     const url = location.pathname.split('/')[4]
++    
++    const { t } = this.props;
+ 
+     return (
+       <Box>
+@@ -65,7 +69,7 @@ class CommentModeration extends React.Component {
+             lineHeight: 'body',
+             mb: [3, null, 4]
+           }}>
+-          Moderate
++          {t('moderate.title')}
+         </Heading>
+         <Flex sx={{ mb: [4] }}>
+           <Link
+@@ -74,7 +78,7 @@ class CommentModeration extends React.Component {
+               variant: url ? 'links.nav' : 'links.activeNav'
+             }}
+             to={`${match.url}`}>
+-            Unmoderated{' '}
++            {t('moderate.unmoderated')}{' '}
+             {this.props.unmoderated.unmoderated_comments
+               ? this.props.unmoderated.unmoderated_comments.length
+               : null}
+@@ -85,7 +89,7 @@ class CommentModeration extends React.Component {
+               variant: url === 'accepted' ? 'links.activeNav' : 'links.nav'
+             }}
+             to={`${match.url}/accepted`}>
+-            Accepted{' '}
++            {t('moderate.accepted')}{' '}
+             {this.props.accepted.accepted_comments
+               ? this.props.accepted.accepted_comments.length
+               : null}
+@@ -96,7 +100,7 @@ class CommentModeration extends React.Component {
+               variant: url === 'rejected' ? 'links.activeNav' : 'links.nav'
+             }}
+             to={`${match.url}/rejected`}>
+-            Rejected{' '}
++            {t('moderate.rejected')}{' '}
+             {this.props.rejected.rejected_comments
+               ? this.props.rejected.rejected_comments.length
+               : null}
+@@ -126,4 +130,6 @@ class CommentModeration extends React.Component {
+   }
+ }
+ 
+-export default CommentModeration
++// export default CommentModeration
++const CommentModeration = withTranslation()(CommentModerationTranslated);
++export default withTranslation()(CommentModeration);
+diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
+index b4501bcd..e126977a 100644
+--- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
++++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
+@@ -9,8 +9,10 @@ import {
+ } from '../../../actions'
+ import Comment from './comment'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.mod_comments_accepted)
+-class ModerateCommentsAccepted extends React.Component {
++class ModerateCommentsAcceptedTranslated extends React.Component {
+   onCommentRejected(comment) {
+     this.props.dispatch(changeCommentStatusToRejected(comment))
+   }
+@@ -21,12 +23,13 @@ class ModerateCommentsAccepted extends React.Component {
+ 
+   createCommentMarkup() {
+     const comments = this.props.accepted_comments.map((comment, i) => {
++      const { t } = this.props;
+       return (
+         <Comment
+           key={i}
+           rejectButton
+           rejectClickHandler={this.onCommentRejected.bind(this)}
+-          rejectButtonText="reject"
++          rejectButtonText={t('moderate.reject')}
+           isMetaCheckbox
+           toggleIsMetaHandler={this.toggleIsMetaHandler.bind(this)}
+           comment={comment}
+@@ -37,19 +40,23 @@ class ModerateCommentsAccepted extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <div>
+         {this.props.accepted_comments !== null
+           ? this.createCommentMarkup()
+-          : 'Loading accepted comments...'}
++          : t('moderate.loading_accepted')}
+       </div>
+     )
+   }
+ }
+ 
+-ModerateCommentsAccepted.propTypes = {
++ModerateCommentsAcceptedTranslated.propTypes = {
+   dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired,
+   accepted_comments: PropTypes.arrayOf(PropTypes.object)
+ }
+ 
+-export default ModerateCommentsAccepted
++// export default ModerateCommentsAccepted
++const ModerateCommentsAccepted = withTranslation()(ModerateCommentsAcceptedTranslated);
++export default withTranslation()(ModerateCommentsAccepted);
+diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
+index d9dd7774..3b29c25d 100644
+--- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
++++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
+@@ -9,8 +9,10 @@ import {
+ import { connect } from 'react-redux'
+ import Comment from './comment'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.mod_comments_rejected)
+-class ModerateCommentsRejected extends React.Component {
++class ModerateCommentsRejectedTranslated extends React.Component {
+   onCommentAccepted(comment) {
+     this.props.dispatch(changeCommentStatusToAccepted(comment))
+   }
+@@ -20,12 +22,13 @@ class ModerateCommentsRejected extends React.Component {
+   }
+ 
+   createCommentMarkup() {
++    const { t } = this.props;
+     const comments = this.props.rejected_comments.map((comment, i) => {
+       return (
+         <Comment
+           key={i}
+           acceptButton
+-          acceptButtonText="accept"
++          acceptButtonText={t('moderate.accept')}
+           acceptClickHandler={this.onCommentAccepted.bind(this)}
+           isMetaCheckbox
+           toggleIsMetaHandler={this.toggleIsMetaHandler.bind(this)}
+@@ -37,19 +40,23 @@ class ModerateCommentsRejected extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <div>
+         {this.props.rejected_comments !== null
+           ? this.createCommentMarkup()
+-          : 'Loading rejected comments...'}
++          : t('moderate.loading_rejected')}
+       </div>
+     )
+   }
+ }
+ 
+-ModerateCommentsRejected.propTypes = {
++ModerateCommentsRejectedTranslated.propTypes = {
+   dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired,
+   rejected_comments: PropTypes.arrayOf(PropTypes.object)
+ }
+ 
+-export default ModerateCommentsRejected
++// export default ModerateCommentsRejected
++const ModerateCommentsRejected = withTranslation()(ModerateCommentsRejectedTranslated);
++export default withTranslation()(ModerateCommentsRejected);
+diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
+index 45dc29b0..303ef3c3 100644
+--- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
++++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
+@@ -10,8 +10,10 @@ import {
+ } from '../../../actions'
+ import Comment from './comment'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.mod_comments_unmoderated)
+-class ModerateCommentsTodo extends React.Component {
++class ModerateCommentsTodoTranslated extends React.Component {
+   onCommentAccepted(comment) {
+     this.props.dispatch(changeCommentStatusToAccepted(comment))
+   }
+@@ -27,6 +29,7 @@ class ModerateCommentsTodo extends React.Component {
+   createCommentMarkup(max) {
+ 
+     return this.props.unmoderated_comments.slice(0,max).map((comment, i) => {
++      const { t } = this.props;
+       return (
+         <Comment
+           key={i}
+@@ -34,8 +37,8 @@ class ModerateCommentsTodo extends React.Component {
+           rejectButton
+           acceptClickHandler={this.onCommentAccepted.bind(this)}
+           rejectClickHandler={this.onCommentRejected.bind(this)}
+-          acceptButtonText="accept"
+-          rejectButtonText="reject"
++          acceptButtonText={t('moderate.accept')}
++          rejectButtonText={t('moderate.reject')}
+           isMetaCheckbox
+           toggleIsMetaHandler={this.toggleIsMetaHandler.bind(this)}
+           comment={comment}
+@@ -46,23 +49,27 @@ class ModerateCommentsTodo extends React.Component {
+   }
+ 
+   render() {
+-    const max = 100;
++    const { t } = this.props;
++    const max = 500;
+     return (
+       <div>
+         <div>
+-          <p> Displays maximum {max} comments </p> 
++          {t('moderate.display_max', { param1: max})}
+           {this.props.unmoderated_comments !== null
+             ? this.createCommentMarkup(max)
+-            : 'Loading unmoderated comments...'}
++            : t('moderate.loading_unmoderated')}
+         </div>
+       </div>
+     )
+   }
+ }
+ 
+-ModerateCommentsTodo.propTypes = {
++ModerateCommentsTodoTranslated.propTypes = {
+   dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired,
+   unmoderated_comments: PropTypes.arrayOf(PropTypes.object)
+ }
+ 
+-export default ModerateCommentsTodo
++// export default ModerateCommentsTodo
++const ModerateCommentsTodo = withTranslation()(ModerateCommentsTodoTranslated);
++export default withTranslation()(ModerateCommentsTodo);
+diff --git a/client-admin/src/components/conversation-admin/index.js b/client-admin/src/components/conversation-admin/index.js
+index df0ad410..70c8c6d5 100644
+--- a/client-admin/src/components/conversation-admin/index.js
++++ b/client-admin/src/components/conversation-admin/index.js
+@@ -17,8 +17,10 @@ import ShareAndEmbed from './share-and-embed'
+ 
+ import Reports from './report/reports'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.zid_metadata)
+-class ConversationAdminContainer extends React.Component {
++class ConversationAdminContainerTranslated extends React.Component {
+   loadZidMetadata() {
+     this.props.dispatch(
+       populateZidMetadataStore(this.props.match.params.conversation_id)
+@@ -45,20 +47,22 @@ class ConversationAdminContainer extends React.Component {
+     const { match, location } = this.props
+ 
+     const url = location.pathname.split('/')[3]
++    
++    const { t } = this.props;
+ 
+     return (
+       <Flex>
+         <Box sx={{ mr: [5], p: [4], flex: '0 0 275' }}>
+           <Box sx={{ mb: [3] }}>
+             <Link sx={{ variant: 'links.nav' }} to={`/`}>
+-              All
++              {t('conv_nav.all')}
+             </Link>
+           </Box>
+           <Box sx={{ mb: [3] }}>
+             <Link
+               sx={{ variant: url ? 'links.nav' : 'links.activeNav' }}
+               to={`${match.url}`}>
+-              Configure
++              {t('conv_nav.configure')}
+             </Link>
+           </Box>
+           <Box sx={{ mb: [3] }}>
+@@ -67,7 +71,7 @@ class ConversationAdminContainer extends React.Component {
+                 variant: url === 'share' ? 'links.activeNav' : 'links.nav'
+               }}
+               to={`${match.url}/share`}>
+-              Distribute
++              {t('conv_nav.distribute')}
+             </Link>
+           </Box>
+           <Box sx={{ mb: [3] }}>
+@@ -76,7 +80,7 @@ class ConversationAdminContainer extends React.Component {
+                 variant: url === 'comments' ? 'links.activeNav' : 'links.nav'
+               }}
+               to={`${match.url}/comments`}>
+-              Moderate
++              {t('conv_nav.moderate')}
+             </Link>
+           </Box>
+           <Box sx={{ mb: [3] }}>
+@@ -85,7 +89,7 @@ class ConversationAdminContainer extends React.Component {
+                 variant: url === 'stats' ? 'links.activeNav' : 'links.nav'
+               }}
+               to={`${match.url}/stats`}>
+-              Monitor
++              {t('conv_nav.monitor')}
+             </Link>
+           </Box>
+           <Box sx={{ mb: [3] }}>
+@@ -94,7 +98,7 @@ class ConversationAdminContainer extends React.Component {
+                 variant: url === 'reports' ? 'links.activeNav' : 'links.nav'
+               }}
+               to={`${match.url}/reports`}>
+-              Report
++              {t('conv_nav.report')}
+             </Link>
+           </Box>
+         </Box>
+@@ -128,4 +132,6 @@ class ConversationAdminContainer extends React.Component {
+   }
+ }
+ 
+-export default ConversationAdminContainer
++// export default ConversationAdminContainer
++const ConversationAdminContainer = withTranslation()(ConversationAdminContainerTranslated);
++export default withTranslation()(ConversationAdminContainer);
+diff --git a/client-admin/src/components/conversation-admin/report/reports-list.js b/client-admin/src/components/conversation-admin/report/reports-list.js
+index 04ac1d10..6a57cafa 100644
+--- a/client-admin/src/components/conversation-admin/report/reports-list.js
++++ b/client-admin/src/components/conversation-admin/report/reports-list.js
+@@ -9,8 +9,10 @@ import { Heading, Box, Button } from 'theme-ui'
+ import ComponentHelpers from '../../../util/component-helpers'
+ import NoPermission from '../no-permission'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.zid_metadata)
+-class ReportsList extends React.Component {
++class ReportsListTranslated extends React.Component {
+   constructor(props) {
+     super(props)
+     this.state = {
+@@ -53,9 +55,11 @@ class ReportsList extends React.Component {
+     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
+       return <NoPermission />
+     }
++    
++    const { t } = this.props;
+ 
+     if (this.state.loading) {
+-      return <div>Loading Reports...</div>
++      return <div>{t('reports.loading')}</div>
+     }
+     return (
+       <Box>
+@@ -66,11 +70,11 @@ class ReportsList extends React.Component {
+             lineHeight: 'body',
+             mb: [3, null, 4]
+           }}>
+-          Report
++          {t('reports.title')}
+         </Heading>
+         <Box sx={{ mb: [3, null, 4] }}>
+           <Button onClick={this.createReportClicked.bind(this)}>
+-            Create report url
++            {t('reports.create_new')}
+           </Button>
+         </Box>
+         {this.state.reports.map((report) => {
+@@ -90,7 +94,8 @@ class ReportsList extends React.Component {
+   }
+ }
+ 
+-ReportsList.propTypes = {
++ReportsListTranslated.propTypes = {
++  t: PropTypes.func.isRequired,
+   match: PropTypes.shape({
+     params: PropTypes.shape({
+       conversation_id: PropTypes.string
+@@ -101,4 +106,6 @@ ReportsList.propTypes = {
+   })
+ }
+ 
+-export default ReportsList
++// export default ReportsList
++const ReportsList = withTranslation()(ReportsListTranslated);
++export default withTranslation()(ReportsList);
+diff --git a/client-admin/src/components/conversation-admin/seed-comment.js b/client-admin/src/components/conversation-admin/seed-comment.js
+index 26c34609..3404b4b2 100644
+--- a/client-admin/src/components/conversation-admin/seed-comment.js
++++ b/client-admin/src/components/conversation-admin/seed-comment.js
+@@ -8,8 +8,10 @@ import { handleSeedCommentSubmit, seedCommentChanged } from '../../actions'
+ import strings from '../../strings/strings'
+ import { Box, Text, Button, jsx, Link } from 'theme-ui'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.seed_comments)
+-class ModerateCommentsSeed extends React.Component {
++class ModerateCommentsSeedTranslated extends React.Component {
+   constructor(props) {
+     super(props)
+     this.state = {
+@@ -34,29 +36,31 @@ class ModerateCommentsSeed extends React.Component {
+   }
+ 
+   getButtonText() {
+-    let text = 'Submit'
++    const { t } = this.props;
++    let text = t('seed.submit')
+ 
+     if (this.props.success) {
+-      text = 'Success!'
++      text = t('seed.success')
+     }
+ 
+     if (this.props.loading) {
+-      text = 'Saving...'
++      text = t('seed.saving')
+     }
+ 
+     return text
+   }
+ 
+   render() {
++    const { t } = this.props;
+     const { seedText } = this.props
+     return (
+       <Box sx={{ mb: [4] }}>
+         <Text sx={{ mb: [2] }}>
+-          Add{' '}
++          {t('seed.add')}{' '}
+           <Link target="_blank" href="https://compdemocracy.org/seed-comments">
+-            seed comments
++            {t('seed.comments')}
+           </Link>{' '}
+-          for participants to vote on:
++          {t('seed.to_vote_on')}
+         </Text>
+         <Box sx={{ mb: [2] }}>
+           <textarea
+@@ -89,6 +93,8 @@ class ModerateCommentsSeed extends React.Component {
+   }
+ }
+ 
+-export default ModerateCommentsSeed
++// export default ModerateCommentsSeed
++const ModerateCommentsSeed = withTranslation()(ModerateCommentsSeedTranslated);
++export default withTranslation()(ModerateCommentsSeed);
+ 
+ // value={this.props.seedText}
+diff --git a/client-admin/src/components/conversation-admin/share-and-embed.js b/client-admin/src/components/conversation-admin/share-and-embed.js
+index 482014dc..89d6eee4 100644
+--- a/client-admin/src/components/conversation-admin/share-and-embed.js
++++ b/client-admin/src/components/conversation-admin/share-and-embed.js
+@@ -10,8 +10,10 @@ import { Heading } from 'theme-ui'
+ import ComponentHelpers from '../../util/component-helpers'
+ import NoPermission from './no-permission'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.zid_metadata)
+-class ShareAndEmbed extends React.Component {
++class ShareAndEmbedTranslated extends React.Component {
+   constructEmbeddedOnMarkup() {
+     return (
+       <p data-test-id="embed-page">
+@@ -30,6 +32,8 @@ class ShareAndEmbed extends React.Component {
+     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
+       return <NoPermission />
+     }
++    
++    const { t } = this.props;
+ 
+     const { match } = this.props
+     return (
+@@ -41,14 +45,14 @@ class ShareAndEmbed extends React.Component {
+             lineHeight: 'body',
+             mb: [3, null, 4]
+           }}>
+-          Distribute
++          {t('distribute.title')}
+         </Heading>
+         <ConversationHasCommentsCheck
+           conversation_id={match.params.conversation_id}
+           strict_moderation={this.props.zid_metadata.strict_moderation}
+         />
+         <div>
+-          <p> Share </p>
++          <p>{t('distribute.share')}</p>
+           <p>
+             <a
+               target="blank"
+@@ -58,7 +62,7 @@ class ShareAndEmbed extends React.Component {
+           </p>
+         </div>
+         <div>
+-          <p> Embed</p>
++          <p>{t('distribute.embed')}</p>
+           <div>
+             <pre>
+               {'<div'}
+@@ -69,9 +73,10 @@ class ShareAndEmbed extends React.Component {
+             </pre>
+           </div>
+           <p>
+-            This embed code can only be used to embed a single conversation.{' '}
++            
++            {t('distribute.desc')}{' '}
+             <Link to="/integrate">
+-              I want to integrate pol.is on my entire site.
++              {t('distribute.link')}
+             </Link>
+           </p>
+           <div>
+@@ -85,16 +90,19 @@ class ShareAndEmbed extends React.Component {
+   }
+ }
+ 
+-ShareAndEmbed.propTypes = {
++ShareAndEmbedTranslated.propTypes = {
+   match: PropTypes.shape({
+     params: PropTypes.shape({
+       conversation_id: PropTypes.string
+     })
+   }),
++  t: PropTypes.func.isRequired,
+   zid_metadata: PropTypes.shape({
+     parent_url: PropTypes.string,
+     strict_moderation: PropTypes.bool
+   })
+ }
+ 
+-export default ShareAndEmbed
++// export default ShareAndEmbed
++const ShareAndEmbed = withTranslation()(ShareAndEmbedTranslated);
++export default withTranslation()(ShareAndEmbed);
+diff --git a/client-admin/src/components/conversation-admin/stats/commenters.js b/client-admin/src/components/conversation-admin/stats/commenters.js
+index 33c2af71..0c5cede4 100644
+--- a/client-admin/src/components/conversation-admin/stats/commenters.js
++++ b/client-admin/src/components/conversation-admin/stats/commenters.js
+@@ -7,10 +7,13 @@ import { jsx, Box, Heading } from 'theme-ui'
+ import { VictoryChart, VictoryArea } from 'victory'
+ import victoryTheme from './victoryTheme'
+ 
+-class Commenters extends React.Component {
++import { withTranslation } from 'react-i18next';
++
++class CommentersTranslated extends React.Component {
+   render() {
+     const { size, firstCommentTimes } = this.props
+     if (firstCommentTimes.length <= 1) return null /* handle seed commenter */
++    const { t } = this.props;
+     return (
+       <Box sx={{ mt: [5] }}>
+         <Heading
+@@ -20,7 +23,7 @@ class Commenters extends React.Component {
+             lineHeight: 'body',
+             my: [2]
+           }}>
+-          Commenters over time, by time of first comment
++          {t('stats.commenters')}
+         </Heading>
+         <VictoryChart
+           theme={victoryTheme}
+@@ -40,4 +43,6 @@ class Commenters extends React.Component {
+   }
+ }
+ 
+-export default Commenters
++// export default Commenters
++const Commenters = withTranslation()(CommentersTranslated);
++export default withTranslation()(Commenters);
+diff --git a/client-admin/src/components/conversation-admin/stats/conversation-stats-number-cards.js b/client-admin/src/components/conversation-admin/stats/conversation-stats-number-cards.js
+index 278f5604..cc972df8 100644
+--- a/client-admin/src/components/conversation-admin/stats/conversation-stats-number-cards.js
++++ b/client-admin/src/components/conversation-admin/stats/conversation-stats-number-cards.js
+@@ -4,36 +4,39 @@ import React from 'react'
+ import PropTypes from 'prop-types'
+ import NumberCard from './conversation-stats-number-card'
+ 
+-class NumberCards extends React.Component {
++import { withTranslation } from 'react-i18next';
++
++class NumberCardsTranslated extends React.Component {
+   render() {
+     const data = this.props.data
+     const averageVotes = (
+       data.voteTimes.length / data.firstVoteTimes.length
+     ).toFixed(2)
++    const { t } = this.props;
+     return (
+       <div>
+         <NumberCard
+           datum={data.firstVoteTimes.length}
+-          subheading="participants voted"
++          subheading={t('stats.voted')}
+           icon="users"
+         />
+         <NumberCard
+           datum={data.voteTimes.length}
+-          subheading="votes were cast"
++          subheading={t('stats.votes')}
+           icon="tags"
+         />
+         <NumberCard
+           datum={isNaN(averageVotes) ? 0 : averageVotes}
+-          subheading="votes per participant on average"
++          subheading={t('stats.average_votes')}
+         />
+         <NumberCard
+           datum={data.firstCommentTimes.length}
+-          subheading="commented"
++          subheading={t('stats.commented')}
+           icon="users"
+         />
+         <NumberCard
+           datum={data.commentTimes.length}
+-          subheading="comments submitted"
++          subheading={t('stats.comments_submitted')}
+           icon="comments"
+         />
+       </div>
+@@ -41,7 +44,8 @@ class NumberCards extends React.Component {
+   }
+ }
+ 
+-NumberCards.propTypes = {
++NumberCardsTranslated.propTypes = {
++  t: PropTypes.func.isRequired,
+   data: PropTypes.shape({
+     firstVoteTimes: PropTypes.arrayOf(PropTypes.number),
+     firstCommentTimes: PropTypes.arrayOf(PropTypes.number),
+@@ -50,4 +54,6 @@ NumberCards.propTypes = {
+   })
+ }
+ 
+-export default NumberCards
++// export default NumberCards
++const NumberCards = withTranslation()(NumberCardsTranslated);
++export default withTranslation()(NumberCards);
+diff --git a/client-admin/src/components/conversation-admin/stats/index.js b/client-admin/src/components/conversation-admin/stats/index.js
+index 428b94ab..32cca9f3 100644
+--- a/client-admin/src/components/conversation-admin/stats/index.js
++++ b/client-admin/src/components/conversation-admin/stats/index.js
+@@ -12,10 +12,12 @@ import { Heading, Box, jsx } from 'theme-ui'
+ import ComponentHelpers from '../../../util/component-helpers'
+ import NoPermission from '../no-permission'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.stats)
+ @connect((state) => state.zid_metadata)
+ @connect((state) => state.stats)
+-class ConversationStats extends React.Component {
++class ConversationStatsTranslated extends React.Component {
+   constructor(props) {
+     super(props)
+     const times = dateSetupUtil()
+@@ -80,7 +82,9 @@ class ConversationStats extends React.Component {
+       !conversation_stats.firstCommentTimes ||
+       !conversation_stats.firstVoteTimes
+ 
+-    if (loading) return <Box>Loading...</Box>
++    const { t } = this.props;
++    
++    if (loading) return <Box>{t('stats.loading')}</Box>
+ 
+     return (
+       <div>
+@@ -91,7 +95,7 @@ class ConversationStats extends React.Component {
+             lineHeight: 'body',
+             mb: [3, null, 4]
+           }}>
+-          Monitor
++          {t('stats.title')}
+         </Heading>
+         <NumberCards data={conversation_stats} />
+         <Voters
+@@ -109,4 +113,6 @@ class ConversationStats extends React.Component {
+   }
+ }
+ 
+-export default ConversationStats
++// export default ConversationStats
++const ConversationStats = withTranslation()(ConversationStatsTranslated);
++export default withTranslation()(ConversationStats);
+diff --git a/client-admin/src/components/conversation-admin/stats/voters.js b/client-admin/src/components/conversation-admin/stats/voters.js
+index f6f57a4b..df58377b 100644
+--- a/client-admin/src/components/conversation-admin/stats/voters.js
++++ b/client-admin/src/components/conversation-admin/stats/voters.js
+@@ -7,11 +7,14 @@ import { jsx, Box, Heading } from 'theme-ui'
+ import { VictoryChart, VictoryArea } from 'victory'
+ import victoryTheme from './victoryTheme'
+ 
+-class Voters extends React.Component {
++import { withTranslation } from 'react-i18next';
++
++class VotersTranslated extends React.Component {
+   render() {
+     const { size, firstVoteTimes } = this.props
+     if (firstVoteTimes.length <= 1)
+       return null /* no area chart with 1 data point */
++    const { t } = this.props;
+     return (
+       <Box sx={{ mt: [5] }}>
+         <Heading
+@@ -21,7 +24,7 @@ class Voters extends React.Component {
+             lineHeight: 'body',
+             my: [2]
+           }}>
+-          Voters over time, by time of first vote
++          {t('stats.voters')}
+         </Heading>
+         <VictoryChart
+           theme={victoryTheme}
+@@ -41,4 +44,6 @@ class Voters extends React.Component {
+   }
+ }
+ 
+-export default Voters
++// export default Voters
++const Voters = withTranslation()(VotersTranslated);
++export default withTranslation()(Voters);
+diff --git a/client-admin/src/components/conversations-and-account/account.js b/client-admin/src/components/conversations-and-account/account.js
+index 94b7ef8f..0a7b5c38 100644
+--- a/client-admin/src/components/conversations-and-account/account.js
++++ b/client-admin/src/components/conversations-and-account/account.js
+@@ -7,9 +7,13 @@ import { Box, Heading } from 'theme-ui'
+ 
+ import Spinner from '../framework/spinner'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.user)
+-class Account extends React.Component {
++class AccountTranslated extends React.Component {
++  
+   buildAccountMarkup() {
++    const { t } = this.props;
+     return (
+       <>
+         <Box>
+@@ -20,14 +24,14 @@ class Account extends React.Component {
+               lineHeight: 'body',
+               mb: [3, null, 4]
+             }}>
+-            Account
++            {t('account.title')}
+           </Heading>
+-          <p>Hi {this.props.user.hname.split(' ')[0]}!</p>
++          <p>{t('account.welcome')} {this.props.user.hname.split(' ')[0]}!</p>
+           <Box>
+             <p>{this.props.user.hname}</p>
+             <p>{this.props.user.email}</p>
+-            <p>Social:</p>
+-            <p>{this.props.user.hasFacebook ? 'Facebook is connected' : ''} </p>
++            <p>{this.props.user.hasFacebook || this.props.user.hasTwitter ? 'Social:' : ''}</p>
++            <p>{this.props.user.hasFacebook ? 'Facebook is connected' : ''}</p>
+             <p>{this.props.user.hasTwitter ? 'Twitter is connected' : ''}</p>
+           </Box>
+         </Box>
+@@ -44,13 +48,16 @@ class Account extends React.Component {
+   }
+ }
+ 
+-Account.propTypes = {
++AccountTranslated.propTypes = {
+   user: PropTypes.shape({
+     hname: PropTypes.string,
+     email: PropTypes.string,
+     hasFacebook: PropTypes.bool,
+     hasTwitter: PropTypes.bool
+-  })
++  }),
++  t: PropTypes.func.isRequired
+ }
+ 
+-export default Account
++// export default Account
++const Account = withTranslation()(AccountTranslated);
++export default withTranslation()(Account);
+diff --git a/client-admin/src/components/conversations-and-account/conversation.js b/client-admin/src/components/conversations-and-account/conversation.js
+index ba039291..9f5b9cfb 100644
+--- a/client-admin/src/components/conversations-and-account/conversation.js
++++ b/client-admin/src/components/conversations-and-account/conversation.js
+@@ -2,7 +2,10 @@
+ import { jsx, Text, Card } from 'theme-ui'
+ import PropTypes from 'prop-types'
+ 
++import { useTranslation } from 'react-i18next';
++
+ function Conversation({ c, i, goToConversation }) {
++  const { t } = useTranslation();
+   return (
+     <Card
+       onClick={goToConversation}
+@@ -13,7 +16,7 @@ function Conversation({ c, i, goToConversation }) {
+       <Text data-test-id="embed-page">
+         {c.parent_url ? `Embedded on ${c.parent_url}` : null}
+       </Text>
+-      <Text sx={{ mt: [2] }}>{c.participant_count} participants</Text>
++      <Text sx={{ mt: [2] }}>{c.participant_count} {t('conversations.participants')}</Text>
+     </Card>
+   )
+ }
+diff --git a/client-admin/src/components/conversations-and-account/conversations.js b/client-admin/src/components/conversations-and-account/conversations.js
+index 7fcb9036..50b65a2f 100644
+--- a/client-admin/src/components/conversations-and-account/conversations.js
++++ b/client-admin/src/components/conversations-and-account/conversations.js
+@@ -12,8 +12,10 @@ import Url from '../../util/url'
+ import { Box, Heading, Button, Text } from 'theme-ui'
+ import Conversation from './conversation'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.conversations)
+-class Conversations extends React.Component {
++class ConversationsTranslated extends React.Component {
+   constructor(props) {
+     super(props)
+     this.state = {
+@@ -72,6 +74,7 @@ class Conversations extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     const err = this.props.error
+     const { conversations } = this.props
+ 
+@@ -84,20 +87,20 @@ class Conversations extends React.Component {
+             lineHeight: 'body',
+             mb: [3, null, 4]
+           }}>
+-          All Conversations
++          {t('conversations.title')}
+         </Heading>
+         <Box sx={{ mb: [3, null, 4] }}>
+           <Button onClick={this.onNewClicked.bind(this)}>
+-            Create new conversation
++            {t('conversations.create_new')}
+           </Button>
+         </Box>
+         <Box>
+           <Box sx={{ mb: [3] }}>
+-            {this.props.loading ? 'Loading conversations...' : null}
++            {this.props.loading ? t('conversations.loading') : null}
+           </Box>
+           {err ? (
+             <Text>
+-              {'Error loading conversations: ' +
++              {t('conversations.loading_error') +
+                 err.status +
+                 ' ' +
+                 err.statusText}
+@@ -121,8 +124,9 @@ class Conversations extends React.Component {
+   }
+ }
+ 
+-Conversations.propTypes = {
++ConversationsTranslated.propTypes = {
+   dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired,
+   error: PropTypes.shape({
+     status: PropTypes.number,
+     statusText: PropTypes.string
+@@ -139,4 +143,7 @@ Conversations.propTypes = {
+   })
+ }
+ 
+-export default Conversations
++// export default Conversations
++const Conversations = withTranslation()(ConversationsTranslated);
++export default withTranslation()(Conversations);
++
+diff --git a/client-admin/src/components/conversations-and-account/integrate.js b/client-admin/src/components/conversations-and-account/integrate.js
+index 9d97ae4b..f8268a55 100644
+--- a/client-admin/src/components/conversations-and-account/integrate.js
++++ b/client-admin/src/components/conversations-and-account/integrate.js
+@@ -6,12 +6,16 @@ import { connect } from 'react-redux'
+ import { Box, Heading, Text } from 'theme-ui'
+ import Url from '../../util/url'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.user)
+-class Integrate extends React.Component {
++class IntegrateTranslated extends React.Component {
+   render() {
+     const userSiteId = this.props.user === null
+      ? '__loading, try refreshing__'
+      : this.props.user.site_ids[0];
++     
++    const { t } = this.props;
+ 
+     return (
+       <Box>
+@@ -23,31 +27,17 @@ class Integrate extends React.Component {
+               lineHeight: 'body',
+               mb: [3, null, 4]
+             }}>
+-            Integrate
++            {t('integrate.title')}
+           </Heading>
+           <Text>
+-            Copy and paste this code into your content management template. Each
+-            page (article, post) requires a unique string in the
+-            &quot;PAGE_ID&quot; field. This should be consistent over time and
+-            unique to each of your pages (like the article title).
++          {t('integrate.text1')}
+           </Text>
+           <ul>
+-            <li>
+-              When this embed code loads on your website, it will either create
+-              a new conversation (if one is not already associated with the
+-              string passed into PAGE_ID) or load an existing conversation.
+-            </li>
+-            <li>
+-              This embed code will keep track of what conversations belongs on
+-              what pages via the data-page_id HTML attribute.
+-            </li>
+-            <li>
+-              Simply replace &quot;PAGE_ID&quot;, either manually or in your
+-              templates, to create new conversations and load existing ones in
+-              the right place.
+-            </li>
++            <li>{t('integrate.text2')}</li>
++            <li>{t('integrate.text3')}</li>
++            <li>{t('integrate.text4')}</li>
+           </ul>
+-          <Box>
++          <Box sx={{bg:'#BBB'}}>
+             <pre>
+               {`
+ <div
+@@ -65,10 +55,13 @@ class Integrate extends React.Component {
+   }
+ }
+ 
+-Integrate.propTypes = {
++IntegrateTranslated.propTypes = {
++  t: PropTypes.func.isRequired,
+   user: PropTypes.shape({
+     site_ids: PropTypes.arrayOf(PropTypes.string)
+   })
+ }
+ 
+-export default Integrate
++// export default Integrate
++const Integrate = withTranslation()(IntegrateTranslated);
++export default withTranslation()(Integrate);
+\ No newline at end of file
+diff --git a/client-admin/src/components/interior-header.js b/client-admin/src/components/interior-header.js
+index 39bdcfd3..9afee915 100644
+--- a/client-admin/src/components/interior-header.js
++++ b/client-admin/src/components/interior-header.js
+@@ -4,8 +4,16 @@ import { Box, jsx } from 'theme-ui'
+ import { Link } from 'react-router-dom'
+ import Logomark from './framework/logomark'
+ 
+-class InteriorHeader extends React.Component {
++import { withTranslation } from 'react-i18next';
++
++class InteriorHeaderTranslated extends React.Component {
+   render() {
++    const { t, i18n } = this.props;
++    document.documentElement.lang = i18n.language; // This is too slow for google translate
++    const changeLanguage = (lng) => {
++        i18n.changeLanguage(lng);
++        document.documentElement.lang = lng;
++    };
+     return (
+       <Box>
+         <Box
+@@ -27,14 +35,24 @@ class InteriorHeader extends React.Component {
+             />
+             Polis
+           </Link>
++          
+           <Link id="signoutLink" sx={{ variant: 'links.header' }} to="/signout">
+-            sign out
++            {t('header.signout')}
+           </Link>
++          
+         </Box>
++        <div style={{display:"flex", justifyContent:"flex-end"}}>
++            <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('fi')}>FI</button>
++            <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('sv')}>SV</button>
++            <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('en')}>EN</button>
++          </div>
+         <Box>{this.props.children}</Box>
+       </Box>
+     )
+   }
+ }
+ 
+-export default InteriorHeader
++// export default InteriorHeader
++const InteriorHeader = withTranslation()(InteriorHeaderTranslated);
++export default withTranslation()(InteriorHeader);
++
+diff --git a/client-admin/src/components/landers/createuser.js b/client-admin/src/components/landers/createuser.js
+index 23d7e08a..a3915e81 100644
+--- a/client-admin/src/components/landers/createuser.js
++++ b/client-admin/src/components/landers/createuser.js
+@@ -10,10 +10,12 @@ import { Link } from 'react-router-dom'
+ import StaticLayout from './lander-layout'
+ import strings from '../../strings/strings'
+ 
++import { withTranslation } from 'react-i18next';
++
+ const fbAppId = process.env.FB_APP_ID
+ 
+ @connect((state) => state.signin)
+-class Createuser extends React.Component {
++class CreateuserTranslated extends React.Component {
+   getDest() {
+     return this.props.location.pathname.slice('/createuser'.length)
+   }
+@@ -60,6 +62,7 @@ class Createuser extends React.Component {
+   }
+ 
+   drawForm() {
++    const { t } = this.props;
+     return (
+       <Box>
+         <form sx={{ mb: [4] }}>
+@@ -76,7 +79,7 @@ class Createuser extends React.Component {
+               }}
+               id="createUserNameInput"
+               ref={(c) => (this.hname = c)}
+-              placeholder="name"
++              placeholder={t('createuser.name')}
+               type="text"
+             />
+           </Box>
+@@ -93,7 +96,7 @@ class Createuser extends React.Component {
+               }}
+               id="createUserEmailInput"
+               ref={(c) => (this.email = c)}
+-              placeholder="email"
++              placeholder={t('createuser.email')}
+               type="email"
+             />
+           </Box>
+@@ -110,7 +113,7 @@ class Createuser extends React.Component {
+               }}
+               id="createUserPasswordInput"
+               ref={(c) => (this.password = c)}
+-              placeholder="password"
++              placeholder={t('createuser.password')}
+               type="password"
+             />
+           </Box>
+@@ -127,21 +130,21 @@ class Createuser extends React.Component {
+               }}
+               id="createUserPasswordRepeatInput"
+               ref={(c) => (this.password2 = c)}
+-              placeholder="repeat password"
++              placeholder={t('createuser.password_repeat')}
+               type="password"
+             />
+           </Box>
+           {this.maybeErrorMessage()}
+ 
+           <Box>
+-            I agree to the{' '}
++            {t('createuser.agree')}{' '}
+             <a href="https://pol.is/tos" tabIndex="110">
+-              pol.is terms
++              {t('createuser.agree_tos')}
+             </a>{' '}
+-            and{' '}
++            {t('createuser.agree_and')}{' '}
+             <a href="https://pol.is/privacy" tabIndex="111">
+               {' '}
+-              privacy agreement
++              {t('createuser.agree_privacy')}
+             </a>
+             .
+           </Box>
+@@ -149,16 +152,16 @@ class Createuser extends React.Component {
+             sx={{ my: [2] }}
+             id="createUserButton"
+             onClick={this.handleLoginClicked.bind(this)}>
+-            {this.props.pending ? 'Creating Account...' : 'Create Account'}
++            {this.props.pending ? t('createuser.creating') : t('createuser.create')} 
+           </Button>
+         </form>
+         <Box sx={{ mb: [4] }}>
+-          Already have an account?{' '}
++          {t('createuser.already_have_account')}{' '}
+           <Link
+             tabIndex="6"
+             to={'/signin' + this.getDest()}
+             data-section="signup-select">
+-            Sign in
++            {t('createuser.signin')}
+           </Link>
+         </Box>
+ 
+@@ -206,11 +209,12 @@ class Createuser extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <StaticLayout>
+         <div>
+           <Heading as="h1" sx={{ my: [4, null, 5], fontSize: [6, null, 7] }}>
+-            Create Account
++            {t('createuser.title')}
+           </Heading>
+           {this.props.facebookError !== 'polis_err_user_with_this_email_exists'
+             ? this.drawForm()
+@@ -221,4 +225,6 @@ class Createuser extends React.Component {
+   }
+ }
+ 
+-export default Createuser
++// export default Createuser
++const Createuser = withTranslation()(CreateuserTranslated);
++export default withTranslation()(Createuser);
+diff --git a/client-admin/src/components/landers/lander-header.js b/client-admin/src/components/landers/lander-header.js
+index 1d1d67a5..8aa73441 100644
+--- a/client-admin/src/components/landers/lander-header.js
++++ b/client-admin/src/components/landers/lander-header.js
+@@ -1,12 +1,21 @@
+ /** @jsx jsx */
+ import { Component } from 'react'
++import PropTypes from 'prop-types'
+ import { Flex, Box, jsx } from 'theme-ui'
+ 
+ import { Link } from 'react-router-dom'
+ import Logomark from '../framework/logomark'
+ 
+-class Header extends Component {
++import { withTranslation } from 'react-i18next';
++
++class HeaderTranslated extends Component {
+   render() {
++    const { t, i18n } = this.props;
++    document.documentElement.lang = i18n.language; // This is too slow for google translate
++    const changeLanguage = (lng) => {
++        i18n.changeLanguage(lng);
++        document.documentElement.lang = lng;
++    };
+     return (
+       <Box>
+         <Flex
+@@ -26,9 +35,14 @@ class Header extends Component {
+               Polis
+             </Link>
+           </Box>
++          <div>
++          <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('fi')}>FI</button>
++          <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('sv')}>SV</button>
++          <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('en')}>EN</button>
++          </div>
+           <Box>
+             <Link sx={{ variant: 'links.nav' }} to="/signin">
+-              Sign in
++              {t('header.signin')}
+             </Link>
+           </Box>
+         </Flex>
+@@ -37,4 +51,11 @@ class Header extends Component {
+   }
+ }
+ 
+-export default Header
++HeaderTranslated.propTypes = {
++  t: PropTypes.func.isRequired,
++  i18n: PropTypes.func.isRequired
++}
++
++// export default Header
++const Header = withTranslation()(HeaderTranslated);
++export default withTranslation()(Header);
+diff --git a/client-admin/src/components/landers/password-reset-init-done.js b/client-admin/src/components/landers/password-reset-init-done.js
+index 5d90859a..aa0cfd8d 100644
+--- a/client-admin/src/components/landers/password-reset-init-done.js
++++ b/client-admin/src/components/landers/password-reset-init-done.js
+@@ -1,21 +1,31 @@
+ // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import React from 'react'
++import PropTypes from 'prop-types'
+ import { connect } from 'react-redux'
+ 
+ import StaticLayout from './lander-layout'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect()
+-class PasswordResetInitDone extends React.Component {
++class PasswordResetInitDoneTranslated extends React.Component {
+   render() {
++    const { t } = this.props;
+     return (
+       <StaticLayout>
+         <div>
+-          <p>Check your email for a password reset link</p>
++          <p>{t('password.reset_check_email_link')}</p>
+         </div>
+       </StaticLayout>
+     )
+   }
+ }
+ 
+-export default PasswordResetInitDone
++PasswordResetInitDoneTranslated.propTypes = {
++  t: PropTypes.func.isRequired
++}
++
++// export default PasswordResetInitDone
++const PasswordResetInitDone = withTranslation()(PasswordResetInitDoneTranslated);
++export default withTranslation()(PasswordResetInitDone);
+diff --git a/client-admin/src/components/landers/password-reset-init.js b/client-admin/src/components/landers/password-reset-init.js
+index 4544f4a9..021edf18 100644
+--- a/client-admin/src/components/landers/password-reset-init.js
++++ b/client-admin/src/components/landers/password-reset-init.js
+@@ -7,8 +7,10 @@ import { doPasswordResetInit } from '../../actions'
+ 
+ import StaticLayout from './lander-layout'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect()
+-class PasswordResetInit extends React.Component {
++class PasswordResetInitTranslated extends React.Component {
+   handleClick(e) {
+     e.preventDefault()
+ 
+@@ -20,17 +22,18 @@ class PasswordResetInit extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <StaticLayout>
+-        <h1> Password Reset</h1>
+-        <form>
++        <h1>{t('password.title')}</h1>
++        <form style={{marginBottom: "50px"}}>
+           <input
+             ref={(c) => (this.email = c)}
+-            placeholder="email"
++            placeholder={t('password.email')}
+             type="text"
+           />
+           <button onClick={this.handleClick.bind(this)}>
+-            Send password reset email
++            {t('password.send_email')}
+           </button>
+         </form>
+       </StaticLayout>
+@@ -38,8 +41,11 @@ class PasswordResetInit extends React.Component {
+   }
+ }
+ 
+-PasswordResetInit.propTypes = {
+-  dispatch: PropTypes.func
++PasswordResetInitTranslated.propTypes = {
++  dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired
+ }
+ 
+-export default PasswordResetInit
++// export default PasswordResetInit
++const PasswordResetInit = withTranslation()(PasswordResetInitTranslated);
++export default withTranslation()(PasswordResetInit);
+diff --git a/client-admin/src/components/landers/password-reset.js b/client-admin/src/components/landers/password-reset.js
+index a3db6769..6a5f7a01 100644
+--- a/client-admin/src/components/landers/password-reset.js
++++ b/client-admin/src/components/landers/password-reset.js
+@@ -6,8 +6,10 @@ import { connect } from 'react-redux'
+ import { doPasswordReset } from '../../actions'
+ import StaticLayout from './lander-layout'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect()
+-class PasswordReset extends React.Component {
++class PasswordResetTranslated extends React.Component {
+   handleClick(e) {
+     e.preventDefault()
+     const attrs = {
+@@ -24,22 +26,23 @@ class PasswordReset extends React.Component {
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <StaticLayout>
+-        <h1>Password Reset</h1>
+-        <form>
++        <h1>{t('password.title')}</h1>
++        <form style={{marginBottom: "50px"}}>
+           <input
+             ref={(c) => (this.password = c)}
+-            placeholder="new password"
++            placeholder={t('password.new')}
+             type="password"
+           />
+           <input
+             ref={(c) => (this.passwordRepeat = c)}
+-            placeholder="repeat new password"
++            placeholder={t('password.new_repeat')}
+             type="password"
+           />
+           <button onClick={this.handleClick.bind(this)}>
+-            Set new password
++            {t('password.new_set')}
+           </button>
+         </form>
+       </StaticLayout>
+@@ -47,9 +50,12 @@ class PasswordReset extends React.Component {
+   }
+ }
+ 
+-PasswordReset.propTypes = {
++PasswordResetTranslated.propTypes = {
+   dispatch: PropTypes.func,
+-  location: PropTypes.object
++  location: PropTypes.object,
++  t: PropTypes.func.isRequired
+ }
+ 
+-export default PasswordReset
++// export default PasswordReset
++const PasswordReset = withTranslation()(PasswordResetTranslated);
++export default withTranslation()(PasswordReset);
+diff --git a/client-admin/src/components/landers/signout.js b/client-admin/src/components/landers/signout.js
+index 8f9f6c44..4ece0733 100644
+--- a/client-admin/src/components/landers/signout.js
++++ b/client-admin/src/components/landers/signout.js
+@@ -8,25 +8,31 @@ import { Heading } from 'theme-ui'
+ 
+ import { doSignout } from '../../actions'
+ 
++import { withTranslation } from 'react-i18next';
++
+ @connect((state) => state.signout)
+-class SignOut extends React.Component {
++class SignOutTranslated extends React.Component {
+   componentDidMount() {
+-    this.props.dispatch(doSignout('/home'))
++    this.props.dispatch(doSignout('/signin')) // DF customization, due to WAF restrictions redirect back to /signin instead of /home
+   }
+ 
+   render() {
++    const { t } = this.props;
+     return (
+       <StaticLayout>
+         <Heading as="h1" sx={{ my: [4, null, 5], fontSize: [6, null, 7] }}>
+-          Signing Out
++          {t('signout.signingout')}
+         </Heading>
+       </StaticLayout>
+     )
+   }
+ }
+ 
+-SignOut.propTypes = {
+-  dispatch: PropTypes.func
++SignOutTranslated.propTypes = {
++  dispatch: PropTypes.func,
++  t: PropTypes.func.isRequired
+ }
+ 
+-export default SignOut
++// export default SignOut
++const SignOut = withTranslation()(SignOutTranslated);
++export default withTranslation()(SignOut);
+diff --git a/client-admin/src/i18n.js b/client-admin/src/i18n.js
+new file mode 100644
+index 00000000..4a3d4eab
+--- /dev/null
++++ b/client-admin/src/i18n.js
+@@ -0,0 +1,34 @@
++import i18n from 'i18next';
++import { initReactI18next } from 'react-i18next';
++
++import Backend from 'i18next-http-backend';
++import LanguageDetector from 'i18next-browser-languagedetector';
++
++i18n
++  // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
++  // learn more: https://github.com/i18next/i18next-http-backend
++  // want your translations to be loaded from a professional CDN? => https://github.com/locize/react-tutorial#step-2---use-the-locize-cdn
++  .use(Backend)
++  
++  // detect user language
++  // learn more: https://github.com/i18next/i18next-browser-languageDetector
++  .use(LanguageDetector)
++  
++  // pass the i18n instance to react-i18next.
++  .use(initReactI18next)
++  
++  // init i18next
++  // for all options read: https://www.i18next.com/overview/configuration-options
++  .init({
++    debug: false,
++    fallbackLng: 'en',
++    supportedLngs: ['en', 'fi', 'sv'],
++    interpolation: {
++      escapeValue: false, // not needed for react as it escapes by default
++    },
++    ns: 'client-admin' // Use the namespace to separate translation files by UI it belongs to
++  });
++
++
++export default i18n;
++
+diff --git a/client-admin/src/index.js b/client-admin/src/index.js
+index 0364afcf..5c4aa906 100644
+--- a/client-admin/src/index.js
++++ b/client-admin/src/index.js
+@@ -2,7 +2,7 @@
+ 
+ import $ from 'jquery'
+ 
+-import React from 'react'
++import React, { Suspense } from 'react';
+ import ReactDOM from 'react-dom'
+ import { Provider } from 'react-redux'
+ 
+@@ -13,11 +13,15 @@ import App from './app'
+ 
+ import { BrowserRouter as Router, Route } from 'react-router-dom'
+ 
++// import i18n (needs to be bundled ;)) 
++import './i18n';
++
+ const store = configureStore()
+ 
+ class Root extends React.Component {
+   render() {
+     return (
++    <Suspense fallback="loading">
+       <ThemeProvider theme={theme}>
+         <Provider store={store}>
+           <Router>
+@@ -25,6 +29,7 @@ class Root extends React.Component {
+           </Router>
+         </Provider>
+       </ThemeProvider>
++      </Suspense>
+     )
+   }
+ }
+diff --git a/client-participation/js/strings.js b/client-participation/js/strings.js
+index e22e972d..f906e67f 100644
+--- a/client-participation/js/strings.js
++++ b/client-participation/js/strings.js
+@@ -4,6 +4,10 @@ var preloadHelper = require("./util/preloadHelper");
+ var Utils = require("./util/utils");
+ 
+ var translations = {
++  // Finnish
++  fi: require("./strings/fi.js"),
++  // Swedish
++  sv: require("./strings/sv.js"),
+   // Arabic
+   ar: require("./strings/ar.js"),
+   // Welsh
+@@ -79,7 +83,16 @@ preloadHelper.acceptLanguagePromise.then(function() {
+   prioritized.forEach(function (languageCode) {
+     if (languageCode.match(/^en/)) {
+       _.extend(strings, translations.en_us);
+-    } else if (languageCode.match(/^ja/)) {
++    } else if (
++      languageCode.match(/^fi/) ||
++      languageCode.match(/^fi-FI/)) {
++      _.extend(strings, translations.fi);
++    } else if (
++      languageCode.match(/^sv/) ||
++      languageCode.match(/^sv-SE/)) {
++      _.extend(strings, translations.sv);
++    }
++    else if (languageCode.match(/^ja/)) {
+       _.extend(strings, translations.ja);
+     } else if (
+       languageCode.match(/^zh-CN/) ||
+diff --git a/client-participation/js/strings/fi.js b/client-participation/js/strings/fi.js
+new file mode 100644
+index 00000000..0ac3b15d
+--- /dev/null
++++ b/client-participation/js/strings/fi.js
+@@ -0,0 +1,136 @@
++// Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++var s = {};
++
++s.agree = "Samaa mieltä";
++s.disagree = "Eri mieltä";
++s.pass = "Ohita / Epävarma";
++
++s.importantCheckbox = "Tämä kommentti on tärkeä";
++s.howImportantPrompt = "Kuinta tärkeä tämä kannanotto on?";
++s.howImportantLow = "Alhainen";
++s.howImportantMedium = "Keskisuuri";
++s.howImportantHigh = "Korkea";
++
++s.modSpam = "Spam";
++s.modOffTopic = "Aiheen vierestä";
++s.modImportant = "Tärkeä";
++s.modSubmitInitialState = "Ohita (ei mikään ylläolevista), seuraava kannanotto";
++s.modSubmit = "Valmis, seuraava kannanotto";
++
++s.x_wrote = "kirjoitti:";
++s.x_tweeted = "twiittasi:";
++s.comments_remaining = "{{num_comments}} jäljellä";
++s.comments_remaining2 = "{{num_comments}} kannanotto(a) jäljellä";
++s.group_123 = "Ryhmä:";
++s.comment_123 = "Kannanotto:";
++s.majorityOpinion = "Enemmistön mielipide";
++s.majorityOpinionShort = "Enemmistö";
++s.info = "Info";
++s.addPolisToYourSite = "<img style='height: 20px; margin: 0px 4px;' src='{{URL}}'/>";
++s.privacy = "Yksityisyys";
++s.TOS = "Palveluehdot";
++s.writePrompt = "Jaa näkemyksesi...";
++s.anonPerson = "Anonyymi";
++s.helpWhatAmISeeingTitle = "Mitä näen?";
++s.helpWhatAmISeeing = "Samalla tavalla äänestävät ihmiset ryhmitellään. Klikkaamalla ryhmää näet, mitkä ovat heidän yhteiset näkemyksensä.";
++s.helpWhatDoIDoTitle = " Mitä teen?";
++s.helpWhatDoIDo = "Äänestä toisten kannanotoista klikkaamalla 'samaa mieltä' tai 'eri mieltä'. Kirjoita kannanotto (pitäydy vain yhdessä ajatuksessa). Kutsu ystäväsi mukaan keskusteluun!";
++s.writeCommentHelpText = "Puuttuuko sinun näkökulmasi tai kokemuksesi keskustelusta? Jos puuttuu, <a>lisää ne</a> alla olevaan laatikkoon.";
++s.helpWriteListIntro = "Millainen on hyvä kannanotto?";
++s.helpWriteListStandalone = "Itsenäinen ajatus";
++s.helpWriteListRaisNew = "Tuo esiin uusia näkökulmia tai kokemuksia ";
++s.helpWriteListShort = "Selkeä ja ytimekäs (rajoitettu 140 merkkiin)";
++s.heresHowGroupVoted = "Näin ryhmä{{GROUP_NUMBER}} äänesti:";
++s.one_person = "{{x}} henkilö";
++s.x_people = "{{x}} ihmistä";
++s.acrossAllPtpts = "Kaikki osallistujat:";
++s.xPtptsSawThisComment = " näkivät tämän kannanoton";
++s.xOfThoseAgreed = "osallistujista oli samaa mieltä";
++s.xOfthoseDisagreed = "osallistujista oli eri mieltä";
++s.opinionGroups = "Mielipideryhmät";
++s.topComments = "Suosituimmat kannanotot";
++s.divisiveComments = "Eriävät lausunnot";
++s.pctAgreed = "{{pct}}% olivat samaa mieltä";
++s.pctDisagreed = "{{pct}}% olivat eri mieltä";
++s.pctAgreedLong = "{{pct}}% kaikista kannanottoa {{comment_id}} äänestäneistä olivat samaa mieltä.";
++s.pctAgreedOfGroup = "{{pct}}% ryhmästä {{group}} olivat samaa mieltä";
++s.pctDisagreedOfGroup = "{{pct}}% ryhmästä {{group}} olivat eri mieltä";
++s.pctDisagreedLong = "{{pct}}% kaikista kannanottoa {{comment_id}} äänestäneistä olivat eri mieltä.";
++s.pctAgreedOfGroupLong = "{{pct}}% ryhmän {{group}} kannanottoa {{comment_id}} äänestäneistä olivat samaa mieltä.";
++s.pctDisagreedOfGroupLong = "{{pct}}% ryhmän {{group}} kannanottoa {{comment_id}} äänestäneistä olivat eri mieltä.";
++s.commentSent = "Kannanotto lähetetty! Vain muut osallistujat näkevät kannanottosi ja ovat samaa tai eri mieltä.";
++s.commentSendFailed = "Kannanottosi lähettämisessä tapahtui virhe.";
++s.commentSendFailedEmpty = "Kannanottosi lähettämisessä tapahtui virhe - Kannanotto ei saa olla tyhjä.";
++s.commentSendFailedTooLong = "Kannanottosi lähettämisessä tapahtui virhe - Kannanotto on liian pitkä.";
++s.commentSendFailedDuplicate = "Kannanottosi lähettämisessä tapahtui virhe - Identtinen kannanotto on jo olemassa.";
++s.commentErrorDuplicate = "Duplikaatti! Tämä kannannotto on jo olemassa.";
++s.commentErrorConversationClosed = "Tämä keskustelu on päättynyt. Uusia kannanottoja ei voi antaa.";
++s.commentIsEmpty = "Kannanotto on tyhjä";
++s.commentIsTooLong = "Kannanotto on liian pitkä";
++s.hereIsNextStatement = "Äänestys onnistui. Siirry ylöspäin nähdäksesi seuraavan kannanoton.";
++
++s.connectFacebook = "Yhdistä Facebook";
++s.connectTwitter = "Yhdistä Twitter";
++s.connectToPostPrompt = "Yhdistä tunnus kannanoton antamista varten. Emme lähetä kannanottoa aikajanallesi.";
++s.connectToVotePrompt = "Yhdistä tunnus äänestääksesi. Emme lähetä kannanottoa aikajanallesi.";
++s.tip = "Vinkki:";
++s.commentWritingTipsHintsHeader = "Vinkkejä kannanottojen kirjoittamiseen";
++s.tipCharLimit = "Kannanotot on rajoitettu {{char_limit}} merkkiin.";
++s.tipCommentsRandom = "Muistathan, että kannanotot näytetään satunnaisesti, etkä vastaa suoraan muiden osallistujien kannanottoihin.";
++s.tipOneIdea = "Pilko pitkät kannanotot, jotka sisältävät useita ajatuksia. Näin muiden on helpompi äänestää kannanottoasi.";
++s.tipNoQuestions = "Kannanotot eivät saa olla kysymysmuotoisia. Osallistujat ovat samaa tai eri mieltä esittämiesi väitteiden kanssa.";
++s.commentTooLongByChars = "Kannanoton pituusraja ylittyi {{CHARACTERS_COUNT}} merkillä.";
++s.notSentSinceDemo = "(ei oikeasti, tämä on demo)";
++s.submitComment = "Lähetä";
++s.tipStarred = "Merkitty tärkeäksi.";
++s.participantHelpWelcomeText = "Tervetuloa uudenlaiseen keskusteluun - <em>äänestä</em> muiden ihmisten kannanottoja.";
++s.participantHelpGroupsText = "Ihmiset, jotka äänestävät samalla tavalla, <span style='font-weight: 700;'>on ryhmitelty.</span> Klikkaa ryhmää nähdäksesi, mitkä näkemykset he jakavat. <a style='font-weight: 700; cursor: pointer; text-decoration: underline' id='helpTextGroupsExpand'>...lisää</a>";
++s.participantHelpGroupsNotYetText = "Visualisointi tulee näkyviin, kun 7 osallistujaa on aloittanut äänestyksen.";
++s.helpWhatAreGroupsDetail = "<p>Kun käyttäjä äänestää väittämiä, väittämät ryhmitellään niiden kanssa, jotka äänestivät samalla tavalla kuin he! Näet nämä ryhmät alta. Jokainen ryhmä koostuu ihmisistä, joilla on samanlaiset mielipiteet. Napsauta ryhmää nähdäksesi, mikä toi vastaajat yhteen ja minkä näkemyksen kukin ryhmä jakaa.</p>";
++s.socialConnectPrompt = "Voit halutessasi yhdistää some-tilisi nähdäksesi ystävät ja seuraamasi ihmiset visualisoinnissa.";
++s.connectFbButton = "Yhdistä Facebookiin";
++s.connectTwButton = "Yhdistä Twitteriin";
++s.polis_err_reg_fb_verification_email_sent = "Tarkista sähköpostistasi vahvistuslinkki ja palaa sitten tänne jatkaaksesi.";
++s.polis_err_reg_fb_verification_noemail_unverified = "Facebook-tilisi on vahvistamaton. Vahvista sähköpostiosoitteesi Facebookissa ja palaa sitten tänne jatkaaksesi.";
++s.showTranslationButton = "Aktivoi kolmannen osapuolen käännös";
++s.hideTranslationButton = "Poista käännös käytöstä";
++s.thirdPartyTranslationDisclaimer = "Kolmannen osapuolen toimittama käännös";
++
++s.notificationsAlreadySubscribed = "Olet tilannut tämän keskustelun päivitykset.";
++s.notificationsGetNotified = "Saat ilmoituksen, kun uusia kannanottoja saapuu:";
++s.notificationsEnterEmail = "Kirjoita sähköpostiosoitteesi saadaksesi ilmoituksen, kun uusia kannanottoja saapuu:";
++s.labelEmail = "Sähköposti";
++s.notificationsSubscribeButton = "Tilaa";
++s.notificationsSubscribeErrorAlert = "Virhe tilaamisessa";
++s.noCommentsYet = "Ei vielä kannanottoja.";
++s.noCommentsYetSoWrite = "Käynnistä tämä keskustelu lisäämällä kannanotto.";
++s.noCommentsYetSoInvite = "Aloita keskustelu kutsumalla lisää osallistujia tai lisäämällä kannanotto.";
++s.noCommentsYouVotedOnAll = "Olet äänestänyt kaikkia kannanottoja.";
++s.noCommentsTryWritingOne = "Jos sinulla on lisättävää, kokeile kirjoittaa oma kannanotto.";
++s.convIsClosed = "Tämä keskustelu on suljettu.";
++s.noMoreVotingAllowed = "Äänestäminen ei ole enää sallittu.";
++
++
++s.topic_good_01 = "Mitä meidän pitäisi tehdä pingishuoneelle?";
++s.topic_good_01_reason = "avoin, kenellä tahansa voi olla mielipide vastauksista tähän kysymykseen";
++s.topic_good_02 = "Mitä mieltä olet uudesta ehdotuksesta?";
++s.topic_good_02_reason = "avoin, kenellä tahansa voi olla mielipide vastauksista tähän kysymykseen";
++s.topic_good_03 = "Tuleeko mieleesi mitään, mikä hidastaa tuottavuutta?";
++
++s.topic_bad_01 = "kaikki ilmoittavat julkaisuvalmiudesta";
++s.topic_bad_01_reason = "eri ryhmistä tulevat ihmiset äänestävät vastauksista, mutta heillä ei välttämättä ole riittävästi tietoa voidakseen äänestää luotettavasti.";
++s.topic_bad_02 = "Mitkä ovat julkaisun estäjät?";
++s.topic_bad_02_reason = "";
++
++s.footer_title = "Polis";
++s.footer_desc = "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.";
++s.footer_disclaimer = "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.";
++s.footer_version = "Versio";
++s.footer_released = "Julkaisu pvm";
++s.footer_provider = "Palveluntuottaja";
++s.footer_links_privacy = "DigiFinland Oy tietosuoja";
++s.footer_links_info = "Tietoa palvelusta";
++s.footer_links_source = "Lähdekoodi";
++
++module.exports = s;
+diff --git a/client-participation/js/strings/sv.js b/client-participation/js/strings/sv.js
+new file mode 100644
+index 00000000..e928a202
+--- /dev/null
++++ b/client-participation/js/strings/sv.js
+@@ -0,0 +1,136 @@
++// Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++var s = {};
++
++s.agree = "Håller med";
++s.disagree = "Håller inte med";
++s.pass = "Förbi / Osäkert";
++
++s.importantCheckbox = "Denna kommentar är viktig";
++s.howImportantPrompt = "Hur viktigt är detta uttalande?";
++s.howImportantLow = "Låg";
++s.howImportantMedium = "Medium";
++s.howImportantHigh = "Hög";
++
++s.modSpam = "Spam";
++s.modOffTopic = "Orelevant";
++s.modImportant = "Viktig";
++s.modSubmitInitialState = "Ignorera (inget av ovanstående), nästa påstående";
++s.modSubmit = "Klart, nästa uttalande";
++
++s.x_wrote = "skrev:";
++s.x_tweeted = "twittrade:";
++s.comments_remaining = "{{num_comments}} kvar";
++s.comments_remaining2 = "{{num_comments}} uttalande kvar";
++s.group_123 = "Grupp:";
++s.comment_123 = "Uttalande:";
++s.majorityOpinion = "Majoritetens åsikt";
++s.majorityOpinionShort = "Majoriteten";
++s.info = "Info";
++s.addPolisToYourSite = "<img style='height: 20px; margin: 0px 4px;' src='{{URL}}'/>";
++s.privacy = "Integritet";
++s.TOS = "Användarvillkor";
++s.writePrompt = "Dela ditt perspektiv...";
++s.anonPerson = "Anonym";
++s.helpWhatAmISeeingTitle = "Vad är det jag ser?";
++s.helpWhatAmISeeing = "Människor som röstar på liknande sätt grupperas. Klicka på en grupp för att se vilka synpunkter de delar.";
++s.helpWhatDoIDoTitle = " Vad gör jag?";
++s.helpWhatDoIDo = "Rösta på andras påståenden genom att klicka på 'godkänner' eller 'inte håller med'. Skriv ett påstående (håll var och en vid en enda idé). Bjud in dina vänner till konversationen!";
++s.writeCommentHelpText = "Saknas dina perspektiv eller erfarenheter i samtalet? Om så är fallet, <b>lägg till dem</b> i rutan nedan.";
++s.helpWriteListIntro = "Vad gör ett bra uttalande?";
++s.helpWriteListStandalone = "Fristående idé";
++s.helpWriteListRaisNew = "Lyft nya perspektiv, erfarenheter eller problem";
++s.helpWriteListShort = "Tydlig och koncis (begränsad till 140 tecken)";
++s.heresHowGroupVoted = "Så här röstade grupp {{GROUP_NUMBER}}:";
++s.one_person = "{{x}} person";
++s.x_people = "{{x}} människor";
++s.acrossAllPtpts = "För alla deltagare:";
++s.xPtptsSawThisComment = " såg detta uttalande";
++s.xOfThoseAgreed = "av deltagarna höll med";
++s.xOfthoseDisagreed = "av deltagarna höll inte med";
++s.opinionGroups = "Opinionsgrupper";
++s.topComments = "Topp uttalanden";
++s.divisiveComments = "Splittrande uttalanden";
++s.pctAgreed = "{{pct}}% höll med";
++s.pctDisagreed = "{{pct}}% höll inte med";
++s.pctAgreedLong = "{{pct}}% av alla som röstade på uttalande {{comment_id}} höll med.";
++s.pctAgreedOfGroup = "{{pct}}% av gruppen {{grupp}} höll med";
++s.pctDisagreedOfGroup = "{{pct}}% av gruppen {{grupp}} höll inte med";
++s.pctDisagreedLong = "{{pct}}% av alla som röstade på uttalandet {{comment_id}} höll inte med.";
++s.pctAgreedOfGroupLong = "{{pct}}% av de i gruppen {{group}} som röstade på uttalande {{comment_id}} samtyckte.";
++s.pctDisagreedOfGroupLong = "{{pct}}% av de i gruppen {{group}} som röstade på uttalandet {{comment_id}} höll inte med.";
++s.commentSent = "Uttalande skickat! Endast andra deltagare kommer att se ditt uttalande och instämmer eller inte håller med.";
++s.commentSendFailed = "Det uppstod ett fel när ditt kontoutdrag skickades.";
++s.commentSendFailedEmpty = "Det uppstod ett fel när du skickade ditt uttalande - Uttalande ska inte vara tomt.";
++s.commentSendFailedTooLong = "Det uppstod ett fel när du skickade ditt uttalande - Uttalande är för långt.";
++s.commentSendFailedDuplicate = "Det uppstod ett fel när ditt kontoutdrag skickades - Det finns redan ett identiskt utdrag.";
++s.commentErrorDuplicate = "Duplicera! Det uttalandet finns redan.";
++s.commentErrorConversationClosed = "Denna konversation är stängd. Inga ytterligare utlåtanden kan lämnas.";
++s.commentIsEmpty = "Uttalandet är tomt";
++s.commentIsTooLong = "Uttalandet är för långt";
++s.hereIsNextStatement = "Framgång med rösten. Navigera upp för att se nästa uttalande.";
++
++s.connectFacebook = "Anslut Facebook";
++s.connectTwitter = "Anslut Twitter";
++s.connectToPostPrompt = "Anslut en identitet för att skicka ett uttalande. Vi kommer inte att göra inlägg på din tidslinje.";
++s.connectToVotePrompt = "Anslut en identitet för att rösta. Vi kommer inte att göra inlägg på din tidslinje.";
++s.tip = "Råd:";
++s.commentWritingTipsHintsHeader = "Tips för att skriva uttalanden";
++s.tipCharLimit = "Uttalanden är begränsade till {{char_limit}} tecken.";
++s.tipCommentsRandom = "Kom ihåg att uttalanden visas slumpmässigt och du svarar inte direkt på andra deltagares uttalanden.";
++s.tipOneIdea = "Bryt upp långa uttalanden som innehåller flera idéer. Detta gör det lättare för andra att rösta på ditt uttalande.";
++s.tipNoQuestions = "Påståenden ska inte vara i form av en fråga. Deltagarna kommer att hålla med eller inte hålla med om de påståenden du gör.";
++s.commentTooLongByChars = "Utdragets längdgräns har överskridits med {{CHARACTERS_COUNT}} tecken.";
++s.notSentSinceDemo = "(inte riktigt, det här är en demo)";
++s.submitComment = "Skicka in";
++s.tipStarred = "Markerad som viktig.";
++s.participantHelpWelcomeText = "Välkommen till en ny typ av konversation - <em>rösta</em> på andra människors uttalanden.";
++s.participantHelpGroupsText = "Människor som röstar på liknande sätt <span style='font-weight: 700;'>grupperas.</span> Klicka på en grupp för att se vilka synpunkter de delar. <a style='font-weight: 700; cursor: pointer; text-decoration: underline' id='helpTextGroupsExpand'>...mer</a>";
++s.participantHelpGroupsNotYetText = "Visualiseringen kommer att visas när 7 deltagare har börjat rösta";
++s.helpWhatAreGroupsDetail = "<p>Du har förmodligen sett 'rekommenderade produkter' på Amazon eller 'rekommenderade filmer' på Netflix. Var och en av dessa tjänster använder statistik för att gruppera användaren med personer som köper och tittar på liknande saker och sedan visa dem saker som dessa personer köpt eller tittat på.</p> <p> När en användare röstar på uttalanden, grupperas de med personer som röstade som de gjorde! Du kan se dessa grupper nedan. Var och en består av människor som har liknande åsikter. Det finns fascinerande insikter att upptäcka i varje samtal. Varsågod – klicka på en grupp för att se vad som förde dem samman och vad som gör dem unika! </p>";
++s.socialConnectPrompt = "Anslut eventuellt för att se vänner och personer du följer i visualiseringen.";
++s.connectFbButton = "Anslut till Facebook";
++s.connectTwButton = "Anslut till Twitter";
++s.polis_err_reg_fb_verification_email_sent = "Kontrollera din e-post för en verifieringslänk och återvänd sedan hit för att fortsätta.";
++s.polis_err_reg_fb_verification_noemail_unverified = "Ditt Facebook-konto är overifierat. Vänligen verifiera din e-postadress med Facebook och återvänd sedan hit för att fortsätta.";
++s.showTranslationButton = "Aktivera översättning från tredje part";
++s.hideTranslationButton = "Inaktivera översättning";
++s.thirdPartyTranslationDisclaimer = "Översättning tillhandahållen av tredje part";
++
++s.notificationsAlreadySubscribed = "Du prenumererar på uppdateringar för den här konversationen.";
++s.notificationsGetNotified = "Få aviseringar när fler uttalanden kommer:";
++s.notificationsEnterEmail = "Ange din e-postadress för att bli meddelad när fler uttalanden kommer:";
++s.labelEmail = "Email";
++s.notificationsSubscribeButton = "Prenumerera";
++s.notificationsSubscribeErrorAlert = "Fel vid prenumeration";
++s.noCommentsYet = "Inga kommentarer än.";
++s.noCommentsYetSoWrite = "Starta denna diskussion genom att lägga till en kommentar.";
++s.noCommentsYetSoInvite = "Få igång den här konversationen genom att bjuda in fler deltagare eller lägg till ett uttalande.";
++s.noCommentsYouVotedOnAll = "Du har röstat för alla påståenden.";
++s.noCommentsTryWritingOne = "Om du har något att tillägga, försök att skriva ditt eget uttalande.";
++s.convIsClosed = "Denna diskussion är avslutad.";
++s.noMoreVotingAllowed = "Det är inte längre tillåtet att rösta.";
++
++
++s.topic_good_01 = "Vad ska vi göra åt pingisrummet?";
++s.topic_good_01_reason = "öppen, vem som helst kan ha en åsikt om svar på denna fråga";
++s.topic_good_02 = "Vad tycker du om det nya förslaget?";
++s.topic_good_02_reason = "öppen, vem som helst kan ha en åsikt om svar på denna fråga";
++s.topic_good_03 = "Kan du komma på något som bromsar produktiviteten?";
++
++s.topic_bad_01 = "alla rapporterar din lanseringsberedskap";
++s.topic_bad_01_reason = "personer från olika team kommer att rösta på svaren, men kanske inte har tillräckligt med kunskap för att rösta med tillförsikt.";
++s.topic_bad_02 = "vad är våra lanseringsblockerare?";
++s.topic_bad_02_reason = "";
++
++s.footer_title = "Polis";
++s.footer_desc = "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.";
++s.footer_disclaimer = "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.";
++s.footer_version = "Version";
++s.footer_released = "Publiceringsdatum";
++s.footer_provider = "Tjänsteleverantör";
++s.footer_links_privacy = "DigiFinland Oy dataskydd";
++s.footer_links_info = "Information";
++s.footer_links_source = "Källkod";
++
++module.exports = s;
+diff --git a/client-participation/js/templates/vote-view.handlebars b/client-participation/js/templates/vote-view.handlebars
+index a76464bd..b63936ee 100644
+--- a/client-participation/js/templates/vote-view.handlebars
++++ b/client-participation/js/templates/vote-view.handlebars
+@@ -90,7 +90,7 @@
+       </form>
+     {{else}} {{!-- !canSubscribe --}}
+       <div><strong>{{txt1}}</strong></div>
+-      <div>{{txt2}}</div>
++      <div class="displayNone">{{txt2}}</div>
+     {{/if}} {{!-- /canSubscribe --}}
+   {{/if}} {{!-- /subscribed --}}
+   </div> {{!-- /empty scenario div --}}
+diff --git a/client-report/locales/en/client-report.json b/client-report/locales/en/client-report.json
+new file mode 100644
+index 00000000..d6a8d674
+--- /dev/null
++++ b/client-report/locales/en/client-report.json
+@@ -0,0 +1,119 @@
++{
++  "file_desc": "Translations in English",
++  "app": {
++    "loading_error": "Error Loading",
++    "loading_nothing_to_show": "Nothing to show yet",
++    "loading": "Loading ..."
++  },
++  "heading": {
++    "title": "Report"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "disclaimer": "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
++    "version": "Version: {{param1}}",
++    "released": "Release date: {{param1}}",
++    "provider": "Service provider",
++    "links": {
++      "privacy": "DigiFinland Oy data protection",
++      "info": "Information",
++      "source": "Sourcecode"
++    }
++  },
++  "controls": {
++    "auto_refresh": "auto-refresh",
++    "color_blind_mode": "color blind mode"
++  },
++  "overview": {
++    "title": "Overview",
++    "text": "Polis is a real-time survey system that helps identify the different ways a large group of people think about a divisive or complicated topic. Here’s a basic breakdown of some terms you’ll need to know in order to understand this report.",
++    "term_participants_title": "Participants",
++    "term_participants_text": "These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.",
++    "term_statements_title": "statements",
++    "term_statements_text": "Participants may submit statements for other participants to vote on. Statements are assigned a number in the order they’re submitted.",
++    "term_opinion_groups_title": "Opinion groups",
++    "term_opinion_groups_text": "These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.",
++    "ownername_text": "This pol.is conversation was run by ",
++    "topic_text": "The topic was ",
++    "people_voted": "people voted",
++    "people_grouped": "people grouped",
++    "votes_cast": "votes were cast",
++    "statements_submitted": "statements were submitted",
++    "votes_per_voter_avg": "votes per voter on average",
++    "statements_per_author_avg": "statements per author on average"
++  },
++  "barChart": {
++    "voted": "voted",
++    "agreed": "agreed",
++    "disagreed": "disagreed",
++    "passed": "passed"
++  },
++  "beeswarm": {
++    "title": "How divisive was the conversation?",
++    "text": "Statements (here as little circles) to the left were voted on the same way—either everyone agreed or everyone disagreed. Statements to the right were divisive—participants were split between agreement and disagreement.",
++    "howto_strong": "How to use this:",
++    "howto": "Hover to see the statement text. Start on the far right to find out what the most divisive statement was.",
++    "consensus": "Consensus statements",
++    "divisive": "Divisive statements"
++  },
++  "legend": {
++    "agreed": "Agreed",
++    "disagreed": "Disagreed",
++    "passed": "Passed",
++    "didnotvote": "Didn&apos;t vote"
++  },
++  "all_comments": {
++    "title": "All statements",
++    "text": "Group votes across all statements, excluding those statements which were moderated out.",
++    "sortby": "Sort by: ",
++    "tid": "Statement Id",
++    "consensus": "Group-informed Consensus",
++    "numvotes": "Number of votes",
++    "agreed": "Agreed",
++    "disagreed": "Disagreed",
++    "passed": "Passed"
++  },
++  "comment_list": {
++    "agreed": "Agreed",
++    "disagreed": "Disagreed",
++    "passed": "Passed",
++    "respondents": " Respondents",
++    "overall": "Overall",
++    "statement": "STATEMENT"
++  },
++  "majority": {
++    "title": "Majority",
++    "text": "Here's what most people agreed with.",
++    "desc": "60% or more of all participants voted one way or the other, regardless of whether large amounts of certain minority opinion groups voted the other way."
++  },
++  "participant_groups": {
++    "title": "Opinion Groups",
++    "text": "Across {{param1}} total participants, {{param2}} opinion groups emerged. There are two factors that define an opinion group. First, each opinion group is made up of a number of participants who tended to vote similarly on multiple statements. Second, each group of participants who voted similarly will have also voted distinctly differently from other groups.",
++    "group": "Group",
++    "participants": " participants",
++    "grp_desc": "Statements which make this group unique, by their votes: "
++  },
++  "metadata": {
++    "title": "Metadata",
++    "text": "The demographic breakdown of each group, as self reported by agreeing and disagreeing on statements marked 'metadata' by moderators."
++  },
++  "uncertainty": {
++    "title": "Areas of uncertainty",
++    "text": "Across all {{param1}} participants, there was uncertainty about the following statements. Greater than 30% of participants who saw these statements 'passed'.",
++    "desc": "Areas of uncertainty can provide avenues to educate and open dialogue with your community."
++  },
++  "graph": {
++    "title": "Graph",
++    "text": "Which statements were voted on similarly? How do participants relate to each other?",
++    "desc": "In this graph, statements are positioned more closely to statements which were voted on similarly. Participants, in turn, are positioned more closely to statements on which they agreed, and further from statements on which they disagreed. This means participants who voted similarly are closer together.",
++    "axes": "Axes",
++    "radial_axes": "Radial axes",
++    "statements": "Statements",
++    "participants_bucketized": "Participants (bucketized)",
++    "group_outline": "Group outline",
++    "group_labels": "Group labels",
++    "click_text": "Click a statement, identified by its number, to explore regions of the graph."
++  }
++}
++
+diff --git a/client-report/locales/en/client-report.json.headersJson b/client-report/locales/en/client-report.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-report/locales/en/client-report.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-report/locales/fi/client-report.json b/client-report/locales/fi/client-report.json
+new file mode 100644
+index 00000000..919499a6
+--- /dev/null
++++ b/client-report/locales/fi/client-report.json
+@@ -0,0 +1,119 @@
++{
++  "file_desc": "Käännökset suomeksi",
++  "app": {
++    "loading_error": "Ongelma lataamisessa",
++    "loading_nothing_to_show": "Ei vielä mitään näytettävää",
++    "loading": "Ladataan..."
++  },
++  "heading": {
++    "title": "Raportti"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "disclaimer": "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
++    "version": "Versio: {{param1}}",
++    "released": "Julkaisu pvm: {{param1}}",
++    "provider": "Palveluntuottaja",
++    "links": {
++      "privacy": "DigiFinland Oy tietosuoja",
++      "info": "Tietoa palvelusta",
++      "source": "Lähdekoodi"
++    }
++  },
++  "controls": {
++    "auto_refresh": "automaattinen päivitys",
++    "color_blind_mode": "värisokeustila"
++  },
++  "overview": {
++    "title": "Yleiskatsaus",
++    "text": "Polis on reaaliaikainen kyselyjärjestelmä, joka auttaa tunnistamaan miten eri tavoin suuri joukko ihmisiä ajattelee mielipiteitä jakavasta tai monimutkaisesta aiheesta. Seuraavassa esitellään joitakin termejä, jotka sinun on tunnettava tämän raportin ymmärtämiseksi.",
++    "term_participants_title": "Osallistujat",
++    "term_participants_text": "Henkilöt, jotka osallistuivat keskusteluun äänestämällä ja kirjoittamalla lausuntoja. Osallistujat lajitellaan mielipideryhmiin heidän antamiensa äänten mukaisesti.",
++    "term_statements_title": "Lausunnot",
++    "term_statements_text": "Osallistujat voivat antaa lausuntoja, joista muut osallistujat äänestävät. Lausunnot numeroidaan lähetysjärjestyksessä.",
++    "term_opinion_groups_title": "Mielipideryhmät",
++    "term_opinion_groups_text": "Henkilöt, jotka osallistuivat keskusteluun äänestämällä ja kirjoittamalla lausuntoja. Osallistujat lajitellaan mielipideryhmiin heidän antamiensa äänten mukaisesti.",
++    "ownername_text": "Tämän pol.is-keskustelun toteutti ",
++    "topic_text": "Aiheena oli ",
++    "people_voted": "henkilöä äänesti",
++    "people_grouped": "henkilöä ryhmiteltiin",
++    "votes_cast": "ääntä annettiin",
++    "statements_submitted": "lausuntoa annettiin",
++    "votes_per_voter_avg": "ääntä äänestäjää kohti keskimäärin",
++    "statements_per_author_avg": "lausuntoa per kirjoittaja keskimäärin"
++  },
++  "barChart": {
++    "voted": "äänesti",
++    "agreed": "samaa mieltä",
++    "disagreed": "eri mieltä",
++    "passed": "ohitti"
++  },
++  "beeswarm": {
++    "title": "Miten mielipiteitä jakava keskustelu oli?",
++    "text": "Vasemmanpuoleisista lausunnoista (tässä pieninä ympyröinä) äänestettiin yksimielisesti – kaikki olivat niistä joko samaa mieltä tai eri mieltä. Oikeanpuoleiset lausunnot jakoivat mielipiteitä – osallistujat olivat samaa mieltä tai eri mieltä hyväksymisestä.",
++    "howto_strong": "Käyttöohje",
++    "howto": "Näet lausunnon tekstin siirtämällä hiirtä sen päällä. Eniten mielipiteitä jakaneen lausunnon näet äärimmäisenä oikealla.",
++    "consensus": "Lausunnot, joista yksimielisyys",
++    "divisive": "Lausunnot, joista erimielisyyttä"
++  },
++  "legend": {
++    "agreed": "Samaa mieltä",
++    "disagreed": "Eri mieltä",
++    "passed": "Ohitti",
++    "didnotvote": "Ei äänestänyt"
++  },
++  "all_comments": {
++    "title": "Kaikki lausunnot",
++    "text": "Ryhmässä annetut äänet kaikista lausunnoista lukuun ottamatta niitä lausuntoja, jotka moderaattori poisti.",
++    "sortby": "Lajittele ",
++    "tid": "Lausunnon tunnus",
++    "consensus": "Ryhmäkohtainen yksimielisyys",
++    "numvotes": "Äänten määrä",
++    "agreed": "Samaa mieltä",
++    "disagreed": "Eri mieltä",
++    "passed": "Ohitti"
++  },
++  "comment_list": {
++    "agreed": "Samaa mieltä",
++    "disagreed": "Eri mieltä",
++    "passed": "Ohitti",
++    "respondents": " Vastaajia",
++    "overall": "YHTEENSÄ",
++    "statement": "LAUSUNTO"
++  },
++  "majority": {
++    "title": "Enemmistö",
++    "text": "Suurin osa äänestäneistä oli yhtä mieltä tästä.",
++    "desc": "60 % tai enemmän kaikista osallistujista äänesti tavalla tai toisella riippumatta siitä, äänestikö suuri määrä tiettyjä vähemmistömielipideryhmiä toisin."
++  },
++  "participant_groups": {
++    "title": "Mielipideryhmät",
++    "text": "{{param1}} osallistujien kokonaismäärästä muodostui {{param2}} mielipideryhmää. Mielipideryhmä muodostuu kahden tekijän perusteella. Ensinnäkin mielipideryhmä koostuu osallistujista, jotka ovat äänestäneet samalla tavoin useista lausunnoista. Toiseksi jokainen samalla tavoin äänestänyt osallistujaryhmä on äänestänyt selvästi eri tavalla kuin muut ryhmät.",
++    "group": "Ryhmä",
++    "participants": " osallistujaa",
++    "grp_desc": "Lausunnot, jotka tekevät tästä ryhmästä äänten perusteella ainutlaatuisen: "
++  },
++  "metadata": {
++    "title": "Metatiedot",
++    "text": "Kunkin ryhmän demografinen jakauma oman ilmoituksen perusteella sen mukaisesti, mistä moderaattorien ”metatiedoiksi” merkitsemistä lausunnoista he ovat samaa ja mistä eri mieltä."
++  },
++  "uncertainty": {
++    "title": "Epävarmat osa-alueet",
++    "text": "Kaikkien {{param1}} osallistujien keskuudessa oli epävarmuutta seuraavista lausunnoista. Yli 30 prosenttia lausunnot nähneistä osallistujista ”ohitti”.",
++    "desc": "Epävarmat osa-alueet voivat tarjota mahdollisuuksia koulutukseen ja vuoropuhelun aloittamiseen yhteisön kanssa."
++  },
++  "graph": {
++    "title": "Kaavio",
++    "text": "Mistä lausunnoista äänestettiin samalla tavalla? Miten osallistujat ovat yhteydessä toisiinsa?",
++    "desc": "Tässä kaaviossa lausunnot ovat lähempänä lausuntoja, joista äänestettiin samalla tavalla. Osallistujat puolestaan ovat lähempänä lausuntoja, joista he olivat samaa mieltä, ja kauempana lausunnoista, joista he olivat eri mieltä. Tämä tarkoittaa, että samalla tavalla äänestäneet osallistujat ovat lähempänä toisiaan.",
++    "axes": "Akselit",
++    "radial_axes": "Sädeakselit",
++    "statements": "Lausunnot",
++    "participants_bucketized": "Osallistujat (ryhmitelty)",
++    "group_outline": "Ryhmän kuvaus",
++    "group_labels": "Ryhmän tunnisteet",
++    "click_text": "Voit tarkastella kaavion alueita napsauttamalla numerolla merkittyä lausuntoa."
++  }
++}
++
+diff --git a/client-report/locales/fi/client-report.json.headersJson b/client-report/locales/fi/client-report.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-report/locales/fi/client-report.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-report/locales/sv/client-report.json b/client-report/locales/sv/client-report.json
+new file mode 100644
+index 00000000..a07dba2e
+--- /dev/null
++++ b/client-report/locales/sv/client-report.json
+@@ -0,0 +1,119 @@
++{
++  "file_desc": "Översättningar på svenska",
++  "app": {
++    "loading_error": "Problem att ladda",
++    "loading_nothing_to_show": "Inget att visa än",
++    "loading": "Läser in ..."
++  },
++  "heading": {
++    "title": "Rapport"
++  },
++  "footer": {
++    "title": "Polis",
++    "desc": "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "disclaimer": "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
++    "version": "Version: {{param1}}",
++    "released": "Publiceringsdatum: {{param1}}",
++    "provider": "Tjänsteleverantör",
++    "links": {
++      "privacy": "DigiFinland Oy dataskydd",
++      "info": "Information",
++      "source": "Källkod"
++    }
++  },
++  "controls": {
++    "auto_refresh": "automatisk uppdatering",
++    "color_blind_mode": "färgblint läge"
++  },
++  "overview": {
++    "title": "Översikt",
++    "text": "Polis är ett undersökningssystem i realtid som hjälper till att identifiera de olika sätten som en stor grupp människor tänker på ett kontroversiellt eller komplicerat ämne. Här följer grundläggande förklaringar av några termer du behöver känna till för att förstå denna rapport.",
++    "term_participants_title": "Deltagare",
++    "term_participants_text": "Dessa är personerna som deltog i konversationen genom att rösta och skriva påståenden. Varje deltagare placeras i en åsiktsgrupp enligt hur de röstade.",
++    "term_statements_title": "påståenden",
++    "term_statements_text": "Deltagarna kan skicka in påståenden som andra deltagare kan rösta på. Påståendena tilldelas ett nummer i den ordning de skickas in.",
++    "term_opinion_groups_title": "Åsiktsgrupper",
++    "term_opinion_groups_text": "Dessa är personerna som deltog i konversationen genom att rösta och skriva påståenden. Varje deltagare placeras i en åsiktsgrupp enligt hur de röstade.",
++    "ownername_text": "Denna pol.is-konversation hölls av ",
++    "topic_text": "Ämnet var ",
++    "people_voted": "människorna röstade",
++    "people_grouped": "människorna grupperades",
++    "votes_cast": "röster avlades",
++    "statements_submitted": "påståenden skickades in",
++    "votes_per_voter_avg": "röster per röstande i genomsnitt",
++    "statements_per_author_avg": "påståenden per skribent i genomsnitt"
++  },
++  "barChart": {
++    "voted": "röstade",
++    "agreed": "av samma åsikt",
++    "disagreed": "av olika åsikt",
++    "passed": "passade"
++  },
++  "beeswarm": {
++    "title": "Hur splittrande var konversationen?",
++    "text": "På påståendena (här som små cirklar) till vänster röstade man på samma sätt - antingen var alla av samma åsikt eller alla av olika åsikt. Påståenden till höger var splittrande - deltagarnas åsikter var delade mellan enighet och oenighet.",
++    "howto_strong": "Hur man använder detta:",
++    "howto": "För kursorn över för att se texten i påståendet. Börja längst till höger för att ta reda på vilket det mest splittrande påståendet var.",
++    "consensus": "Konsensusuttalanden",
++    "divisive": "Splittrande uttalanden"
++  },
++  "legend": {
++    "agreed": "Av samma åsikt",
++    "disagreed": "Inte av samma åsikt",
++    "passed": "Passade",
++    "didnotvote": "Röstade inte"
++  },
++  "all_comments": {
++    "title": "Alla påståenden",
++    "text": "Gruppera röster över alla påståenden utom de påståendena som togs bort.",
++    "sortby": "Sortera enligt: ",
++    "tid": "Uttalande-ID",
++    "consensus": "Gruppinformerad konsensus",
++    "numvotes": "Antal röster",
++    "agreed": "Av samma åsikt",
++    "disagreed": "Av olika åsikt",
++    "passed": "Passade"
++  },
++  "comment_list": {
++    "agreed": "Av samma åsikt",
++    "disagreed": "Av olika åsikt",
++    "passed": "Passade",
++    "respondents": " Respondenter",
++    "overall": "Övergripande",
++    "statement": "PÅSTÅENDE"
++  },
++  "majority": {
++    "title": "Majoritet",
++    "text": "Här är vad de flesta personerna var överens om.",
++    "desc": "60% eller fler av alla deltagare röstade på ett eller annat sätt oavsett om stora mängder av vissa minoritetsåsiktsgrupper röstade på det andra sättet."
++  },
++  "participant_groups": {
++    "title": "Åsiktsgrupper",
++    "text": "Mellan {{param1}} totala deltagare uppstod {{param2}} åsiktsgrupper. Det finns två faktorer som definierar en åsiktsgrupp. För det första består varje åsiktsgrupp av ett antal deltagare som tenderade att rösta liknande på flera påståenden. För det andra har varje grupp av deltagare som röstade liknande också röstat väldigt annorlunda jämfört med andra grupper.",
++    "group": "Grupp",
++    "participants": " deltagare",
++    "grp_desc": "Påståenden som gör denna grupp unik på grund av sina röster: "
++  },
++  "metadata": {
++    "title": "Metadata",
++    "text": "Den demografiska uppdelningen av varje grupp som självrapporterades genom att vara av samma åsikt eller att vara av olika åsikt om påståendena markerade som 'metadata' av moderatorer."
++  },
++  "uncertainty": {
++    "title": "Osäkerhetsområden",
++    "text": "Mellan alla {{param1}} deltagare fanns det osäkerhet kring följande påståenden. Mer än 30% av deltagarna som såg dessa påståenden 'passade' på dem.",
++    "desc": "Osäkerhetsområden kan erbjuda möjligheter att utbilda och öppna dialog med din gemenskap."
++  },
++  "graph": {
++    "title": "Graf",
++    "text": "Vilka påståenden röstade man om på liknande sätt? Hur relaterar deltagarna till varandra?",
++    "desc": "I denna graf är påståendena placerade närmare påståenden som man röstade om på liknande sätt. Deltagare är i sin tur placerade närmare påståenden som de höll med om och längre bort från påståenden som de inte höll med om. Detta innebär att deltagare som röstade på liknande sätt är närmare varandra.",
++    "axes": "Axlar",
++    "radial_axes": "Radiella axlar",
++    "statements": "Påståenden",
++    "participants_bucketized": "Deltagare (grupperade)",
++    "group_outline": "Gruppöversikt",
++    "group_labels": "Gruppbeteckningar",
++    "click_text": "Klicka på ett påstående som är identifierat med nummer för att utforska olika områden på grafen."
++  }
++}
++
+diff --git a/client-report/locales/sv/client-report.json.headersJson b/client-report/locales/sv/client-report.json.headersJson
+new file mode 100644
+index 00000000..6b3b5556
+--- /dev/null
++++ b/client-report/locales/sv/client-report.json.headersJson
+@@ -0,0 +1 @@
++{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
+\ No newline at end of file
+diff --git a/client-report/package-lock.json b/client-report/package-lock.json
+index c5a534ce..e0b5151a 100644
+--- a/client-report/package-lock.json
++++ b/client-report/package-lock.json
+@@ -13,6 +13,9 @@
+         "d3-contour": "~1.1.2",
+         "d3-scale-chromatic": "~1.1.1",
+         "hull.js": "~0.2.11",
++        "i18next": "^23.6.0",
++        "i18next-browser-languagedetector": "^7.1.0",
++        "i18next-http-backend": "^2.3.1",
+         "jquery": "~3.6.3",
+         "lodash": "~4.17.21",
+         "prop-types": "~15.8.1",
+@@ -20,6 +23,7 @@
+         "react": "~17.0.2",
+         "react-dom": "~17.0.2",
+         "react-fontawesome": "~0.3.3",
++        "react-i18next": "^13.3.1",
+         "react-redux": "~7.2.9",
+         "redux": "~3.0.5",
+         "redux-thunk": "~1.0.3",
+@@ -1746,11 +1750,11 @@
+       "dev": true
+     },
+     "node_modules/@babel/runtime": {
+-      "version": "7.21.0",
+-      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.21.0.tgz",
+-      "integrity": "sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==",
++      "version": "7.23.9",
++      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz",
++      "integrity": "sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==",
+       "dependencies": {
+-        "regenerator-runtime": "^0.13.11"
++        "regenerator-runtime": "^0.14.0"
+       },
+       "engines": {
+         "node": ">=6.9.0"
+@@ -3526,6 +3530,14 @@
+       "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz",
+       "integrity": "sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ=="
+     },
++    "node_modules/cross-fetch": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
++      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
++      "dependencies": {
++        "node-fetch": "^2.6.12"
++      }
++    },
+     "node_modules/cross-spawn": {
+       "version": "7.0.3",
+       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+@@ -5632,6 +5644,14 @@
+         "node": ">= 12"
+       }
+     },
++    "node_modules/html-parse-stringify": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz",
++      "integrity": "sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==",
++      "dependencies": {
++        "void-elements": "3.1.0"
++      }
++    },
+     "node_modules/html-webpack-plugin": {
+       "version": "5.5.3",
+       "resolved": "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-5.5.3.tgz",
+@@ -5814,6 +5834,44 @@
+       "resolved": "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz",
+       "integrity": "sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ=="
+     },
++    "node_modules/i18next": {
++      "version": "23.8.1",
++      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.8.1.tgz",
++      "integrity": "sha512-Yhe6oiJhigSh64ev7nVVywu7vHjuUG41MRmFKNwphbkadqTL1ozZFBQISflY7/ju+gL6I/SPfI1GgWQh1yYArA==",
++      "funding": [
++        {
++          "type": "individual",
++          "url": "https://locize.com"
++        },
++        {
++          "type": "individual",
++          "url": "https://locize.com/i18next.html"
++        },
++        {
++          "type": "individual",
++          "url": "https://www.i18next.com/how-to/faq#i18next-is-awesome.-how-can-i-support-the-project"
++        }
++      ],
++      "dependencies": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "node_modules/i18next-browser-languagedetector": {
++      "version": "7.2.0",
++      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.0.tgz",
++      "integrity": "sha512-U00DbDtFIYD3wkWsr2aVGfXGAj2TgnELzOX9qv8bT0aJtvPV9CRO77h+vgmHFBMe7LAxdwvT/7VkCWGya6L3tA==",
++      "dependencies": {
++        "@babel/runtime": "^7.23.2"
++      }
++    },
++    "node_modules/i18next-http-backend": {
++      "version": "2.4.2",
++      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.4.2.tgz",
++      "integrity": "sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==",
++      "dependencies": {
++        "cross-fetch": "4.0.0"
++      }
++    },
+     "node_modules/iconv-lite": {
+       "version": "0.4.24",
+       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
+@@ -6742,6 +6800,25 @@
+         "tslib": "^2.0.3"
+       }
+     },
++    "node_modules/node-fetch": {
++      "version": "2.7.0",
++      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
++      "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
++      "dependencies": {
++        "whatwg-url": "^5.0.0"
++      },
++      "engines": {
++        "node": "4.x || >=6.0.0"
++      },
++      "peerDependencies": {
++        "encoding": "^0.1.0"
++      },
++      "peerDependenciesMeta": {
++        "encoding": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/node-forge": {
+       "version": "1.3.1",
+       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-1.3.1.tgz",
+@@ -7543,6 +7620,27 @@
+         "react": ">=0.12.0"
+       }
+     },
++    "node_modules/react-i18next": {
++      "version": "13.5.0",
++      "resolved": "https://registry.npmjs.org/react-i18next/-/react-i18next-13.5.0.tgz",
++      "integrity": "sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==",
++      "dependencies": {
++        "@babel/runtime": "^7.22.5",
++        "html-parse-stringify": "^3.0.1"
++      },
++      "peerDependencies": {
++        "i18next": ">= 23.2.3",
++        "react": ">= 16.8.0"
++      },
++      "peerDependenciesMeta": {
++        "react-dom": {
++          "optional": true
++        },
++        "react-native": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/react-is": {
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+@@ -7639,9 +7737,9 @@
+       }
+     },
+     "node_modules/regenerator-runtime": {
+-      "version": "0.13.11",
+-      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz",
+-      "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg=="
++      "version": "0.14.1",
++      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz",
++      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
+     },
+     "node_modules/regenerator-transform": {
+       "version": "0.15.1",
+@@ -8631,6 +8729,11 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/tr46": {
++      "version": "0.0.3",
++      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
++      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
++    },
+     "node_modules/tslib": {
+       "version": "2.6.0",
+       "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.6.0.tgz",
+@@ -8815,6 +8918,14 @@
+         "uuid": "dist/bin/uuid"
+       }
+     },
++    "node_modules/void-elements": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/void-elements/-/void-elements-3.1.0.tgz",
++      "integrity": "sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/watchpack": {
+       "version": "2.4.0",
+       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
+@@ -8837,6 +8948,11 @@
+         "minimalistic-assert": "^1.0.0"
+       }
+     },
++    "node_modules/webidl-conversions": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
++      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
++    },
+     "node_modules/webpack": {
+       "version": "5.88.2",
+       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.88.2.tgz",
+@@ -9476,6 +9592,15 @@
+         "node": ">=0.8.0"
+       }
+     },
++    "node_modules/whatwg-url": {
++      "version": "5.0.0",
++      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
++      "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
++      "dependencies": {
++        "tr46": "~0.0.3",
++        "webidl-conversions": "^3.0.0"
++      }
++    },
+     "node_modules/which": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+diff --git a/client-report/package.json b/client-report/package.json
+index 4b50e8df..0b22b481 100644
+--- a/client-report/package.json
++++ b/client-report/package.json
+@@ -37,6 +37,9 @@
+     "d3-contour": "~1.1.2",
+     "d3-scale-chromatic": "~1.1.1",
+     "hull.js": "~0.2.11",
++    "i18next": "^23.6.0",
++    "i18next-browser-languagedetector": "^7.1.0",
++    "i18next-http-backend": "^2.3.1",
+     "jquery": "~3.6.3",
+     "lodash": "~4.17.21",
+     "prop-types": "~15.8.1",
+@@ -44,6 +47,7 @@
+     "react": "~17.0.2",
+     "react-dom": "~17.0.2",
+     "react-fontawesome": "~0.3.3",
++    "react-i18next": "^13.3.1",
+     "react-redux": "~7.2.9",
+     "redux": "~3.0.5",
+     "redux-thunk": "~1.0.3",
+diff --git a/client-report/src/components/beeswarm/beeswarm.js b/client-report/src/components/beeswarm/beeswarm.js
+index a8427ad0..0046095c 100644
+--- a/client-report/src/components/beeswarm/beeswarm.js
++++ b/client-report/src/components/beeswarm/beeswarm.js
+@@ -4,6 +4,7 @@ import React from "react";
+ import CommentList from "../lists/commentList";
+ import * as globals from "../globals";
+ import _ from "lodash";
++import { withTranslation } from 'react-i18next';
+ // import Flex from "../framework/flex"
+ 
+ // function type(d) {
+@@ -103,7 +104,7 @@ class VoronoiCells extends React.Component {
+   }
+ }
+ 
+-class Beeswarm extends React.Component {
++class BeeswarmTranslated extends React.Component {
+   constructor(props) {
+     super(props);
+ 
+@@ -179,14 +180,14 @@ class Beeswarm extends React.Component {
+       })
+   }
+   render() {
++    const { t } = this.props;
+     return (
+       <div style={{width: this.svgWidth}}>
+-        <p style={globals.primaryHeading}> How divisive was the conversation? </p>
+-        <p style={globals.paragraph}>
+-          Statements (here as little circles) to the left were voted on the same way—either everyone agreed or everyone disagreed. Statements to the right were divisive—participants were split between agreement and disagreement.
+-        </p>
+-        <p style={globals.paragraph}>
+-          <strong>How to use this:</strong> Hover to see the statement text. Start on the far right to find out what the most divisive statement was.
++        <p style={globals.primaryHeading}> {t('beeswarm.title')} </p>
++        <p style={globals.paragraph}> {t('beeswarm.text')} </p>
++        <p style={globals.paragraph}> 
++        <strong>{t('beeswarm.howto_strong')} </strong>
++        {t('beeswarm.howto')} 
+         </p>
+         <svg width={this.svgWidth} height={this.svgHeight}>
+           <g id="beeswarmAxisAttachPointD3" transform={"translate(" + this.margin.left + "," + this.margin.top + ")"}>
+@@ -203,8 +204,8 @@ class Beeswarm extends React.Component {
+           <line x1="0" y1={this.svgHeight - 10} x2={this.svgWidth} y2={this.svgHeight - 10} strokeWidth="1" stroke="black"/>
+         </svg>
+         <div style={{display: "flex", justifyContent: "space-between", margin: 0}}>
+-          <p style={{margin: 0}}> Consensus statements </p>
+-          <p style={{margin: 0}}> Divisive statements</p>
++          <p style={{margin: 0}}> {t('beeswarm.consensus')} </p>
++          <p style={{margin: 0}}> {t('beeswarm.divisive')} </p>
+         </div>
+         {/*<ProbabilityLegend/>*/}
+ 
+@@ -227,7 +228,9 @@ class Beeswarm extends React.Component {
+   }
+ }
+ 
+-export default Beeswarm;
++//export default Beeswarm;
++const Beeswarm = withTranslation()(BeeswarmTranslated);
++export default withTranslation()(Beeswarm);
+ 
+ // <text
+ //   style={{textAnchor: "middle"}}
+diff --git a/client-report/src/components/controls/controls.js b/client-report/src/components/controls/controls.js
+index 630c6abd..02b6b263 100644
+--- a/client-report/src/components/controls/controls.js
++++ b/client-report/src/components/controls/controls.js
+@@ -5,7 +5,9 @@ import Checkbox from '../framework/checkbox';
+ import React from "react";
+ import settings from "../../settings";
+ 
+-class Controls extends React.Component {
++import { withTranslation } from 'react-i18next';
++
++class ControlsTranslated extends React.Component {
+ 
+   constructor(props) {
+     super(props);
+@@ -25,10 +27,19 @@ class Controls extends React.Component {
+   // }
+ 
+   render() {
++    const { t, i18n } = this.props;
++    document.documentElement.lang = i18n.language; //This is too slow for google translate
++    const changeLanguage = (lng) => {
++        i18n.changeLanguage(lng);
++        document.documentElement.lang = lng;
++    };
+     return (
+       <div>
++      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('fi')}>FI</button>
++      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('sv')}>SV</button>
++      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('en')}>EN</button>
+       <Checkbox
+-        label= {"auto-refresh"}
++        label= {t('controls.auto_refresh')}
+         disabled={false}
+         ref={this.autoRefreshEnabledRef}
+         checked={ this.props.autoRefreshEnabled}
+@@ -37,7 +48,7 @@ class Controls extends React.Component {
+         labelWrapperColor={settings.darkerGray}
+         color={settings.polisBlue}/>
+       <Checkbox
+-        label= {"color blind mode"}
++        label= {t('controls.color_blind_mode')}
+         disabled={false}
+         ref={this.colorBlindModeRef}
+         checked={ this.props.colorBlindMode}
+@@ -52,4 +63,7 @@ class Controls extends React.Component {
+ }
+         // <Checkbox value="pineapple"/>
+ 
+-export default Controls;
++//export default Controls;
++const Controls = withTranslation()(ControlsTranslated);
++
++export default withTranslation()(Controls);
+diff --git a/client-report/src/components/framework/heading.js b/client-report/src/components/framework/heading.js
+index 30a5716b..44d4265a 100644
+--- a/client-report/src/components/framework/heading.js
++++ b/client-report/src/components/framework/heading.js
+@@ -1,12 +1,15 @@
+ // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import React from "react";
+-import SmallLogo from "./logoSmallLong";
++//import SmallLogo from "./logoSmallLong";
+ import Url from "../../util/url";
+ 
++import { useTranslation } from 'react-i18next';
++
+ const urlPrefix = Url.urlPrefix;
+ 
+ const Content = ({conversation}) => {
++  const { t } = useTranslation();
+   return (
+     <div style={{
+         display: "flex",
+@@ -16,12 +19,11 @@ const Content = ({conversation}) => {
+         paddingBottom: 5,
+         borderBottom: "1px solid rgb(130,130,130)",
+       }}>
+-      <SmallLogo/>
+       <p style={{
+           fontSize: 36,
+           margin: 0,
+         }}>
+-        Report
++        {t('heading.title')}
+       </p>
+       <p style={{
+           fontSize: 24,
+diff --git a/client-report/src/components/framework/legend.js b/client-report/src/components/framework/legend.js
+index 4f963604..5fbc0d3e 100644
+--- a/client-report/src/components/framework/legend.js
++++ b/client-report/src/components/framework/legend.js
+@@ -1,17 +1,19 @@
+ // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+ import React from "react";
++import { useTranslation } from 'react-i18next';
+ 
+ const Legend = ({voteColors}) => {
++  const { t } = useTranslation();
+   return (
+     <svg style={{width: 400, height: 20, border: "1px solid lightgrey"}}>
+       <rect width={70} height={20} fill={voteColors.agree} x={0}></rect>
+       <rect width={170} height={20} fill={voteColors.disagree} x={70}></rect>
+       <rect width={70} height={20} fill={voteColors.pass} x={240}></rect>
+-      <text y={14} x={8} fill="white" style={{fontSize: 12}}>% Agreed</text>
+-      <text y={14} x={115} fill="white" style={{fontSize: 12}}>% Disagreed</text>
+-      <text y={14} x={247} fill="black" style={{fontSize: 12}}>% Passed</text>
+-      <text y={14} x={318} fill="black" style={{fontSize: 12}}>% Didn&apos;t vote</text>
++      <text y={14} x={8} fill="white" style={{fontSize: 12}}>% {t('legend.agreed')}</text>
++      <text y={14} x={115} fill="white" style={{fontSize: 12}}>% {t('legend.disagreed')}</text>
++      <text y={14} x={247} fill="black" style={{fontSize: 12}}>% {t('legend.passed')}</text>
++      <text y={14} x={318} fill="black" style={{fontSize: 12}}>% {t('legend.didnotvote')}</text>
+     </svg>
+   )
+ }
+diff --git a/client-report/src/components/lists/allCommentsModeratedIn.js b/client-report/src/components/lists/allCommentsModeratedIn.js
+index 5c14fe71..56e5dca3 100644
+--- a/client-report/src/components/lists/allCommentsModeratedIn.js
++++ b/client-report/src/components/lists/allCommentsModeratedIn.js
+@@ -5,6 +5,7 @@ import _ from "lodash";
+ import CommentList from "./commentList";
+ import * as globals from "../globals";
+ 
++import { withTranslation } from 'react-i18next';
+ 
+ function sortByTid(comments) {
+   return _.map(comments, (comment) => comment.tid).sort((a, b) => a - b);
+@@ -26,7 +27,7 @@ function sortByPctPassed(comments) {
+   return _.map(_.reverse(_.sortBy(comments, (c) => {return c["pctPassed"];})), (c) => {return c.tid;});
+ }
+ 
+-class allCommentsModeratedIn extends React.Component {
++class allCommentsModeratedInTranslated extends React.Component {
+ 
+   constructor(props) {
+     super(props);
+@@ -63,21 +64,19 @@ class allCommentsModeratedIn extends React.Component {
+     } else {
+       console.error('missing sort function', this.state.sortStyle);
+     }
+-
++    const { t } = this.props;
+     return (
+       <div>
+-        <p style={globals.primaryHeading}> All statements </p>
+-        <p style={globals.paragraph}>
+-          Group votes across all statements, excluding those statements which were moderated out.
+-        </p>
+-        <label htmlFor="allCommentsSortMode">Sort by: </label>
++        <p style={globals.primaryHeading}>{t('all_comments.title')}</p>
++        <p style={globals.paragraph}>{t('all_comments.text')}</p>
++        <label htmlFor="allCommentsSortMode">{t('all_comments.sortby')}</label>
+         <select id="allCommentsSortMode" onChange={this.onSortChanged.bind(this)} value={this.state.sortStyle}>
+-          <option value="tid">Statement Id</option>
+-          <option value="consensus">Group-informed Consensus</option>
+-          <option value="numvotes">Number of votes</option>
+-          <option value="pctAgreed">% Agreed</option>
+-          <option value="pctDisagreed">% Disagreed</option>
+-          <option value="pctPassed">% Passed</option>
++          <option value="tid">{t('all_comments.tid')}</option>
++          <option value="consensus">{t('all_comments.consensus')}</option>
++          <option value="numvotes">{t('all_comments.numvotes')}</option>
++          <option value="pctAgreed">% {t('all_comments.agreed')}</option>
++          <option value="pctDisagreed">% {t('all_comments.disagreed')}</option>
++          <option value="pctPassed">% {t('all_comments.passed')}</option>
+         </select>
+         <div style={{marginTop: 50}}>
+           <CommentList
+@@ -94,4 +93,6 @@ class allCommentsModeratedIn extends React.Component {
+   }
+ }
+ 
+-export default allCommentsModeratedIn;
++//export default allCommentsModeratedIn;
++const allCommentsModeratedIn = withTranslation()(allCommentsModeratedInTranslated);
++export default withTranslation()(allCommentsModeratedIn);
+\ No newline at end of file
+diff --git a/client-report/src/components/lists/commentList.js b/client-report/src/components/lists/commentList.js
+index 722eeaaf..d09da435 100644
+--- a/client-report/src/components/lists/commentList.js
++++ b/client-report/src/components/lists/commentList.js
+@@ -4,6 +4,8 @@ import React from "react";
+ import _ from "lodash";
+ import * as globals from "../globals";
+ 
++import { useTranslation, withTranslation } from 'react-i18next';
++
+ const BarChartCompact = ({ comment, voteCounts, nMembers, voteColors }) => {
+   if (!comment) return null;
+ 
+@@ -32,21 +34,19 @@ const BarChartCompact = ({ comment, voteCounts, nMembers, voteColors }) => {
+   const disagreeSaw = (disagrees / sawTheComment) * w;
+   const passSaw = (passes / sawTheComment) * w;
+ 
+-  const agreeString = (agreeSaw << 0) + "%";
+-  const disagreeString = (disagreeSaw << 0) + "%";
+-  const passString = (passSaw << 0) + "%";
++  const agreeString = (agreeSaw << 0) + "% ";
++  const disagreeString = (disagreeSaw << 0) + "% ";
++  const passString = (passSaw << 0) + "% ";
++
++  const { t } = useTranslation();
+ 
+   return (
+     <div
+       title={
+-        agreeString +
+-        " Agreed\n" +
+-        disagreeString +
+-        " Disagreed\n" +
+-        passString +
+-        " Passed\n" +
+-        sawTheComment +
+-        " Respondents"
++        agreeString + t('comment_list.agreed')+"\n"+
++        disagreeString + t('comment_list.disagreed')+"\n"+
++        passString + t('comment_list.passed')+"\n"+
++        sawTheComment + t('comment_list.respondents')
+       }
+     >
+       <svg width={101} height={10} style={{ marginRight: 30 }}>
+@@ -159,7 +159,7 @@ const CommentRow = ({ comment, groups, voteColors }) => {
+   );
+ };
+ 
+-class CommentList extends React.Component {
++class CommentListTranslated extends React.Component {
+   getGroupLabels() {
+     function makeLabel(key, label, numMembers) {
+       return (
+@@ -186,9 +186,11 @@ class CommentList extends React.Component {
+       );
+     }
+     let labels = [];
++    
++    const { t } = this.props;
+ 
+     // totals
+-    labels.push(makeLabel(99, "Overall", this.props.ptptCount));
++    labels.push(makeLabel(99, t('comment_list.overall'), this.props.ptptCount));
+ 
+     _.each(this.props.math["group-votes"], (g, i) => {
+       labels.push(makeLabel(i, globals.groupLabels[i], g["n-members"]));
+@@ -199,7 +201,7 @@ class CommentList extends React.Component {
+ 
+   render() {
+     const comments = _.keyBy(this.props.comments, "tid");
+-
++    const { t } = this.props;
+     return (
+       <div>
+         <div
+@@ -220,7 +222,7 @@ class CommentList extends React.Component {
+               textTransform: "uppercase",
+             }}
+           >
+-            Statement
++            {t('comment_list.statement')}
+           </span>
+ 
+           {this.getGroupLabels()}
+@@ -241,4 +243,6 @@ class CommentList extends React.Component {
+   }
+ }
+ 
+-export default CommentList;
++//export default CommentList;
++const CommentList = withTranslation()(CommentListTranslated);
++export default withTranslation()(CommentList);
+diff --git a/client-report/src/components/lists/majorityStrict.js b/client-report/src/components/lists/majorityStrict.js
+index a379beed..61c0f5a1 100644
+--- a/client-report/src/components/lists/majorityStrict.js
++++ b/client-report/src/components/lists/majorityStrict.js
+@@ -5,6 +5,8 @@ import * as globals from "../globals";
+ import CommentList from "./commentList";
+ import Legend from "../framework/legend";
+ 
++import { useTranslation } from 'react-i18next';
++
+ const MajorityStrict = ({
+   conversation,
+   comments,
+@@ -26,15 +28,12 @@ const MajorityStrict = ({
+   consensus.disagree.forEach((c) => {
+     _consensusTids.push(c.tid);
+   });
+-
++  const { t } = useTranslation();
+   return (
+     <div>
+-      <p style={globals.primaryHeading}> Majority </p>
+-      <p style={globals.paragraph}>Here&apos;s what most people agreed with.</p>
+-      <p style={globals.paragraph}>
+-        60% or more of all participants voted one way or the other, regardless of whether large
+-        amounts of certain minority opinion groups voted the other way.
+-      </p>
++      <p style={globals.primaryHeading}>{t('majority.title')}</p>
++      <p style={globals.paragraph}>{t('majority.text')}</p>
++      <p style={globals.paragraph}>{t('majority.desc')}</p>
+       <Legend voteColors={voteColors} />
+       <div style={{ marginTop: 20 }}>
+         <CommentList
+diff --git a/client-report/src/components/lists/metadata.js b/client-report/src/components/lists/metadata.js
+index ecc016f2..a93ffb4f 100644
+--- a/client-report/src/components/lists/metadata.js
++++ b/client-report/src/components/lists/metadata.js
+@@ -3,6 +3,7 @@
+ import React from "react";
+ import CommentList from "./commentList";
+ import * as globals from "../globals";
++import { useTranslation } from 'react-i18next';
+ 
+ const Metadata = ({ conversation, comments, ptptCount, formatTid, math, voteColors }) => {
+   if (!conversation) {
+@@ -20,14 +21,11 @@ const Metadata = ({ conversation, comments, ptptCount, formatTid, math, voteColo
+   if (_metadataTids.length === 0) {
+     return null;
+   }
+-
++  const { t } = useTranslation();
+   return (
+     <div>
+-      <p style={globals.primaryHeading}> Metadata </p>
+-      <p style={globals.paragraph}>
+-        The demographic breakdown of each group, as self reported by agreeing and disagreeing on
+-        statements marked &apos;metadata&apos; by moderators.
+-      </p>
++      <p style={globals.primaryHeading}>{t('metadata.title')}</p>
++      <p style={globals.paragraph}>{t('metadata.text')}</p>
+       <div style={{ marginTop: 50 }}>
+         <CommentList
+           conversation={conversation}
+diff --git a/client-report/src/components/lists/participantGroup.js b/client-report/src/components/lists/participantGroup.js
+index 19f580a0..aeae1017 100644
+--- a/client-report/src/components/lists/participantGroup.js
++++ b/client-report/src/components/lists/participantGroup.js
+@@ -6,6 +6,8 @@ import * as globals from "../globals";
+ // import style from "../../util/style";
+ import CommentList from "./commentList";
+ 
++import { useTranslation } from 'react-i18next';
++
+ const ParticipantGroup = ({
+   gid,
+   groupComments,
+@@ -21,10 +23,10 @@ const ParticipantGroup = ({
+   math,
+   voteColors,
+ }) => {
+-
++  const { t } = useTranslation();
+   let groupLabel = groupName;
+   if (typeof groupLabel === "undefined") {
+-    groupLabel = "Group " + globals.groupLabels[gid];
++    groupLabel = t('participant_groups.group')+' '+ globals.groupLabels[gid];
+   }
+ 
+   return (
+@@ -33,9 +35,9 @@ const ParticipantGroup = ({
+         width: "100%",
+       }}>
+       <p style={globals.secondaryHeading}>
+-        {groupLabel}: {groupVotesForThisGroup["n-members"]} participants
++        {groupLabel}: {groupVotesForThisGroup["n-members"]} {t('participant_groups.participants')}
+       </p>
+-      <p style={globals.paragraph}> Statements which make this group unique, by their votes: </p>
++      <p style={globals.paragraph}>{t('participant_groups.grp_desc')}</p>
+       <CommentList
+         conversation={conversation}
+         ptptCount={ptptCount}
+diff --git a/client-report/src/components/lists/participantGroups.js b/client-report/src/components/lists/participantGroups.js
+index d2bed697..6141fd98 100644
+--- a/client-report/src/components/lists/participantGroups.js
++++ b/client-report/src/components/lists/participantGroups.js
+@@ -6,8 +6,9 @@ import Group from "./participantGroup";
+ // import style from "../../util/style";
+ import * as globals from "../globals";
+ import Metadata from "./metadata";
++import { withTranslation } from 'react-i18next';
+ 
+-class ParticipantGroups extends React.Component {
++class ParticipantGroupsTranslated extends React.Component {
+   constructor(props) {
+     super(props);
+     this.state = {
+@@ -26,6 +27,9 @@ class ParticipantGroups extends React.Component {
+     if (!this.props.conversation) {
+       return <div>Loading Groups</div>;
+     }
++    const { t } = this.props;
++    const ptptCount=this.props.ptptCount;
++    const groups=this.props.math["group-votes"].length;
+     return (
+       <div style={Object.assign(
+         {},
+@@ -33,10 +37,8 @@ class ParticipantGroups extends React.Component {
+         this.props.style
+       )}>
+       <div>
+-        <p style={globals.primaryHeading}> Opinion Groups </p>
+-        <p style={globals.paragraph}>
+-          Across {this.props.ptptCount} total participants, {this.props.math["group-votes"].length} opinion groups emerged. There are two factors that define an opinion group. First, each opinion group is made up of a number of participants who tended to vote similarly on multiple statements. Second, each group of participants who voted similarly will have also voted distinctly differently from other groups.
+-        </p>
++        <p style={globals.primaryHeading}>{t('participant_groups.title')}</p>
++        <p style={globals.paragraph}>{t('participant_groups.text', { param1: ptptCount, param2: groups })}</p>
+       <Metadata
+         math={this.props.math}
+         comments={this.props.comments}
+@@ -105,4 +107,6 @@ class ParticipantGroups extends React.Component {
+   }
+ }
+ 
+-export default ParticipantGroups;
++//export default ParticipantGroups;
++const ParticipantGroups = withTranslation()(ParticipantGroupsTranslated);
++export default withTranslation()(ParticipantGroups);
+diff --git a/client-report/src/components/lists/uncertainty.js b/client-report/src/components/lists/uncertainty.js
+index dd84d18b..3ddf46e2 100644
+--- a/client-report/src/components/lists/uncertainty.js
++++ b/client-report/src/components/lists/uncertainty.js
+@@ -4,22 +4,19 @@ import React from "react";
+ import CommentList from "./commentList";
+ import * as globals from "../globals";
+ // import style from "../../util/style";
++import { useTranslation } from 'react-i18next';
+ 
+ const Uncertainty = ({conversation, comments, ptptCount, uncertainty, formatTid, math, voteColors}) => {
+ 
+   if (!conversation) {
+     return <div>Loading Uncertainty...</div>
+   }
++  const { t } = useTranslation();
+   return (
+     <div>
+-      <p style={globals.primaryHeading}> Areas of uncertainty </p>
+-      <p style={globals.paragraph}>
+-        Across all {ptptCount} participants, there was uncertainty about the following statements.
+-        Greater than 30% of participants who saw these statements &apos;passed&apos;.
+-      </p>
+-      <p style={globals.paragraph}>
+-        Areas of uncertainty can provide avenues to educate and open dialogue with your community.
+-      </p>
++      <p style={globals.primaryHeading}>{t('uncertainty.title')}</p>
++      <p style={globals.paragraph}>{t('uncertainty.text', { param1: ptptCount})}</p>
++      <p style={globals.paragraph}>{t('uncertainty.desc')}</p>
+       <div style={{marginTop: 50}}>
+         <CommentList
+           conversation={conversation}
+diff --git a/client-report/src/components/overview.js b/client-report/src/components/overview.js
+index 160fd9eb..814e4685 100644
+--- a/client-report/src/components/overview.js
++++ b/client-report/src/components/overview.js
+@@ -4,6 +4,8 @@ import React from "react";
+ import _ from "lodash";
+ import * as globals from "./globals";
+ 
++import { useTranslation } from 'react-i18next';
++
+ const computeVoteTotal = (users) => {
+   let voteTotal = 0;
+ 
+@@ -39,38 +41,31 @@ const Overview = ({
+   //stats,
+   computedStats,
+ }) => {
++  const { t } = useTranslation();
+   return (
+     <div >
+-      <p style={globals.primaryHeading}>Overview</p>
+-      <p style={globals.paragraph}>
+-        Pol.is is a real-time survey system that helps identify the different ways a large group of people think about a divisive or complicated topic. Here’s a basic breakdown of some terms you’ll need to know in order to understand this report.
+-      </p>
+-      <p style={globals.paragraph}>
+-        <strong>Participants:</strong> These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.
+-      </p>
+-      <p style={globals.paragraph}>
+-        <strong>Statements:</strong> Participants may submit statements for other participants to vote on. Statements are assigned a number in the order they’re submitted.
+-      </p>
+-      <p style={globals.paragraph}>
+-        <strong>Opinion groups:</strong> Groups are made of participants who voted similarly to each other, and differently from the other groups.
+-      </p>
++      <p style={globals.primaryHeading}>{t('overview.title')}</p>
++      <p style={globals.paragraph}>{t('overview.text')}</p>
++      <p style={globals.paragraph}><strong>{t('overview.term_participants_title')}:</strong> {t('overview.term_participants_text')}</p>
++      <p style={globals.paragraph}><strong>{t('overview.term_statements_title')}:</strong> {t('overview.term_statements_text')}</p>
++      <p style={globals.paragraph}><strong>{t('overview.term_opinion_groups_title')}:</strong> {t('overview.term_opinion_groups_text')}</p>
+ 
+       <p style={globals.paragraph}>
+-        {conversation && conversation.ownername ? "This pol.is conversation was run by "+conversation.ownername+". " : null}
+-        {conversation && conversation.topic ? "The topic was '"+conversation.topic+"'. " : null}
++        {conversation && conversation.ownername ? t('overview.ownername_text')+"'"+conversation.ownername+"'. " : null}
++        {conversation && conversation.topic ? t('overview.topic_text')+"'"+conversation.topic+"'. " : null}
+       </p>
+       <div style={{maxWidth: 1200, display: "flex", justifyContent: "space-between"}}>
+-        <Number number={ptptCountTotal} label={"people voted"} />
+-        <Number number={ptptCount} label={"people grouped"} />
++        <Number number={ptptCountTotal} label={t('overview.people_voted')} />
++        <Number number={ptptCount} label={t('overview.people_grouped')} />
+ 
+         <Number
+           number={ computeVoteTotal(math["user-vote-counts"]) }
+-          label={"votes were cast"} />
++          label={t('overview.votes_cast')} />
+         {/* Leaving this out for now until we get smarter conversationStats */}
+         {/* <Number number={comments.length} label={"people submitted statements"} /> */}
+-        <Number number={math["n-cmts"]} label={"statements were submitted"} />
+-        <Number number={computedStats.votesPerVoterAvg.toFixed(2)} label={"votes per voter on average"} />
+-        <Number number={computedStats.commentsPerCommenterAvg.toFixed(2)} label={"statements per author on average"} />
++        <Number number={math["n-cmts"]} label={t('overview.statements_submitted')} />
++        <Number number={computedStats.votesPerVoterAvg.toFixed(2)} label={t('overview.votes_per_voter_avg')} />
++        <Number number={computedStats.commentsPerCommenterAvg.toFixed(2)} label={t('overview.statements_per_author_avg')} />
+ 
+       </div>
+ 
+diff --git a/client-report/src/components/participantsGraph/participantsGraph.js b/client-report/src/components/participantsGraph/participantsGraph.js
+index e48c9f97..28bf47b3 100644
+--- a/client-report/src/components/participantsGraph/participantsGraph.js
++++ b/client-report/src/components/participantsGraph/participantsGraph.js
+@@ -11,6 +11,7 @@ import * as d3chromatic from "d3-scale-chromatic";
+ import Comments from "../commentsGraph/comments";
+ import Hull from "./hull";
+ import CommentList from "../lists/commentList";
++import { withTranslation } from 'react-i18next';
+ 
+ const pointsPerSquarePixelMax = 0.0017; /* choose dynamically ? */
+ const contourBandwidth = 20;
+@@ -68,7 +69,7 @@ const Participants = ({ points, math }) => {
+   );
+ };
+ 
+-class ParticipantsGraph extends React.Component {
++class ParticipantsGraphTranslated extends React.Component {
+   constructor(props) {
+     super(props);
+     this.Viewer = null;
+@@ -128,20 +129,13 @@ class ParticipantsGraph extends React.Component {
+       .size([globals.side, globals.side])
+       // .bandwidth(10)(baseClustersScaled)
+       .bandwidth(contourBandwidth)(baseClustersScaled);
+-
++    const { t } = this.props;
+     return (
+       <div style={{ position: "relative" }}>
+         <div>
+-          <p style={globals.primaryHeading}> Graph </p>
+-          <p style={globals.paragraph}>
+-            Which statements were voted on similarly? How do participants relate to each other?
+-          </p>
+-          <p style={globals.paragraph}>
+-            In this graph, statements are positioned more closely to statements which were voted on
+-            similarly. Participants, in turn, are positioned more closely to statements on which
+-            they agreed, and further from statements on which they disagreed. This means
+-            participants who voted similarly are closer together.
+-          </p>
++          <p style={globals.primaryHeading}>{t('graph.title')}</p>
++          <p style={globals.paragraph}>{t('graph.text')}</p>
++          <p style={globals.paragraph}>{t('graph.desc')}</p>
+         </div>
+         <div>
+           {
+@@ -177,7 +171,7 @@ class ParticipantsGraph extends React.Component {
+               this.setState({ showAxes: !this.state.showAxes });
+             }}
+           >
+-            Axes
++            {t('graph.axes')}
+           </button>
+           <button
+             style={{
+@@ -195,7 +189,7 @@ class ParticipantsGraph extends React.Component {
+               });
+             }}
+           >
+-            Radial axes
++            {t('graph.radial_axes')}
+           </button>
+           {/* <button
+             style={{
+@@ -227,7 +221,7 @@ class ParticipantsGraph extends React.Component {
+               this.setState({ showComments: !this.state.showComments });
+             }}
+           >
+-            Statements
++            {t('graph.statements')}
+           </button>
+           <button
+             style={{
+@@ -243,7 +237,7 @@ class ParticipantsGraph extends React.Component {
+               this.setState({ showParticipants: !this.state.showParticipants });
+             }}
+           >
+-            Participants (bucketized)
++            {t('graph.participants_bucketized')}
+           </button>
+           <button
+             style={{
+@@ -259,7 +253,7 @@ class ParticipantsGraph extends React.Component {
+               this.setState({ showGroupOutline: !this.state.showGroupOutline });
+             }}
+           >
+-            Group outline
++            {t('graph.group_outline')}
+           </button>
+           <button
+             style={{
+@@ -275,7 +269,7 @@ class ParticipantsGraph extends React.Component {
+               this.setState({ showGroupLabels: !this.state.showGroupLabels });
+             }}
+           >
+-            Group labels
++            {t('graph.group_labels')}
+           </button>
+         </div>
+ 
+@@ -291,7 +285,7 @@ class ParticipantsGraph extends React.Component {
+               voteColors={this.props.voteColors}
+             />
+           ) : (
+-            <p>Click a statement, identified by its number, to explore regions of the graph.</p>
++            <p>{t('graph.click_text')}</p>
+           )}
+         </div>
+ 
+@@ -448,4 +442,6 @@ class ParticipantsGraph extends React.Component {
+   }
+ }
+ 
+-export default ParticipantsGraph;
++//export default ParticipantsGraph;
++const ParticipantsGraph = withTranslation()(ParticipantsGraphTranslated);
++export default withTranslation()(ParticipantsGraph);
+\ No newline at end of file
+diff --git a/client-report/src/i18n.js b/client-report/src/i18n.js
+new file mode 100644
+index 00000000..3f3f57b4
+--- /dev/null
++++ b/client-report/src/i18n.js
+@@ -0,0 +1,34 @@
++import i18n from 'i18next';
++import { initReactI18next } from 'react-i18next';
++
++import Backend from 'i18next-http-backend';
++import LanguageDetector from 'i18next-browser-languagedetector';
++
++i18n
++  // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
++  // learn more: https://github.com/i18next/i18next-http-backend
++  // want your translations to be loaded from a professional CDN? => https://github.com/locize/react-tutorial#step-2---use-the-locize-cdn
++  .use(Backend)
++  
++  // detect user language
++  // learn more: https://github.com/i18next/i18next-browser-languageDetector
++  .use(LanguageDetector)
++  
++  // pass the i18n instance to react-i18next.
++  .use(initReactI18next)
++  
++  // init i18next
++  // for all options read: https://www.i18next.com/overview/configuration-options
++  .init({
++    debug: false,
++    fallbackLng: 'en',
++    supportedLngs: ['en', 'fi', 'sv'],
++    interpolation: {
++      escapeValue: false, // not needed for react as it escapes by default
++    },
++    ns: 'client-report' // Use the namespace to separate translation files by UI it belongs to
++  });
++
++
++export default i18n;
++
+diff --git a/client-report/src/index.js b/client-report/src/index.js
+index 115707ba..a46a8d16 100644
+--- a/client-report/src/index.js
++++ b/client-report/src/index.js
+@@ -5,6 +5,7 @@ import React from "react";
+ import ReactDOM from "react-dom";
+ import './index.css';
+ import App from "./components/app";
++import './i18n';
+ 
+ // const store = configureStore();
+ 
+diff --git a/client-report/webpack.common.js b/client-report/webpack.common.js
+index 9dcb91e3..68afa165 100644
+--- a/client-report/webpack.common.js
++++ b/client-report/webpack.common.js
+@@ -23,6 +23,7 @@ module.exports = {
+     new CopyWebpackPlugin({
+       patterns: [
+         { from: 'public/favicon.ico', to: 'favicon.ico' },
++        { from: 'locales', to: 'locales' },
+       ],
+     }),
+     new HtmlWebpackPlugin({
+-- 
+2.47.0
+

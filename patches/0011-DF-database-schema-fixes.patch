@@ -1,0 +1,27 @@
+From bb4ded3c29f4b237a6bfbf9e4676836253510845 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Wed, 2 Oct 2024 12:48:25 +0300
+Subject: [PATCH 11/13] DF: database schema fixes
+
+---
+ server/postgres/migrations/000007_df_fixes.sql | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 server/postgres/migrations/000007_df_fixes.sql
+
+diff --git a/server/postgres/migrations/000007_df_fixes.sql b/server/postgres/migrations/000007_df_fixes.sql
+new file mode 100644
+index 00000000..9305dae8
+--- /dev/null
++++ b/server/postgres/migrations/000007_df_fixes.sql
+@@ -0,0 +1,7 @@
++-- set default as 0. disable email notifications on client-participation when it is not set by the admin. client-admin customization: configuration hidden for this value.
++ALTER TABLE "conversations"
++	ALTER COLUMN "subscribe_type" SET DEFAULT '0';
++
++-- add following, if needed. current fix implented by commenting out code block that inserts ip-data when x-forwarded-for attribute is set in request.
++-- ALTER TABLE "participants_extended" ADD "encrypted_ip_address" VARCHAR(256) NULL;
++-- ALTER TABLE "participants_extended" ADD "encrypted_x_forwarded_for" VARCHAR(256) NULL;
+\ No newline at end of file
+-- 
+2.47.0
+

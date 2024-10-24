@@ -1,0 +1,23 @@
+From 681cadce5d9621793825a3ba5604f86952ecfc97 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:17:38 +0300
+Subject: [PATCH 01/13] DF: Change max heap memory for math worker
+
+---
+ math/bin/run | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/math/bin/run b/math/bin/run
+index 4d5f5f5c..d5dc22d6 100755
+--- a/math/bin/run
++++ b/math/bin/run
+@@ -8,5 +8,5 @@ do
+   echo "XXXXXXXXXXXXXXXXXX REBOOTING MATH WORKER XXXXXXXXXXXXXXXXXX"
+   echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+   echo "                                                           "
+-  timeout -s KILL 14400 clojure -M:run full
++  timeout -s KILL 14400 clojure -J-Xmx6g -M:run full
+ done
+-- 
+2.47.0
+

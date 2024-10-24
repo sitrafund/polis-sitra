@@ -1,0 +1,120 @@
+From 00336ae3d512be081b69de93dc98e5f4b96e2690 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Thu, 26 Sep 2024 15:25:40 +0300
+Subject: [PATCH 05/13] DF: Signin page changes
+
+1 add translations to signin page
+2 add dev env warning before login form
+---
+ client-admin/src/components/landers/signin.js | 41 +++++++++++++++----
+ 1 file changed, 33 insertions(+), 8 deletions(-)
+
+diff --git a/client-admin/src/components/landers/signin.js b/client-admin/src/components/landers/signin.js
+index 198130d4..1b352152 100644
+--- a/client-admin/src/components/landers/signin.js
++++ b/client-admin/src/components/landers/signin.js
+@@ -10,10 +10,12 @@ import StaticLayout from './lander-layout'
+ 
+ import strings from '../../strings/strings'
+ 
++import { withTranslation } from 'react-i18next';
++
+ const fbAppId = process.env.FB_APP_ID
+ 
+ @connect((state) => state.signin)
+-class SignIn extends React.Component {
++class SignInTranslated extends React.Component {
+   // eslint-disable-next-line node/handle-callback-err
+   static getDerivedStateFromError(error) {
+     // Update state so the next render will show the fallback UI.
+@@ -73,6 +75,7 @@ class SignIn extends React.Component {
+   }
+ 
+   drawLoginForm() {
++    const { t } = this.props;
+     return (
+       <Box>
+         <form>
+@@ -89,7 +92,7 @@ class SignIn extends React.Component {
+               }}
+               id="signinEmailInput"
+               ref={(c) => (this.email = c)}
+-              placeholder="email"
++              placeholder= {t('signin.email')}
+               type="email"
+             />
+           </Box>
+@@ -106,7 +109,7 @@ class SignIn extends React.Component {
+               }}
+               id="signinPasswordInput"
+               ref={(c) => (this.password = c)}
+-              placeholder="password"
++              placeholder={t('signin.password')}
+               type="password"
+             />
+           </Box>
+@@ -115,11 +118,11 @@ class SignIn extends React.Component {
+             sx={{ my: [2] }}
+             id="signinButton"
+             onClick={this.handleLoginClicked.bind(this)}>
+-            {this.props.pending ? 'Signing in...' : 'Sign In'}
++            {this.props.pending ? t('signin.signingin') : t('signin.signin')}
+           </Button>
+           <Text sx={{ my: 4 }}>
+-            {'Forgot your password? '}
+-            <Link to={'/pwresetinit'}>Reset Password</Link>
++            {t('signin.forgot')}
++            <Link to={'/pwresetinit'}> {t('signin.reset')}</Link>
+           </Text>
+         </form>
+         {fbAppId && (
+@@ -165,8 +168,25 @@ class SignIn extends React.Component {
+     )
+   }
+ 
++  drawTestEnvWarning() {
++    const { t } = this.props;
++    return (
++      <span>
++      <Heading as="h2" sx={{ my: [4, null, 5], fontSize: [4, null, 5] }}>
++        {t('signin.test_warning_title')}
++      </Heading>      
++      <Heading as="h3" sx={{ my: [4, null, 5], fontSize: [3, null, 4] }}>
++        {t('signin.test_warning_text')} 
++      </Heading>      
++      </span>
++    )
++  }
++
++
++
+   render() {
+     const { signInSuccessful, authed } = this.props
++    const { t } = this.props;
+ 
+     if (signInSuccessful || authed) {
+       return <Redirect to={'/'} />
+@@ -175,8 +195,11 @@ class SignIn extends React.Component {
+     return (
+       <StaticLayout>
+         <Heading as="h1" sx={{ my: [4, null, 5], fontSize: [6, null, 7] }}>
+-          Sign In
++          {t('signin.signin')}
+         </Heading>
++        { (window.location.hostname.includes('test') || window.location.hostname.includes('local'))
++          ? this.drawTestEnvWarning() 
++          : '' }
+         {this.props.facebookError !== 'polis_err_user_with_this_email_exists'
+           ? this.drawLoginForm()
+           : this.drawPasswordConnectFacebookForm()}{' '}
+@@ -185,4 +208,6 @@ class SignIn extends React.Component {
+   }
+ }
+ 
+-export default SignIn
++// export default SignIn
++const SignIn = withTranslation()(SignInTranslated);
++export default withTranslation()(SignIn);
+-- 
+2.47.0
+

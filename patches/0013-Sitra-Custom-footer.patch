@@ -1,0 +1,397 @@
+From 16bdbd97fcafccf4bb5a41d1faec929f5b1136e9 Mon Sep 17 00:00:00 2001
+From: Calle Laakkonen <calle.laakkonen@sofokus.com>
+Date: Mon, 2 Sep 2024 11:42:25 +0300
+Subject: [PATCH 13/13] Sitra: Custom footer
+
+---
+ client-admin/public/locales/en/client-admin.json    | 10 ++++++----
+ client-admin/public/locales/fi/client-admin.json    |  8 +++++---
+ client-admin/public/locales/sv/client-admin.json    |  8 +++++---
+ .../src/components/landers/lander-footer.js         | 11 +++++------
+ client-participation/css/polis/modules/_footer.scss |  4 ++--
+ client-participation/js/strings/en_us.js            |  8 +++++---
+ client-participation/js/strings/fi.js               |  6 ++++--
+ client-participation/js/strings/sv.js               |  6 ++++--
+ client-participation/js/templates/footer.handlebars | 13 ++++++-------
+ client-report/locales/en/client-report.json         |  8 +++++---
+ client-report/locales/fi/client-report.json         |  6 ++++--
+ client-report/locales/sv/client-report.json         |  6 ++++--
+ client-report/src/components/framework/Footer.js    | 13 ++++++-------
+ 13 files changed, 61 insertions(+), 46 deletions(-)
+
+diff --git a/client-admin/public/locales/en/client-admin.json b/client-admin/public/locales/en/client-admin.json
+index 578a26cb..4e51a4d6 100644
+--- a/client-admin/public/locales/en/client-admin.json
++++ b/client-admin/public/locales/en/client-admin.json
+@@ -14,15 +14,17 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "desc": "Sitra and DigiFinland have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
+     "disclaimer": "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
+     "version": "Version: {{param1}}",
+     "released": "Release date: {{param1}}",
+     "provider": "Service provider",
+     "links": {
+-      "privacy": "DigiFinland Oy data protection",
++      "privacy": "Sitra data protection",
++      "privacy_href": "https://www.sitra.fi/en/terms-of-service/",
+       "info": "Information",
+-      "source": "Sourcecode"
++      "info_href": "https://www.sitra.fi/en/projects/polis-platform-experiments/",
++      "source": "Source Code"
+     }
+   },
+   "signout": {
+@@ -148,4 +150,4 @@
+     "commenters": "Commenters over time, by time of first comment",
+     "voters": "Voters over time, by time of first vote"
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/client-admin/public/locales/fi/client-admin.json b/client-admin/public/locales/fi/client-admin.json
+index 716b302e..3592f164 100644
+--- a/client-admin/public/locales/fi/client-admin.json
++++ b/client-admin/public/locales/fi/client-admin.json
+@@ -14,14 +14,16 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "desc": "Sitra ja DigiFinland ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
+     "disclaimer": "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
+     "version": "Versio: {{param1}}",
+     "released": "Julkaisu pvm: {{param1}}",
+     "provider": "Palveluntuottaja",
+     "links": {
+-      "privacy": "DigiFinland Oy tietosuoja",
++      "privacy": "Sitran tietosuojaseloste",
++      "privacy_href": "https://www.sitra.fi/tietosuoja/",
+       "info": "Tietoa palvelusta",
++      "info_href": "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/",
+       "source": "Lähdekoodi"
+     }
+   },
+@@ -148,4 +150,4 @@
+     "commenters": "Kommentoijia ajan kuluessa, alkaen ensimmäisestä kommentista",
+     "voters": "Äänestäjiä ajan kuluessa, alkaen ensimmäisestä äänestä"
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/client-admin/public/locales/sv/client-admin.json b/client-admin/public/locales/sv/client-admin.json
+index 0ccaa65f..86e75280 100644
+--- a/client-admin/public/locales/sv/client-admin.json
++++ b/client-admin/public/locales/sv/client-admin.json
+@@ -14,14 +14,16 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "desc": "Sitra och DigiFinland har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
+     "disclaimer": "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
+     "version": "Version: {{param1}}",
+     "released": "Publiceringsdatum: {{param1}}",
+     "provider": "Tjänsteleverantör",
+     "links": {
+-      "privacy": "DigiFinland Oy dataskydd",
++      "privacy": "Sitra dataskydd",
++      "privacy_href": "https://www.sitra.fi/sv/anvandarvillkor/",
+       "info": "Information",
++      "info_href": "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/",
+       "source": "Källkod"
+     }
+   },
+@@ -148,4 +150,4 @@
+     "commenters": "Kommenterare över tid, efter tidpunkt för första kommentaren",
+     "voters": "Röstare över tid, efter tidpunkt för första röstningen"
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/client-admin/src/components/landers/lander-footer.js b/client-admin/src/components/landers/lander-footer.js
+index 4225931c..0daff864 100644
+--- a/client-admin/src/components/landers/lander-footer.js
++++ b/client-admin/src/components/landers/lander-footer.js
+@@ -5,25 +5,24 @@ import { useTranslation } from 'react-i18next';
+ 
+ const Footer = () => {
+ 
+-  document.documentElement.style.backgroundColor = "#003d6d"; // Change HTML-elements background color to fit the footer color
++  document.documentElement.style.backgroundColor = "#000000"; // Change HTML-elements background color to fit the footer color
+ 
+  const { t } = useTranslation();
+  
+  return (
+     <footer style={{ position: 'absolute', left: '0', fontFamily: 'Arial, Helvetica, sans-serif', lineHeight: '1.5', width: '100%'}}>
+-      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#003d6d', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
++      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#000', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', marginLeft: '20px'}}>
+             <h3>{t('footer.title')}</h3>
+             <p>{t('footer.desc')}</p>
+             <p>{t('footer.disclaimer')}</p>
+-            <p style={{fontSize: '10px'}}>{t('footer.version', { param1: "0.1.16"})}   {t('footer.released', { param1: "16.9.2024"})}</p>
+         </div>
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+             <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
+-                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/tietosuoja/">{t('footer.links.privacy')} 🡥</a></li>
+-                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/">{t('footer.links.info')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href={t('footer.links.privacy_href')}>{t('footer.links.privacy')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href={t('footer.links.info_href')}>{t('footer.links.info')} 🡥</a></li>
+                 <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://compdemocracy.org/Welcome/">The Computational Democracy Project 🡥</a></li>
+-                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://github.com/polis-digifinland/polis-digifinland">{t('footer.links.source')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://github.com/sitrafund/polis-sitra/">{t('footer.links.source')} 🡥</a></li>
+             </ul>
+         </div>
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column'}}>
+diff --git a/client-participation/css/polis/modules/_footer.scss b/client-participation/css/polis/modules/_footer.scss
+index 063bda43..ab6471ca 100644
+--- a/client-participation/css/polis/modules/_footer.scss
++++ b/client-participation/css/polis/modules/_footer.scss
+@@ -14,7 +14,7 @@
+     display: flex;
+     align-items: flex-start;
+     flex-wrap: wrap;
+-    background-color: rgb(0, 61, 109);
++    background-color: black;
+     color: rgb(255, 255, 255);
+     font-size: 0.875rem;
+     position: relative;
+@@ -95,4 +95,4 @@ footer p {
+ 
+ html {
+ background-color: rgb(0, 61, 109);
+-}
+\ No newline at end of file
++}
+diff --git a/client-participation/js/strings/en_us.js b/client-participation/js/strings/en_us.js
+index 5b333b23..da7b214d 100644
+--- a/client-participation/js/strings/en_us.js
++++ b/client-participation/js/strings/en_us.js
+@@ -150,14 +150,16 @@ s.topic_bad_02 = "what are our launch blockers?";
+ s.topic_bad_02_reason = "";
+ 
+ s.footer_title = "Polis";
+-s.footer_desc = "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.";
++s.footer_desc = "Sitra and DigiFinland have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.";
+ s.footer_disclaimer = "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.";
+ s.footer_version = "Version";
+ s.footer_released = "Release date";
+ s.footer_provider = "Service provider";
+-s.footer_links_privacy = "DigiFinland Oy data protection";
++s.footer_links_privacy = "Sitra data protection";
++s.footer_links_privacy_href = "https://www.sitra.fi/en/terms-of-service/";
+ s.footer_links_info = "Information";
+-s.footer_links_source = "Sourcecode";
++s.footer_links_info_href = "https://www.sitra.fi/en/projects/polis-platform-experiments/";
++s.footer_links_source = "Source Code";
+ 
+ // Old unused error message from when Polis was a demo <3
+ 
+diff --git a/client-participation/js/strings/fi.js b/client-participation/js/strings/fi.js
+index 0ac3b15d..edd0d553 100644
+--- a/client-participation/js/strings/fi.js
++++ b/client-participation/js/strings/fi.js
+@@ -124,13 +124,15 @@ s.topic_bad_02 = "Mitkä ovat julkaisun estäjät?";
+ s.topic_bad_02_reason = "";
+ 
+ s.footer_title = "Polis";
+-s.footer_desc = "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.";
++s.footer_desc = "Sitra ja DigiFinland ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.";
+ s.footer_disclaimer = "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.";
+ s.footer_version = "Versio";
+ s.footer_released = "Julkaisu pvm";
+ s.footer_provider = "Palveluntuottaja";
+-s.footer_links_privacy = "DigiFinland Oy tietosuoja";
++s.footer_links_privacy = "Sitran tietosuojaseloste";
++s.footer_links_privacy_href = "https://www.sitra.fi/tietosuoja/";
+ s.footer_links_info = "Tietoa palvelusta";
++s.footer_links_info_href = "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/";
+ s.footer_links_source = "Lähdekoodi";
+ 
+ module.exports = s;
+diff --git a/client-participation/js/strings/sv.js b/client-participation/js/strings/sv.js
+index e928a202..e78c889d 100644
+--- a/client-participation/js/strings/sv.js
++++ b/client-participation/js/strings/sv.js
+@@ -124,13 +124,15 @@ s.topic_bad_02 = "vad är våra lanseringsblockerare?";
+ s.topic_bad_02_reason = "";
+ 
+ s.footer_title = "Polis";
+-s.footer_desc = "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.";
++s.footer_desc = "Sitra och DigiFinland har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.";
+ s.footer_disclaimer = "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.";
+ s.footer_version = "Version";
+ s.footer_released = "Publiceringsdatum";
+ s.footer_provider = "Tjänsteleverantör";
+-s.footer_links_privacy = "DigiFinland Oy dataskydd";
++s.footer_links_privacy = "Sitra dataskydd";
++s.footer_links_privacy_href = "https://www.sitra.fi/sv/anvandarvillkor/";
+ s.footer_links_info = "Information";
++s.footer_links_info_href = "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/";
+ s.footer_links_source = "Källkod";
+ 
+ module.exports = s;
+diff --git a/client-participation/js/templates/footer.handlebars b/client-participation/js/templates/footer.handlebars
+index 192b7e0d..b32424d2 100644
+--- a/client-participation/js/templates/footer.handlebars
++++ b/client-participation/js/templates/footer.handlebars
+@@ -11,16 +11,15 @@ should have received a copy of the GNU Affero General Public License along with
+             <h3>{{s.footer_title}}</h3>
+             <p>{{s.footer_desc}}</p>
+             <p>{{s.footer_disclaimer}}</p>
+-            <p style="font-size: 10px;">{{s.footer_version}}: 0.1.16   {{s.footer_released}}: 16.9.2024</p>
+         </div>
+         <div class="css-1236x0c">
+             <ul class="css-u7hqrd">
+                 <li class="css-eaeacs">
+-                    <a target="_blank" href="https://digifinland.fi/tietosuoja/"
++                    <a target="_blank" href="{{s.footer_links_privacy_href}}"
+                         class="css-121oj52">{{s.footer_links_privacy}} 🡥</a>
+                 </li>
+                 <li class="css-eaeacs">
+-                    <a target="_blank" href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/"
++                    <a target="_blank" href="{{s.footer_links_info_href}}"
+                         class="css-121oj52">{{s.footer_links_info}} 🡥</a>
+                 </li>
+                 <li class="css-eaeacs">
+@@ -28,7 +27,7 @@ should have received a copy of the GNU Affero General Public License along with
+                         Democracy Project 🡥</a>
+                 </li>
+                 <li class="css-eaeacs">
+-                    <a target="_blank" href="https://github.com/polis-digifinland/polis-digifinland"
++                    <a target="_blank" href="https://github.com/sitrafund/polis-sitra/"
+                         class="css-121oj52">{{s.footer_links_source}} 🡥</a>
+                 </li>
+             </ul>
+@@ -39,13 +38,13 @@ should have received a copy of the GNU Affero General Public License along with
+                     <h3 class="css-1uk1gs8">{{s.footer_provider}}</h3>
+                 </li>
+                 <li>
+-                    <p class="css-1uk1gs8">DigiFinland Oy</p>
++                    <p class="css-1uk1gs8">Sitra</p>
+                 </li>
+                 <li>
+-                    <p class="css-1uk1gs8">Kuntatalo, Toinen linja 14</p>
++                    <p class="css-1uk1gs8">Itämerenkatu 11-13, PL 160</p>
+                 </li>
+                 <li>
+-                    <p class="css-1uk1gs8">00180 Helsinki</p>
++                    <p class="css-1uk1gs8">00181 Helsinki</p>
+                 </li>
+             </ul>
+         </div>
+diff --git a/client-report/locales/en/client-report.json b/client-report/locales/en/client-report.json
+index d6a8d674..02233758 100644
+--- a/client-report/locales/en/client-report.json
++++ b/client-report/locales/en/client-report.json
+@@ -10,15 +10,17 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland and Sitra have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "desc": "Sitra and DigiFinland have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
+     "disclaimer": "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
+     "version": "Version: {{param1}}",
+     "released": "Release date: {{param1}}",
+     "provider": "Service provider",
+     "links": {
+-      "privacy": "DigiFinland Oy data protection",
++      "privacy": "Sitra data protection",
++      "privacy_href": "https://www.sitra.fi/en/terms-of-service/",
+       "info": "Information",
+-      "source": "Sourcecode"
++      "info_href": "https://www.sitra.fi/en/projects/polis-platform-experiments/",
++      "source": "Source Code"
+     }
+   },
+   "controls": {
+diff --git a/client-report/locales/fi/client-report.json b/client-report/locales/fi/client-report.json
+index 919499a6..e65f0ec8 100644
+--- a/client-report/locales/fi/client-report.json
++++ b/client-report/locales/fi/client-report.json
+@@ -10,14 +10,16 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland ja Sitra ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "desc": "Sitra ja DigiFinland ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
+     "disclaimer": "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
+     "version": "Versio: {{param1}}",
+     "released": "Julkaisu pvm: {{param1}}",
+     "provider": "Palveluntuottaja",
+     "links": {
+-      "privacy": "DigiFinland Oy tietosuoja",
++      "privacy": "Sitran tietosuojaseloste",
++      "privacy_href": "https://www.sitra.fi/tietosuoja/",
+       "info": "Tietoa palvelusta",
++      "info_href": "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/",
+       "source": "Lähdekoodi"
+     }
+   },
+diff --git a/client-report/locales/sv/client-report.json b/client-report/locales/sv/client-report.json
+index a07dba2e..33031123 100644
+--- a/client-report/locales/sv/client-report.json
++++ b/client-report/locales/sv/client-report.json
+@@ -10,14 +10,16 @@
+   },
+   "footer": {
+     "title": "Polis",
+-    "desc": "DigiFinland och Sitra har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "desc": "Sitra och DigiFinland har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
+     "disclaimer": "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
+     "version": "Version: {{param1}}",
+     "released": "Publiceringsdatum: {{param1}}",
+     "provider": "Tjänsteleverantör",
+     "links": {
+-      "privacy": "DigiFinland Oy dataskydd",
++      "privacy": "Sitra dataskydd",
++      "privacy_href": "https://www.sitra.fi/sv/anvandarvillkor/",
+       "info": "Information",
++      "info_href": "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/",
+       "source": "Källkod"
+     }
+   },
+diff --git a/client-report/src/components/framework/Footer.js b/client-report/src/components/framework/Footer.js
+index 95d2d960..09399de8 100644
+--- a/client-report/src/components/framework/Footer.js
++++ b/client-report/src/components/framework/Footer.js
+@@ -11,17 +11,16 @@ const Footer = () => {
+  
+  return (
+     <footer style={{ position: 'absolute', left: '0', fontFamily: 'Arial, Helvetica, sans-serif', lineHeight: '1.5', width: '100%'}}>
+-      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#003d6d', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
++      <div style={{ display: 'flex', alignItems: 'flex-start', flexWrap: 'wrap', backgroundColor: '#000', color: '#fff', fontSize: '0.875rem', position: 'relative', bottom: '0', paddingTop: '20px',paddingBottom: '20px' }}>
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', marginLeft: '20px'}}>
+             <h3>{t('footer.title')}</h3>
+             <p>{t('footer.desc')}</p>
+             <p>{t('footer.disclaimer')}</p>
+-            <p style={{fontSize: '10px'}}>{t('footer.version', { param1: "0.1.16"})}   {t('footer.released', { param1: "16.9.2024"})}</p>
+         </div>
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+             <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
+-                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/tietosuoja/">{t('footer.links.privacy')} 🡥</a></li>
+-                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://digifinland.fi/toimintamme/polis-kansalaiskeskustelualusta/">{t('footer.links.info')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href={t('footer.links.privacy_href')}>{t('footer.links.privacy')} 🡥</a></li>
++                <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href={t('footer.links.info_href')}>{t('footer.links.info')} 🡥</a></li>
+                 <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://compdemocracy.org/Welcome/">The Computational Democracy Project 🡥</a></li>
+                 <li style={{ margin: '10px'}}><a target="_blank" rel="noreferrer" style={{ color: '#FFF', border: 0 }} href="https://github.com/polis-digifinland/polis-digifinland">{t('footer.links.source')} 🡥</a></li>
+             </ul>
+@@ -29,9 +28,9 @@ const Footer = () => {
+         <div style={{ width: '30%', minWidth: '300px', display: 'flex', flexDirection: 'column'}}>
+             <ul style={{ display: 'flex',flexDirection: 'column', listStyle: 'none',}}>
+                 <li><h3 style={{ margin: '0'}}>{t('footer.provider')}</h3></li>
+-                <li><p style={{ margin: '0'}}>DigiFinland Oy</p></li>
+-                <li><p style={{ margin: '0'}}>Kuntatalo, Toinen linja 14</p></li>
+-                <li><p style={{ margin: '0'}}>00180 Helsinki</p></li>
++                <li><p style={{ margin: '0'}}>Sitra</p></li>
++                <li><p style={{ margin: '0'}}>Itämerenkatu 11-13, PL 160</p></li>
++                <li><p style={{ margin: '0'}}>00181 Helsinki</p></li>
+             </ul>
+         </div>
+       </div>
+-- 
+2.47.0
+
