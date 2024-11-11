@@ -1,4 +1,4 @@
-From 16bdbd97fcafccf4bb5a41d1faec929f5b1136e9 Mon Sep 17 00:00:00 2001
+From 157f5e765520c739e17cccd9ac4319506dec30ed Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Mon, 2 Sep 2024 11:42:25 +0300
 Subject: [PATCH 13/13] Sitra: Custom footer
@@ -52,7 +52,7 @@ index 578a26cb..4e51a4d6 100644
 \ No newline at end of file
 +}
 diff --git a/client-admin/public/locales/fi/client-admin.json b/client-admin/public/locales/fi/client-admin.json
-index 716b302e..3592f164 100644
+index 716b302e..b207b477 100644
 --- a/client-admin/public/locales/fi/client-admin.json
 +++ b/client-admin/public/locales/fi/client-admin.json
 @@ -14,14 +14,16 @@
@@ -68,7 +68,7 @@ index 716b302e..3592f164 100644
      "links": {
 -      "privacy": "DigiFinland Oy tietosuoja",
 +      "privacy": "Sitran tietosuojaseloste",
-+      "privacy_href": "https://www.sitra.fi/tietosuoja/",
++      "privacy_href": "https://www.sitra.fi/seloste-henkilotietojen-kasittelysta-polis-palvelussa/",
        "info": "Tietoa palvelusta",
 +      "info_href": "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/",
        "source": "Lähdekoodi"
@@ -191,7 +191,7 @@ index 5b333b23..da7b214d 100644
  // Old unused error message from when Polis was a demo <3
  
 diff --git a/client-participation/js/strings/fi.js b/client-participation/js/strings/fi.js
-index 0ac3b15d..edd0d553 100644
+index 0ac3b15d..b4629212 100644
 --- a/client-participation/js/strings/fi.js
 +++ b/client-participation/js/strings/fi.js
 @@ -124,13 +124,15 @@ s.topic_bad_02 = "Mitkä ovat julkaisun estäjät?";
@@ -206,7 +206,7 @@ index 0ac3b15d..edd0d553 100644
  s.footer_provider = "Palveluntuottaja";
 -s.footer_links_privacy = "DigiFinland Oy tietosuoja";
 +s.footer_links_privacy = "Sitran tietosuojaseloste";
-+s.footer_links_privacy_href = "https://www.sitra.fi/tietosuoja/";
++s.footer_links_privacy_href = "https://www.sitra.fi/seloste-henkilotietojen-kasittelysta-polis-palvelussa/";
  s.footer_links_info = "Tietoa palvelusta";
 +s.footer_links_info_href = "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/";
  s.footer_links_source = "Lähdekoodi";
@@ -309,7 +309,7 @@ index d6a8d674..02233758 100644
    },
    "controls": {
 diff --git a/client-report/locales/fi/client-report.json b/client-report/locales/fi/client-report.json
-index 919499a6..e65f0ec8 100644
+index 919499a6..0ffe214b 100644
 --- a/client-report/locales/fi/client-report.json
 +++ b/client-report/locales/fi/client-report.json
 @@ -10,14 +10,16 @@
@@ -325,7 +325,7 @@ index 919499a6..e65f0ec8 100644
      "links": {
 -      "privacy": "DigiFinland Oy tietosuoja",
 +      "privacy": "Sitran tietosuojaseloste",
-+      "privacy_href": "https://www.sitra.fi/tietosuoja/",
++      "privacy_href": "https://www.sitra.fi/seloste-henkilotietojen-kasittelysta-polis-palvelussa/",
        "info": "Tietoa palvelusta",
 +      "info_href": "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/",
        "source": "Lähdekoodi"
