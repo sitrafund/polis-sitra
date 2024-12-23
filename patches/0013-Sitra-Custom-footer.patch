@@ -1,4 +1,4 @@
-From 157f5e765520c739e17cccd9ac4319506dec30ed Mon Sep 17 00:00:00 2001
+From c06bbd8a3d8f58b2a9e1df73166041d5b5b7ee7e Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Mon, 2 Sep 2024 11:42:25 +0300
 Subject: [PATCH 13/13] Sitra: Custom footer
@@ -20,7 +20,7 @@ Subject: [PATCH 13/13] Sitra: Custom footer
  13 files changed, 61 insertions(+), 46 deletions(-)
 
 diff --git a/client-admin/public/locales/en/client-admin.json b/client-admin/public/locales/en/client-admin.json
-index 578a26cb..4e51a4d6 100644
+index 578a26cb..16dd70d9 100644
 --- a/client-admin/public/locales/en/client-admin.json
 +++ b/client-admin/public/locales/en/client-admin.json
 @@ -14,15 +14,17 @@
@@ -36,7 +36,7 @@ index 578a26cb..4e51a4d6 100644
      "links": {
 -      "privacy": "DigiFinland Oy data protection",
 +      "privacy": "Sitra data protection",
-+      "privacy_href": "https://www.sitra.fi/en/terms-of-service/",
++      "privacy_href": "https://www.sitra.fi/en/privacy-policy-concerning-the-polis-service/",
        "info": "Information",
 -      "source": "Sourcecode"
 +      "info_href": "https://www.sitra.fi/en/projects/polis-platform-experiments/",
@@ -82,7 +82,7 @@ index 716b302e..b207b477 100644
 \ No newline at end of file
 +}
 diff --git a/client-admin/public/locales/sv/client-admin.json b/client-admin/public/locales/sv/client-admin.json
-index 0ccaa65f..86e75280 100644
+index 0ccaa65f..586e9583 100644
 --- a/client-admin/public/locales/sv/client-admin.json
 +++ b/client-admin/public/locales/sv/client-admin.json
 @@ -14,14 +14,16 @@
@@ -98,7 +98,7 @@ index 0ccaa65f..86e75280 100644
      "links": {
 -      "privacy": "DigiFinland Oy dataskydd",
 +      "privacy": "Sitra dataskydd",
-+      "privacy_href": "https://www.sitra.fi/sv/anvandarvillkor/",
++      "privacy_href": "https://www.sitra.fi/sv/beskrivning-av-behandlingen-av-personuppgifter-i-polis-tjansten/",
        "info": "Information",
 +      "info_href": "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/",
        "source": "Källkod"
@@ -167,7 +167,7 @@ index 063bda43..ab6471ca 100644
 \ No newline at end of file
 +}
 diff --git a/client-participation/js/strings/en_us.js b/client-participation/js/strings/en_us.js
-index 5b333b23..da7b214d 100644
+index 5b333b23..88a4314a 100644
 --- a/client-participation/js/strings/en_us.js
 +++ b/client-participation/js/strings/en_us.js
 @@ -150,14 +150,16 @@ s.topic_bad_02 = "what are our launch blockers?";
@@ -182,7 +182,7 @@ index 5b333b23..da7b214d 100644
  s.footer_provider = "Service provider";
 -s.footer_links_privacy = "DigiFinland Oy data protection";
 +s.footer_links_privacy = "Sitra data protection";
-+s.footer_links_privacy_href = "https://www.sitra.fi/en/terms-of-service/";
++s.footer_links_privacy_href = "https://www.sitra.fi/en/privacy-policy-concerning-the-polis-service/";
  s.footer_links_info = "Information";
 -s.footer_links_source = "Sourcecode";
 +s.footer_links_info_href = "https://www.sitra.fi/en/projects/polis-platform-experiments/";
@@ -213,7 +213,7 @@ index 0ac3b15d..b4629212 100644
  
  module.exports = s;
 diff --git a/client-participation/js/strings/sv.js b/client-participation/js/strings/sv.js
-index e928a202..e78c889d 100644
+index e928a202..c308d742 100644
 --- a/client-participation/js/strings/sv.js
 +++ b/client-participation/js/strings/sv.js
 @@ -124,13 +124,15 @@ s.topic_bad_02 = "vad är våra lanseringsblockerare?";
@@ -228,7 +228,7 @@ index e928a202..e78c889d 100644
  s.footer_provider = "Tjänsteleverantör";
 -s.footer_links_privacy = "DigiFinland Oy dataskydd";
 +s.footer_links_privacy = "Sitra dataskydd";
-+s.footer_links_privacy_href = "https://www.sitra.fi/sv/anvandarvillkor/";
++s.footer_links_privacy_href = "https://www.sitra.fi/sv/beskrivning-av-behandlingen-av-personuppgifter-i-polis-tjansten/";
  s.footer_links_info = "Information";
 +s.footer_links_info_href = "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/";
  s.footer_links_source = "Källkod";
@@ -284,7 +284,7 @@ index 192b7e0d..b32424d2 100644
              </ul>
          </div>
 diff --git a/client-report/locales/en/client-report.json b/client-report/locales/en/client-report.json
-index d6a8d674..02233758 100644
+index d6a8d674..9de8739f 100644
 --- a/client-report/locales/en/client-report.json
 +++ b/client-report/locales/en/client-report.json
 @@ -10,15 +10,17 @@
@@ -300,7 +300,7 @@ index d6a8d674..02233758 100644
      "links": {
 -      "privacy": "DigiFinland Oy data protection",
 +      "privacy": "Sitra data protection",
-+      "privacy_href": "https://www.sitra.fi/en/terms-of-service/",
++      "privacy_href": "https://www.sitra.fi/en/privacy-policy-concerning-the-polis-service/",
        "info": "Information",
 -      "source": "Sourcecode"
 +      "info_href": "https://www.sitra.fi/en/projects/polis-platform-experiments/",
@@ -332,7 +332,7 @@ index 919499a6..0ffe214b 100644
      }
    },
 diff --git a/client-report/locales/sv/client-report.json b/client-report/locales/sv/client-report.json
-index a07dba2e..33031123 100644
+index a07dba2e..2cbb2195 100644
 --- a/client-report/locales/sv/client-report.json
 +++ b/client-report/locales/sv/client-report.json
 @@ -10,14 +10,16 @@
@@ -348,7 +348,7 @@ index a07dba2e..33031123 100644
      "links": {
 -      "privacy": "DigiFinland Oy dataskydd",
 +      "privacy": "Sitra dataskydd",
-+      "privacy_href": "https://www.sitra.fi/sv/anvandarvillkor/",
++      "privacy_href": "https://www.sitra.fi/sv/beskrivning-av-behandlingen-av-personuppgifter-i-polis-tjansten/",
        "info": "Information",
 +      "info_href": "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/",
        "source": "Källkod"
@@ -393,5 +393,5 @@ index 95d2d960..09399de8 100644
          </div>
        </div>
 -- 
-2.47.0
+2.47.1
 

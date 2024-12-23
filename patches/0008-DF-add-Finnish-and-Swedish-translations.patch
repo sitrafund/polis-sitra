@@ -1,4 +1,4 @@
-From 828fca83a21854f5dfce51b642a96a5e1d8d65d8 Mon Sep 17 00:00:00 2001
+From 901dfe493c058b84f2a0929d81f3287658deaf0f Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:36:08 +0300
 Subject: [PATCH 08/13] DF: add Finnish and Swedish translations
@@ -4374,5 +4374,5 @@ index 9dcb91e3..68afa165 100644
      }),
      new HtmlWebpackPlugin({
 -- 
-2.47.0
+2.47.1
 

@@ -1,4 +1,4 @@
-From 8aebb489be5dad4b24720d078e1f709440d98195 Mon Sep 17 00:00:00 2001
+From d91674a3d31b6f0c4b0ef7017d708a7e0c40c101 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:29:41 +0300
 Subject: [PATCH 07/13] DF: custom footer
@@ -366,5 +366,5 @@ index 70e5d7e0..95d2d960 100644
  };
  
 -- 
-2.47.0
+2.47.1
 

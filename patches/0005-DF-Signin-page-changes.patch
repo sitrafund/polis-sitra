@@ -1,4 +1,4 @@
-From 00336ae3d512be081b69de93dc98e5f4b96e2690 Mon Sep 17 00:00:00 2001
+From 3a1f5dea6d84ced331dc4c7692587e36267a002f Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:25:40 +0300
 Subject: [PATCH 05/13] DF: Signin page changes
@@ -116,5 +116,5 @@ index 198130d4..1b352152 100644
 +const SignIn = withTranslation()(SignInTranslated);
 +export default withTranslation()(SignIn);
 -- 
-2.47.0
+2.47.1
 

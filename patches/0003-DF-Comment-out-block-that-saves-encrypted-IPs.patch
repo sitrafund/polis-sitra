@@ -1,4 +1,4 @@
-From 925c577600911fea63cf376b7f80a97cef9fef61 Mon Sep 17 00:00:00 2001
+From 6d4420527e284636e6983ca2f814a94eb141eee5 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:19:53 +0300
 Subject: [PATCH 03/13] DF: Comment out block that saves encrypted IPs...
@@ -46,5 +46,5 @@ index e448a2ba..23ceeaa3 100644
      let authorsQuery: string | null =
        "(" + authorsQueryParts.join(" union ") + ")";
 -- 
-2.47.0
+2.47.1
 
