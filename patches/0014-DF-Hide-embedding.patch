@@ -1,0 +1,95 @@
+From 87dd898b93c5c9cb53744d53012b1973c7cb663a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Tue, 8 Apr 2025 15:19:00 +0300
+Subject: [PATCH 14/15] DF: Hide embedding
+
+---
+ client-admin/src/app.js                       | 13 ----------
+ .../conversation-admin/share-and-embed.js     | 26 +------------------
+ 2 files changed, 1 insertion(+), 38 deletions(-)
+
+diff --git a/client-admin/src/app.js b/client-admin/src/app.js
+index f5bb3512..6194c120 100644
+--- a/client-admin/src/app.js
++++ b/client-admin/src/app.js
+@@ -27,7 +27,6 @@ import ConversationAdminContainer from './components/conversation-admin/index'
+ 
+ import Conversations from './components/conversations-and-account/conversations'
+ import Account from './components/conversations-and-account/account'
+-import Integrate from './components/conversations-and-account/integrate'
+ 
+ import { withTranslation } from 'react-i18next';
+ 
+@@ -184,11 +183,6 @@ class AppTranslated extends React.Component {
+                           {t('app.nav.conversations')}
+                         </Link>
+                       </Box>
+-                      <Box sx={{ mb: [3] }}>
+-                        <Link sx={{ variant: 'links.nav' }} to={`/integrate`}>
+-                          {t('app.nav.integrate')}
+-                        </Link>
+-                      </Box>
+                       <Box sx={{ mb: [3] }}>
+                         <Link sx={{ variant: 'links.nav' }} to={`/account`}>
+                           {t('app.nav.account')}
+@@ -223,13 +217,6 @@ class AppTranslated extends React.Component {
+                         path="/account"
+                         component={Account}
+                       />
+-                      <PrivateRoute
+-                        isLoading={this.isLoading()}
+-                        authed={this.isAuthed()}
+-                        exact
+-                        path="/integrate"
+-                        component={Integrate}
+-                      />
+                     </Box>
+                   </Flex>
+                 )
+diff --git a/client-admin/src/components/conversation-admin/share-and-embed.js b/client-admin/src/components/conversation-admin/share-and-embed.js
+index 89d6eee4..1c3856c6 100644
+--- a/client-admin/src/components/conversation-admin/share-and-embed.js
++++ b/client-admin/src/components/conversation-admin/share-and-embed.js
+@@ -32,7 +32,7 @@ class ShareAndEmbedTranslated extends React.Component {
+     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
+       return <NoPermission />
+     }
+-    
++
+     const { t } = this.props;
+ 
+     const { match } = this.props
+@@ -61,30 +61,6 @@ class ShareAndEmbedTranslated extends React.Component {
+             </a>
+           </p>
+         </div>
+-        <div>
+-          <p>{t('distribute.embed')}</p>
+-          <div>
+-            <pre>
+-              {'<div'}
+-              {" class='polis'"}
+-              {" data-conversation_id='" + match.params.conversation_id + "'>"}
+-              {'</div>\n'}
+-              {"<script async src='" + Url.urlPrefix + "embed.js'></script>"}
+-            </pre>
+-          </div>
+-          <p>
+-            
+-            {t('distribute.desc')}{' '}
+-            <Link to="/integrate">
+-              {t('distribute.link')}
+-            </Link>
+-          </p>
+-          <div>
+-            {this.props.zid_metadata.parent_url
+-              ? this.constructEmbeddedOnMarkup()
+-              : ''}
+-          </div>
+-        </div>
+       </div>
+     )
+   }
+-- 
+2.45.1
+

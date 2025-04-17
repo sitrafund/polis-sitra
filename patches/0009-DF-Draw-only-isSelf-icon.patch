@@ -1,7 +1,7 @@
-From 6897e75d293d2321c257ae5a861d50ced9629af7 Mon Sep 17 00:00:00 2001
+From d2345b81f5fa278dcfe2889338b03e2de524d236 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:37:58 +0300
-Subject: [PATCH 09/13] DF: Draw only isSelf icon
+Subject: [PATCH 09/15] DF: Draw only isSelf icon
 
 ---
  client-participation/vis2/components/graphParticipants.js | 1 +
@@ -20,5 +20,5 @@ index 7eb36895..3eb36905 100644
    return (
      <g
 -- 
-2.47.1
+2.45.1
 

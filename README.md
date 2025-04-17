@@ -8,15 +8,16 @@ This project contains set of deploy scripts, settings files, custom patches, tra
 
 Project uses [Polis](https://github.com/compdemocracy/polis/) codebase with customizations and settings for Sitra.
 Patches from [DigiFinland's Polis project](https://github.com/polis-digifinland/polis-digifinland/) are also included.
+Project uses [Digifinland's participation frontend](https://github.com/polis-digifinland/df-participation) codebase with customizations for Sitra.
 
 
 ## Local dev env quickstart
 
 1. Clone this repository
 
-2. Run `./scripts/fetch-polis.sh` to fetch or update the Polis source
+2. Run `./scripts/fetch-submodule-repositories.sh` to fetch or update the Polis source and DF participation source
 
-3. Run `./scripts/apply-patches.sh` to apply Sitra and DigiFinland customizations
+3. Run `./scripts/apply-patches.sh` to apply Sitra and DigiFinland customizations to Polis and DF participation
 
 4. Add `polis.local` entry to your local DNS or hosts file:
 
@@ -68,8 +69,16 @@ To **upgrade Polis**, do the following steps:
 3. Rebase the sitra branch onto that commit, correcting any conflicts that may arise (development work: ideally the rebase goes through without conflicts, but depending on upstream changes, this may require rewriting the modifications.)
 4. Test for regressions
 5. Write the branch origin commit ID into the `patches/fork` file
-6. Run `scripts/export-patches.sh` to re-export the branch and commit the changed patches
+6. Run `scripts/export-polis-patches.sh` to re-export the branch and commit the changed patches
 
+To **upgrade DF-participation**, do the following steps:
+
+1. Apply patches to the current df-participation repo
+2. Fetch changes from origin and choose the commit you wish to use as the new fork point
+3. Rebase the sitra branch onto that commit, correcting any conflicts that may arise (development work: ideally the rebase goes through without conflicts, but depending on upstream changes, this may require rewriting the modifications.)
+4. Test for regressions
+5. Write the branch origin commit ID into the `df-participation-patches/fork` file
+6. Run `scripts/export-df-participation-patches.sh` to re-export the branch and commit the changed patches
 
 ## Docker Compose
 
@@ -82,6 +91,8 @@ The scripts directory contains a few helper scripts for Docker Compose. They tak
 
 
 ## Minikube & Skaffold
+
+**Heads up! DF-participation local kubernetes configuration are not implemented yet. Use docker compose for development**
 
 Local Kubernetes configuration files are in `./manifests/local` directory.
 See skaffold.yaml for artifacts and build config.

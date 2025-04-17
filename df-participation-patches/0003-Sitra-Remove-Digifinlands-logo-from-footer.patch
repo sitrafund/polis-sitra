@@ -1,0 +1,39 @@
+From a0fa2f717e31b9ec82bf86e464942d5d0a75a30d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Mon, 14 Apr 2025 11:48:05 +0300
+Subject: [PATCH 3/3] Sitra: Remove Digifinlands logo from footer
+
+---
+ src/app/components/Footer.tsx | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/src/app/components/Footer.tsx b/src/app/components/Footer.tsx
+index 9929c09..cb762b3 100644
+--- a/src/app/components/Footer.tsx
++++ b/src/app/components/Footer.tsx
+@@ -1,6 +1,4 @@
+ import initTranslations from '@/i18n';
+-import Image from 'next/image';
+-import dflogo from '../dflogo_valkoinen.png';
+ 
+ interface FooterProps {
+   locale: string;
+@@ -38,15 +36,6 @@ export default async function Footer({ locale }: FooterProps) {
+               <li><p className="m-0">00181 Helsinki</p></li>
+             </ul>
+         </div>
+-        <div className='flex justify-center'>
+-          <Image
+-            src={dflogo}
+-            alt="DigiFinland Oy logo"
+-            width={129}
+-            height={41}
+-            priority
+-          />
+-        </div>
+       </footer>
+     </>
+   )
+-- 
+2.45.1
+

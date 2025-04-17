@@ -1,0 +1,56 @@
+From 3a47ac401756b96ba3e0a44cfeea73c85d5f6adf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Tue, 8 Apr 2025 15:19:53 +0300
+Subject: [PATCH 15/15] Sitra: nginx proxy changes for df-participation service
+
+---
+ file-server/nginx/nginx-ssl.site.default.conf | 31 ++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/file-server/nginx/nginx-ssl.site.default.conf b/file-server/nginx/nginx-ssl.site.default.conf
+index 6e79ce8b..2ee73f4c 100644
+--- a/file-server/nginx/nginx-ssl.site.default.conf
++++ b/file-server/nginx/nginx-ssl.site.default.conf
+@@ -11,9 +11,38 @@ server {
+     ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+     ssl_prefer_server_ciphers on;
+ 
+-    location / {
++    # Similar to load balancer rules, route specific polis-admin related paths to polis-server service
++    # If some admin action is not working, you can add it to this list and check if it's working
++    # Naturally you would need to add it to the load balancer rules as well
++    location ~ ^/(api/v3|static|locales|m/|account|integrate|report|signout|signin|pwresetinit|pwreset|home|about|createuser|report_bundle|report_style) {
++        proxy_set_header X-Forwarded-Proto $scheme;
++        proxy_set_header Host $host;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_pass http://server:5000;
++    }
++
++    # Route root to server service as this is the polis-admin homepage
++    location = / {
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header Host $host;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_pass http://server:5000;
+     }
++
++    # Default location - route everything else to df-participation
++    # Df-participation public urls are in format /[lang]/[zid]
++    location / {
++        proxy_set_header X-Forwarded-Proto $scheme;
++        proxy_set_header Host $host;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++
++        # Add these for handling self-signed cert from Next.js
++        proxy_ssl_verify off;
++        proxy_ssl_server_name on;
++        
++        proxy_pass https://df-participation:3000;
++    }
+ }
+-- 
+2.45.1
+

@@ -25,4 +25,4 @@ else
 fi
 
 # stop containers
-DOCKER_ENV=$1 docker compose -f docker-compose-sitra.yml --env-file sitra-$1.env $ACTION
+DOCKER_ENV=$1 docker compose -f docker-compose-sitra.yml -f docker-compose.dev.yml --env-file sitra-$1.env $ACTION

@@ -1,7 +1,7 @@
-From 3a1f5dea6d84ced331dc4c7692587e36267a002f Mon Sep 17 00:00:00 2001
+From fb5576ffa31c8061be9ce0ba8200a3bbe338d735 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:25:40 +0300
-Subject: [PATCH 05/13] DF: Signin page changes
+Subject: [PATCH 05/15] DF: Signin page changes
 
 1 add translations to signin page
 2 add dev env warning before login form
@@ -116,5 +116,5 @@ index 198130d4..1b352152 100644
 +const SignIn = withTranslation()(SignInTranslated);
 +export default withTranslation()(SignIn);
 -- 
-2.47.1
+2.45.1
 

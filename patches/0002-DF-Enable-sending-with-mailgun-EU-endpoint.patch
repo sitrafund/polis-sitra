@@ -1,7 +1,7 @@
-From 46d20da0b821d719a95e6cfc0793e794e2d7a51e Mon Sep 17 00:00:00 2001
+From e8b9d8d856705bee0bd4a3957e691ef79f4fec66 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:19:06 +0300
-Subject: [PATCH 02/13] DF: Enable sending with mailgun EU endpoint
+Subject: [PATCH 02/15] DF: Enable sending with mailgun EU endpoint
 
 ---
  server/src/email/senders.ts | 1 +
@@ -20,5 +20,5 @@ index 8dde04e3..2d23ea9b 100644
        return mg(mailgunAuth);
      case "aws-ses":
 -- 
-2.47.1
+2.45.1
 

@@ -1,7 +1,7 @@
-From 5e0be2513c5f1d8e16b9fb4d88af769d5f671192 Mon Sep 17 00:00:00 2001
+From fd287d4433e9438b94fa46865d43674427588c26 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:22:50 +0300
-Subject: [PATCH 04/13] DF: hide social media opt in settings for conversation
+Subject: [PATCH 04/15] DF: hide social media opt in settings for conversation
  setup and set opt-in defaults as false
 
 ---
@@ -224,5 +224,5 @@ index f0de7209..7ac6df3a 100644
  
  export { DEFAULTS };
 -- 
-2.47.1
+2.45.1
 

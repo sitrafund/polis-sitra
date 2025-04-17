@@ -1,7 +1,7 @@
-From a7255cdd20bbcfbcf01c84a2d615f36cb8134562 Mon Sep 17 00:00:00 2001
+From 53ecb20c73de8f3674a5fd0e11a1a18d1488e909 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:28:13 +0300
-Subject: [PATCH 06/13] DF: hide TOS link and replace privacy policy link on
+Subject: [PATCH 06/15] DF: hide TOS link and replace privacy policy link on
  admin page footer
 
 Also add translations
@@ -83,5 +83,5 @@ index 0d047d2c..6755c3d7 100644
 +
 +export default Footer;
 -- 
-2.47.1
+2.45.1
 

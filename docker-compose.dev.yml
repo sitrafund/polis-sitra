@@ -1,0 +1,12 @@
+version: '3'
+services:
+  df-participation:
+    build:
+      target: base
+      args:
+        NODE_ENV: "development"
+    command: sh -c "cd /app && npm run dev"
+    volumes:
+      - ./df-participation:/app
+    environment:
+      - NODE_ENV=development

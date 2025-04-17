@@ -14,5 +14,7 @@ if [ ! -f $ENV_FILE ]; then
     exit 1
 fi
 
+
 # build and run
-DOCKER_ENV=$1 docker compose -f docker-compose-sitra.yml  --env-file $ENV_FILE up -d --build --wait
+echo "Starting services..."
+DOCKER_ENV=$1 docker compose -f docker-compose-sitra.yml -f docker-compose.dev.yml --env-file $ENV_FILE up -d --build --wait

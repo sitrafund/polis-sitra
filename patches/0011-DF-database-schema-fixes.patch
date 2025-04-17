@@ -1,7 +1,7 @@
-From d536de621138eb8e897fe0cb5443ac8b3657309b Mon Sep 17 00:00:00 2001
+From c8234c48d5055f93bc7c634cc9faf33b742d289c Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Wed, 2 Oct 2024 12:48:25 +0300
-Subject: [PATCH 11/13] DF: database schema fixes
+Subject: [PATCH 11/15] DF: database schema fixes
 
 ---
  server/postgres/migrations/000007_df_fixes.sql | 7 +++++++
@@ -23,5 +23,5 @@ index 00000000..9305dae8
 +-- ALTER TABLE "participants_extended" ADD "encrypted_x_forwarded_for" VARCHAR(256) NULL;
 \ No newline at end of file
 -- 
-2.47.1
+2.45.1
 
