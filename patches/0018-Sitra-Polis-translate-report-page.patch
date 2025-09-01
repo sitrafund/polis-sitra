@@ -1,0 +1,558 @@
+From 84c9d4915b1c7558720cb7473f3e24e4b54ad41a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Tue, 19 Aug 2025 15:01:18 +0300
+Subject: [PATCH 18/19] Sitra Polis: translate report page
+
+---
+ client-report/locales/en/client-report.json   | 10 +++--
+ client-report/locales/fi/client-report.json   | 10 +++--
+ client-report/locales/sv/client-report.json   | 10 +++--
+ .../src/components/beeswarm/beeswarm.jsx      | 17 ++++----
+ .../src/components/controls/controls.jsx      |  6 ++-
+ .../lists/allCommentsModeratedIn.jsx          | 27 ++++++------
+ .../src/components/lists/majorityStrict.jsx   |  2 +-
+ .../components/lists/participantGroups.jsx    | 16 +++----
+ .../src/components/lists/uncertainty.jsx      |  5 ++-
+ client-report/src/components/overview.jsx     | 42 +++++++++----------
+ .../participantsGraph/participantsGraph.jsx   | 25 ++++++-----
+ 11 files changed, 89 insertions(+), 81 deletions(-)
+
+diff --git a/client-report/locales/en/client-report.json b/client-report/locales/en/client-report.json
+index 9de8739f..bd466d38 100644
+--- a/client-report/locales/en/client-report.json
++++ b/client-report/locales/en/client-report.json
+@@ -36,8 +36,8 @@
+     "term_statements_text": "Participants may submit statements for other participants to vote on. Statements are assigned a number in the order they’re submitted.",
+     "term_opinion_groups_title": "Opinion groups",
+     "term_opinion_groups_text": "These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.",
+-    "ownername_text": "This pol.is conversation was run by ",
+-    "topic_text": "The topic was ",
++    "ownername_text": "This pol.is conversation was run by {{param1}}.",
++    "topic_text": "The topic was '{{param1}}'.",
+     "people_voted": "people voted",
+     "people_grouped": "people grouped",
+     "votes_cast": "votes were cast",
+@@ -74,7 +74,8 @@
+     "numvotes": "Number of votes",
+     "agreed": "Agreed",
+     "disagreed": "Disagreed",
+-    "passed": "Passed"
++    "passed": "Passed",
++    "loading": "Loading all statements"
+   },
+   "comment_list": {
+     "agreed": "Agreed",
+@@ -94,7 +95,8 @@
+     "text": "Across {{param1}} total participants, {{param2}} opinion groups emerged. There are two factors that define an opinion group. First, each opinion group is made up of a number of participants who tended to vote similarly on multiple statements. Second, each group of participants who voted similarly will have also voted distinctly differently from other groups.",
+     "group": "Group",
+     "participants": " participants",
+-    "grp_desc": "Statements which make this group unique, by their votes: "
++    "grp_desc": "Statements which make this group unique, by their votes: ",
++    "loading": "Loading groups"
+   },
+   "metadata": {
+     "title": "Metadata",
+diff --git a/client-report/locales/fi/client-report.json b/client-report/locales/fi/client-report.json
+index 0ffe214b..2e1b88ab 100644
+--- a/client-report/locales/fi/client-report.json
++++ b/client-report/locales/fi/client-report.json
+@@ -36,8 +36,8 @@
+     "term_statements_text": "Osallistujat voivat antaa lausuntoja, joista muut osallistujat äänestävät. Lausunnot numeroidaan lähetysjärjestyksessä.",
+     "term_opinion_groups_title": "Mielipideryhmät",
+     "term_opinion_groups_text": "Henkilöt, jotka osallistuivat keskusteluun äänestämällä ja kirjoittamalla lausuntoja. Osallistujat lajitellaan mielipideryhmiin heidän antamiensa äänten mukaisesti.",
+-    "ownername_text": "Tämän pol.is-keskustelun toteutti ",
+-    "topic_text": "Aiheena oli ",
++    "ownername_text": "Tämän pol.is-keskustelun toteutti {{param1}}.",
++    "topic_text": "Aiheena oli '{{param1}}'.",
+     "people_voted": "henkilöä äänesti",
+     "people_grouped": "henkilöä ryhmiteltiin",
+     "votes_cast": "ääntä annettiin",
+@@ -74,7 +74,8 @@
+     "numvotes": "Äänten määrä",
+     "agreed": "Samaa mieltä",
+     "disagreed": "Eri mieltä",
+-    "passed": "Ohitti"
++    "passed": "Ohitti",
++    "loading": "Ladataan kaikkia lausuntoja"
+   },
+   "comment_list": {
+     "agreed": "Samaa mieltä",
+@@ -94,7 +95,8 @@
+     "text": "{{param1}} osallistujien kokonaismäärästä muodostui {{param2}} mielipideryhmää. Mielipideryhmä muodostuu kahden tekijän perusteella. Ensinnäkin mielipideryhmä koostuu osallistujista, jotka ovat äänestäneet samalla tavoin useista lausunnoista. Toiseksi jokainen samalla tavoin äänestänyt osallistujaryhmä on äänestänyt selvästi eri tavalla kuin muut ryhmät.",
+     "group": "Ryhmä",
+     "participants": " osallistujaa",
+-    "grp_desc": "Lausunnot, jotka tekevät tästä ryhmästä äänten perusteella ainutlaatuisen: "
++    "grp_desc": "Lausunnot, jotka tekevät tästä ryhmästä äänten perusteella ainutlaatuisen: ",
++    "loading": "Ladataan ryhmiä"
+   },
+   "metadata": {
+     "title": "Metatiedot",
+diff --git a/client-report/locales/sv/client-report.json b/client-report/locales/sv/client-report.json
+index 2cbb2195..a179adbf 100644
+--- a/client-report/locales/sv/client-report.json
++++ b/client-report/locales/sv/client-report.json
+@@ -36,8 +36,8 @@
+     "term_statements_text": "Deltagarna kan skicka in påståenden som andra deltagare kan rösta på. Påståendena tilldelas ett nummer i den ordning de skickas in.",
+     "term_opinion_groups_title": "Åsiktsgrupper",
+     "term_opinion_groups_text": "Dessa är personerna som deltog i konversationen genom att rösta och skriva påståenden. Varje deltagare placeras i en åsiktsgrupp enligt hur de röstade.",
+-    "ownername_text": "Denna pol.is-konversation hölls av ",
+-    "topic_text": "Ämnet var ",
++    "ownername_text": "Denna pol.is-konversation hölls av {{param1}}.",
++    "topic_text": "Ämnet var '{{param1}}'.",
+     "people_voted": "människorna röstade",
+     "people_grouped": "människorna grupperades",
+     "votes_cast": "röster avlades",
+@@ -74,7 +74,8 @@
+     "numvotes": "Antal röster",
+     "agreed": "Av samma åsikt",
+     "disagreed": "Av olika åsikt",
+-    "passed": "Passade"
++    "passed": "Passade",
++    "loading": "Laddar alla påståenden"
+   },
+   "comment_list": {
+     "agreed": "Av samma åsikt",
+@@ -94,7 +95,8 @@
+     "text": "Mellan {{param1}} totala deltagare uppstod {{param2}} åsiktsgrupper. Det finns två faktorer som definierar en åsiktsgrupp. För det första består varje åsiktsgrupp av ett antal deltagare som tenderade att rösta liknande på flera påståenden. För det andra har varje grupp av deltagare som röstade liknande också röstat väldigt annorlunda jämfört med andra grupper.",
+     "group": "Grupp",
+     "participants": " deltagare",
+-    "grp_desc": "Påståenden som gör denna grupp unik på grund av sina röster: "
++    "grp_desc": "Påståenden som gör denna grupp unik på grund av sina röster: ",
++    "loading": "Laddar grupper"
+   },
+   "metadata": {
+     "title": "Metadata",
+diff --git a/client-report/src/components/beeswarm/beeswarm.jsx b/client-report/src/components/beeswarm/beeswarm.jsx
+index 22dfd89a..8bee1c12 100644
+--- a/client-report/src/components/beeswarm/beeswarm.jsx
++++ b/client-report/src/components/beeswarm/beeswarm.jsx
+@@ -5,6 +5,7 @@ import CommentList from "../lists/commentList.jsx";
+ import * as globals from "../globals";
+ import _ from "lodash";
+ // import Flex from "../framework/flex"
++import { useTranslation } from "react-i18next";
+ 
+ // function type(d) {
+ //   if (!d.value) return;
+@@ -115,6 +116,8 @@ const Beeswarm = ({ comments, extremity, probabilitiesTids, probabilities, conve
+     const [axesRendered, setAxesRendered] = useState(false);
+     const[vor, setVoronoi] = useState(null);
+ 
++    const { t } = useTranslation();
++
+   const onHoverCallback = (d) => {
+     return () => {
+       setCurrentBeeswarmComment(d.data);
+@@ -173,16 +176,16 @@ const Beeswarm = ({ comments, extremity, probabilitiesTids, probabilities, conve
+       setup();
+     }
+   }, []);
+-  
+-  
++
++
+   return (
+     <div style={{width: svgWidth}}>
+-      <p style={globals.primaryHeading}> How divisive was the conversation? </p>
++      <p style={globals.primaryHeading}> {t("beeswarm.title")} </p>
+       <p style={globals.paragraph}>
+-        Statements (here as little circles) to the left were voted on the same way—either everyone agreed or everyone disagreed. Statements to the right were divisive—participants were split between agreement and disagreement.
++        {t("beeswarm.text")}
+       </p>
+       <p style={globals.paragraph}>
+-        <strong>How to use this:</strong> Hover to see the statement text. Start on the far right to find out what the most divisive statement was.
++        <strong>{t("beeswarm.howto_strong")}:</strong> {t("beeswarm.howto")}
+       </p>
+       <svg width={svgWidth} height={svgHeight}>
+         <g id="beeswarmAxisAttachPointD3" transform={"translate(" + margin.left + "," + margin.top + ")"}>
+@@ -199,8 +202,8 @@ const Beeswarm = ({ comments, extremity, probabilitiesTids, probabilities, conve
+         <line x1="0" y1={svgHeight - 10} x2={svgWidth} y2={svgHeight - 10} strokeWidth="1" stroke="black"/>
+       </svg>
+       <div style={{display: "flex", justifyContent: "space-between", margin: 0}}>
+-        <p style={{margin: 0}}> Consensus statements </p>
+-        <p style={{margin: 0}}> Divisive statements</p>
++        <p style={{margin: 0}}> {t("beeswarm.consensus")} </p>
++        <p style={{margin: 0}}> {t("beeswarm.divisive")} </p>
+       </div>
+       {/*<ProbabilityLegend/>*/}
+ 
+diff --git a/client-report/src/components/controls/controls.jsx b/client-report/src/components/controls/controls.jsx
+index 3c052b9c..eff4cf3b 100644
+--- a/client-report/src/components/controls/controls.jsx
++++ b/client-report/src/components/controls/controls.jsx
+@@ -3,6 +3,7 @@
+ import Checkbox from "../framework/checkbox.jsx";
+ import React from "react";
+ import settings from "../../settings";
++import { useTranslation } from "react-i18next";
+ 
+ const Controls = ({
+   onAutoRefreshEnabled,
+@@ -12,6 +13,7 @@ const Controls = ({
+   autoRefreshEnabled,
+   voteColors,
+ }) => {
++  const { t } = useTranslation();
+   const checkboxGroupChanged = (newVal) => {
+     if (newVal) {
+       onAutoRefreshEnabled();
+@@ -23,7 +25,7 @@ const Controls = ({
+   return (
+     <div>
+       <Checkbox
+-        label="auto-refresh"
++        label={t("controls.auto_refresh")}
+         disabled={false}
+         checked={autoRefreshEnabled}
+         clickHandler={checkboxGroupChanged}
+@@ -32,7 +34,7 @@ const Controls = ({
+         color={settings.polisBlue}
+       />
+       <Checkbox
+-        label="color blind mode"
++        label={t("controls.color_blind_mode")}
+         disabled={false}
+         checked={colorBlindMode}
+         clickHandler={handleColorblindModeClick}
+diff --git a/client-report/src/components/lists/allCommentsModeratedIn.jsx b/client-report/src/components/lists/allCommentsModeratedIn.jsx
+index f4f80b0d..9f487e63 100644
+--- a/client-report/src/components/lists/allCommentsModeratedIn.jsx
++++ b/client-report/src/components/lists/allCommentsModeratedIn.jsx
+@@ -3,6 +3,7 @@
+ import React, { useState } from "react";
+ import CommentList from "./commentList.jsx";
+ import * as globals from "../globals";
++import { useTranslation } from "react-i18next";
+ 
+ 
+ const sortFunctions = {
+@@ -14,8 +15,8 @@ const sortFunctions = {
+   pctPassed: (comments) => comments.sort((a, b) => b["pctPassed"] - a["pctPassed"]).map(c => c.tid),
+ };
+ 
+-const allCommentsModeratedIn = ({ conversation, ptptCount, math, formatTid, comments, voteColors }) => {
+-
++const AllCommentsModeratedIn = ({ conversation, ptptCount, math, formatTid, comments, voteColors }) => {
++  const { t } = useTranslation();
+   const [sortStyle, setSortStyle] = useState(globals.allCommentsSortDefault)
+ 
+   const onSortChanged = (event) => {
+@@ -24,25 +25,25 @@ const allCommentsModeratedIn = ({ conversation, ptptCount, math, formatTid, comm
+ 
+ 
+   if (!conversation) {
+-    return <div>Loading allCommentsModeratedIn...</div>
++    return <div>{t("all_comments.loading")}</div>
+   }
+ 
+   const sortFunction = sortFunctions[sortStyle] || sortFunctions["tid"];
+ 
+   return (
+     <div>
+-      <p style={globals.primaryHeading}> All statements </p>
++      <p style={globals.primaryHeading}>{t("all_comments.title")}</p>
+       <p style={globals.paragraph}>
+-        Group votes across all statements, excluding those statements which were moderated out.
++        {t("all_comments.text")}
+       </p>
+-      <label htmlFor="allCommentsSortMode">Sort by: </label>
++      <label htmlFor="allCommentsSortMode">{t("all_comments.sortby")}: </label>
+       <select id="allCommentsSortMode" onChange={onSortChanged} value={sortStyle}>
+-        <option value="tid">Statement Id</option>
+-        <option value="consensus">Group-informed Consensus</option>
+-        <option value="numvotes">Number of votes</option>
+-        <option value="pctAgreed">% Agreed</option>
+-        <option value="pctDisagreed">% Disagreed</option>
+-        <option value="pctPassed">% Passed</option>
++        <option value="tid">{t("all_comments.tid")}</option>
++        <option value="consensus">{t("all_comments.consensus")}</option>
++        <option value="numvotes">{t("all_comments.numvotes")}</option>
++        <option value="pctAgreed">{t("all_comments.agreed")}</option>
++        <option value="pctDisagreed">{t("all_comments.disagreed")}</option>
++        <option value="pctPassed">{t("all_comments.passed")}</option>
+       </select>
+       <div style={{marginTop: 50}}>
+         <CommentList
+@@ -58,4 +59,4 @@ const allCommentsModeratedIn = ({ conversation, ptptCount, math, formatTid, comm
+   );
+ }
+ 
+-export default allCommentsModeratedIn;
++export default AllCommentsModeratedIn;
+diff --git a/client-report/src/components/lists/majorityStrict.jsx b/client-report/src/components/lists/majorityStrict.jsx
+index e32d9808..883b33f3 100644
+--- a/client-report/src/components/lists/majorityStrict.jsx
++++ b/client-report/src/components/lists/majorityStrict.jsx
+@@ -16,6 +16,7 @@ const MajorityStrict = ({
+   math,
+   voteColors,
+ }) => {
++  const { t } = useTranslation();
+   if (!conversation) {
+     return <div>Loading Majority (strict)...</div>;
+   }
+@@ -28,7 +29,6 @@ const MajorityStrict = ({
+   consensus.disagree.forEach((c) => {
+     _consensusTids.push(c.tid);
+   });
+-  const { t } = useTranslation();
+   return (
+     <div>
+       <p style={globals.primaryHeading}>{t('majority.title')}</p>
+diff --git a/client-report/src/components/lists/participantGroups.jsx b/client-report/src/components/lists/participantGroups.jsx
+index 0ef11a8a..07667091 100644
+--- a/client-report/src/components/lists/participantGroups.jsx
++++ b/client-report/src/components/lists/participantGroups.jsx
+@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
+ import Group from "./participantGroup.jsx";
+ import * as globals from "../globals.js";
+ import Metadata from "./metadata.jsx";
++import { useTranslation } from "react-i18next";
+ 
+ const ParticipantGroups = ({
+   conversation,
+@@ -19,6 +20,7 @@ const ParticipantGroups = ({
+   repfulDisageeTidsByGroup,
+   report,
+ }) => {
++  const { t } = useTranslation();
+   const [isLoading, setIsLoading] = useState(true);
+   const [groups, setGroups] = useState([]);
+ 
+@@ -96,14 +98,12 @@ const ParticipantGroups = ({
+   return (
+     <div style={styles}>
+       <div>
+-        <p style={globals.primaryHeading}> Opinion Groups </p>
++        <p style={globals.primaryHeading}>{t("participant_groups.title")}</p>
+         <p style={globals.paragraph}>
+-          Across {ptptCount} total participants, {math && Object.keys(math["group-votes"])?.length}{" "}
+-          opinion groups emerged. There are two factors that define an opinion
+-          group. First, each opinion group is made up of a number of participants
+-          who tended to vote similarly on multiple statements. Second, each group
+-          of participants who voted similarly will have also voted distinctly
+-          differently from other groups.
++          {t("participant_groups.text", {
++            param1: ptptCount,
++            param2: math && Object.keys(math["group-votes"])?.length,
++          })}
+         </p>
+         <Metadata
+           math={math}
+@@ -114,7 +114,7 @@ const ParticipantGroups = ({
+           formatTid={formatTid}
+         />
+         {isLoading ? (
+-          <div>Loading Groups</div>
++          <div>{t("participant_groups.loading")}</div>
+         ) : (
+           groups
+         )}
+diff --git a/client-report/src/components/lists/uncertainty.jsx b/client-report/src/components/lists/uncertainty.jsx
+index 4d8975e3..5ffcd3be 100644
+--- a/client-report/src/components/lists/uncertainty.jsx
++++ b/client-report/src/components/lists/uncertainty.jsx
+@@ -17,10 +17,11 @@ const Uncertainty = ({
+   voteColors,
+   narrative,
+ }) => {
++  const { t } = useTranslation();
+   if (!conversation) {
+-    return <div>Loading Uncertainty...</div>;
++    return <div>{t("uncertainty.loading")}</div>;
+   }
+-  const { t } = useTranslation();
++
+   return (
+     <div>
+       <p style={globals.primaryHeading}>{t('uncertainty.title')}</p>
+diff --git a/client-report/src/components/overview.jsx b/client-report/src/components/overview.jsx
+index 208480a7..4c86891b 100644
+--- a/client-report/src/components/overview.jsx
++++ b/client-report/src/components/overview.jsx
+@@ -2,6 +2,7 @@
+ 
+ import React from "react";
+ import * as globals from "./globals";
++import { useTranslation } from "react-i18next";
+ 
+ const computeVoteTotal = (users) => {
+   let voteTotal = 0;
+@@ -21,54 +22,49 @@ const Number = ({ number, label }) => (
+ );
+ 
+ const Overview = ({ conversation, ptptCount, ptptCountTotal, math, computedStats }) => {
++  const { t } = useTranslation();
+   return (
+     <div>
+       <div>
+-        <p style={globals.primaryHeading}>Overview</p>
++        <p style={globals.primaryHeading}>{t("overview.title")}</p>
+         <p style={globals.paragraph}>
+-          Pol.is is a real-time survey system that helps identify the different ways a large group
+-          of people think about a divisive or complicated topic. Here's a basic breakdown of some
+-          terms you'll need to know in order to understand this report.
++          {t("overview.text")}
+         </p>
+         <p style={globals.paragraph}>
+-          <strong>Participants:</strong> These are the people who participated in the conversation
+-          by voting and writing statements. Based on how they voted, each participant is sorted into
+-          an opinion group.
++          <strong>{t("overview.term_participants_title")}:</strong> {t("overview.term_participants_text")}
+         </p>
+         <p style={globals.paragraph}>
+-          <strong>Statements:</strong> Participants may submit statements for other participants to
+-          vote on. Statements are assigned a number in the order they're submitted.
++          <strong>{t("overview.term_statements_title")}:</strong> {t("overview.term_statements_text")}
+         </p>
+         <p style={globals.paragraph}>
+-          <strong>Opinion groups:</strong> Groups are made of participants who voted similarly to
+-          each other, and differently from the other groups.
++          <strong>{t("overview.term_opinion_groups_title")}:</strong> {t("overview.term_opinion_groups_text")}
+         </p>
+ 
+         <p style={globals.paragraph}>
+-          {conversation && conversation.ownername
+-            ? "This pol.is conversation was run by " + conversation.ownername + ". "
+-            : null}
+-          {conversation && conversation.topic
+-            ? "The topic was '" + conversation.topic + "'. "
+-            : null}
++          {conversation && t("overview.ownername_text", {
++            param1: conversation.ownername
++          })}
++          {conversation && t("overview.topic_text", {
++            param1: conversation.topic
++          })}
+         </p>
+       </div>
+ 
+       <div style={{ maxWidth: 1200, display: "flex", justifyContent: "space-between" }}>
+-        <Number number={ptptCountTotal} label={"people voted"} />
+-        <Number number={ptptCount} label={"people grouped"} />
++        <Number number={ptptCountTotal} label={t("overview.people_voted")} />
++        <Number number={ptptCount} label={t("overview.people_grouped")} />
+ 
+-        <Number number={computeVoteTotal(math["user-vote-counts"])} label={"votes were cast"} />
++        <Number number={computeVoteTotal(math["user-vote-counts"])} label={t("overview.votes_cast")} />
+         {/* Leaving this out for now until we get smarter conversationStats */}
+         {/* <Number number={comments.length} label={"people submitted statements"} /> */}
+-        <Number number={math["n-cmts"]} label={"statements were submitted"} />
++        <Number number={math["n-cmts"]} label={t("overview.statements_submitted")} />
+         <Number
+           number={computedStats.votesPerVoterAvg.toFixed(2)}
+-          label={"votes per voter on average"}
++          label={t("overview.votes_per_voter_avg")}
+         />
+         <Number
+           number={computedStats.commentsPerCommenterAvg.toFixed(2)}
+-          label={"statements per author on average"}
++          label={t("overview.statements_per_author_avg")}
+         />
+       </div>
+     </div>
+diff --git a/client-report/src/components/participantsGraph/participantsGraph.jsx b/client-report/src/components/participantsGraph/participantsGraph.jsx
+index 3e7d39da..3f7da6e5 100644
+--- a/client-report/src/components/participantsGraph/participantsGraph.jsx
++++ b/client-report/src/components/participantsGraph/participantsGraph.jsx
+@@ -9,6 +9,7 @@ import * as d3chromatic from "d3-scale-chromatic";
+ import Comments from "../commentsGraph/comments.jsx";
+ import Hull from "./hull.jsx";
+ import CommentList from "../lists/commentList.jsx";
++import { useTranslation } from "react-i18next";
+ 
+ const pointsPerSquarePixelMax = 0.0017; /* choose dynamically ? */
+ const contourBandwidth = 20;
+@@ -52,6 +53,7 @@ const Participants = ({ points, math }) => {
+ };
+ 
+ const ParticipantsGraph = (props) => {
++  const { t } = useTranslation();
+   const [selectedComment, setSelectedComment] = useState(null);
+   const [showContour, setShowContour] = useState(false);
+   const [showGroupLabels, setShowGroupLabels] = useState(true);
+@@ -108,15 +110,12 @@ const ParticipantsGraph = (props) => {
+   return (
+     <div style={{ position: "relative" }}>
+       <div>
+-        <p style={globals.primaryHeading}> Graph </p>
++        <p style={globals.primaryHeading}>{t("graph.title")}</p>
+         <p style={globals.paragraph}>
+-          Which statements were voted on similarly? How do participants relate to each other?
++          {t("graph.text")}
+         </p>
+         <p style={globals.paragraph}>
+-          In this graph, statements are positioned more closely to statements which were voted on
+-          similarly. Participants, in turn, are positioned more closely to statements on which
+-          they agreed, and further from statements on which they disagreed. This means
+-          participants who voted similarly are closer together.
++          {t("graph.desc")}
+         </p>
+       </div>
+       <div>
+@@ -134,7 +133,7 @@ const ParticipantsGraph = (props) => {
+             setShowAxes(a => !a);
+           }}
+         >
+-          Axes
++          {t("graph.axes")}
+         </button>
+         <button
+           style={{
+@@ -150,7 +149,7 @@ const ParticipantsGraph = (props) => {
+             setShowRadialAxes(ra => !ra);
+           }}
+         >
+-          Radial axes
++          {t("graph.radial_axes")}
+         </button>
+         <button
+           style={{
+@@ -166,7 +165,7 @@ const ParticipantsGraph = (props) => {
+             setShowComments(c => !c)
+           }}
+         >
+-          Statements
++          {t("graph.statements")}
+         </button>
+         <button
+           style={{
+@@ -182,7 +181,7 @@ const ParticipantsGraph = (props) => {
+             setShowParticipants(p => !p);
+           }}
+         >
+-          Participants (bucketized)
++          {t("graph.participants_bucketized")}
+         </button>
+         <button
+           style={{
+@@ -198,7 +197,7 @@ const ParticipantsGraph = (props) => {
+             setShowGroupOutline(g => !g);
+           }}
+         >
+-          Group outline
++          {t("graph.group_outline")}
+         </button>
+         <button
+           style={{
+@@ -214,7 +213,7 @@ const ParticipantsGraph = (props) => {
+             setShowGroupLabels(l => !l);
+           }}
+         >
+-          Group labels
++          {t("graph.group_labels")}
+         </button>
+       </div>
+ 
+@@ -230,7 +229,7 @@ const ParticipantsGraph = (props) => {
+             voteColors={props.voteColors}
+           />
+         ) : (
+-          <p>Click a statement, identified by its number, to explore regions of the graph.</p>
++          <p>{t("graph.click_text")}</p>
+         )}
+       </div>
+ 
+-- 
+2.45.1
+

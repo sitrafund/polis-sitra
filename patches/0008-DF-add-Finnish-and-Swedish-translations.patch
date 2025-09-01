@@ -1,73 +1,67 @@
-From 1b91907f4b33275c357c51d0cae92a84f8abe90b Mon Sep 17 00:00:00 2001
+From b6ab2d69ff8d853b3db6f58e820cb3bfa38b098f Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:36:08 +0300
-Subject: [PATCH 08/15] DF: add Finnish and Swedish translations
+Subject: [PATCH 08/19] DF: add Finnish and Swedish translations
 
 ---
- client-admin/package-lock.json                | 234 ++++++++++++++++--
- client-admin/package.json                     |   4 +
- .../public/locales/en/client-admin.json       | 151 +++++++++++
+ client-admin/package-lock.json                | 142 +++++++++++++++-
+ client-admin/package.json                     |  15 +-
+ .../public/locales/en/client-admin.json       | 151 ++++++++++++++++++
  .../locales/en/client-admin.json.headersJson  |   1 +
- .../public/locales/fi/client-admin.json       | 151 +++++++++++
+ .../public/locales/fi/client-admin.json       | 151 ++++++++++++++++++
  .../locales/fi/client-admin.json.headersJson  |   1 +
- .../public/locales/sv/client-admin.json       | 151 +++++++++++
+ .../public/locales/sv/client-admin.json       | 151 ++++++++++++++++++
  .../locales/sv/client-admin.json.headersJson  |   1 +
- client-admin/src/app.js                       |  19 +-
+ client-admin/src/app.js                       |  19 ++-
  .../comment-moderation/comment.js             |  16 +-
- .../comment-moderation/index.js               |  18 +-
+ .../comment-moderation/index.js               |  18 ++-
  .../moderate-comments-accepted.js             |  17 +-
  .../moderate-comments-rejected.js             |  17 +-
- .../moderate-comments-todo.js                 |  23 +-
- .../components/conversation-admin/index.js    |  22 +-
- .../conversation-admin/report/reports-list.js |  19 +-
- .../conversation-admin/seed-comment.js        |  22 +-
- .../conversation-admin/share-and-embed.js     |  24 +-
+ .../moderate-comments-todo.js                 |  23 ++-
+ .../components/conversation-admin/index.js    |  22 ++-
+ .../conversation-admin/report/reports-list.js |  19 ++-
+ .../conversation-admin/seed-comment.js        |  22 ++-
+ .../conversation-admin/share-and-embed.js     |  23 ++-
  .../conversation-admin/stats/commenters.js    |  11 +-
- .../stats/conversation-stats-number-cards.js  |  22 +-
+ .../stats/conversation-stats-number-cards.js  |  22 ++-
  .../conversation-admin/stats/index.js         |  14 +-
  .../conversation-admin/stats/voters.js        |  11 +-
- .../conversations-and-account/account.js      |  23 +-
+ .../conversations-and-account/account.js      |  19 ++-
  .../conversations-and-account/conversation.js |   5 +-
- .../conversations.js                          |  21 +-
- .../conversations-and-account/integrate.js    |  39 ++-
- .../src/components/interior-header.js         |  24 +-
- .../src/components/landers/createuser.js      |  34 +--
- .../src/components/landers/lander-header.js   |  27 +-
+ .../conversations.js                          |  21 ++-
+ .../conversations-and-account/integrate.js    |  39 ++---
+ .../src/components/interior-header.js         |  24 ++-
+ .../src/components/landers/createuser.js      |  34 ++--
+ .../src/components/landers/lander-header.js   |  27 +++-
  .../landers/password-reset-init-done.js       |  16 +-
- .../components/landers/password-reset-init.js |  22 +-
- .../src/components/landers/password-reset.js  |  24 +-
- .../src/components/landers/signout.js         |  18 +-
- client-admin/src/i18n.js                      |  34 +++
+ .../components/landers/password-reset-init.js |  22 ++-
+ .../src/components/landers/password-reset.js  |  24 +--
+ .../src/components/landers/signout.js         |  18 ++-
+ client-admin/src/i18n.js                      |  34 ++++
  client-admin/src/index.js                     |   7 +-
  client-participation/js/strings.js            |  15 +-
- client-participation/js/strings/fi.js         | 136 ++++++++++
- client-participation/js/strings/sv.js         | 136 ++++++++++
+ client-participation/js/strings/fi.js         | 136 ++++++++++++++++
+ client-participation/js/strings/sv.js         | 136 ++++++++++++++++
  .../js/templates/vote-view.handlebars         |   2 +-
- client-report/locales/en/client-report.json   | 119 +++++++++
+ client-report/locales/en/client-report.json   | 119 ++++++++++++++
  .../locales/en/client-report.json.headersJson |   1 +
- client-report/locales/fi/client-report.json   | 119 +++++++++
+ client-report/locales/fi/client-report.json   | 119 ++++++++++++++
  .../locales/fi/client-report.json.headersJson |   1 +
- client-report/locales/sv/client-report.json   | 119 +++++++++
+ client-report/locales/sv/client-report.json   | 119 ++++++++++++++
  .../locales/sv/client-report.json.headersJson |   1 +
- client-report/package-lock.json               | 139 ++++++++++-
+ client-report/package-lock.json               |  91 ++++++++++-
  client-report/package.json                    |   4 +
- .../src/components/beeswarm/beeswarm.js       |  23 +-
- .../src/components/controls/controls.js       |  22 +-
- .../src/components/framework/heading.js       |   8 +-
- .../src/components/framework/legend.js        |  10 +-
- .../lists/allCommentsModeratedIn.js           |  29 +--
- .../src/components/lists/commentList.js       |  36 +--
- .../src/components/lists/majorityStrict.js    |  13 +-
- .../src/components/lists/metadata.js          |  10 +-
- .../src/components/lists/participantGroup.js  |  10 +-
- .../src/components/lists/participantGroups.js |  16 +-
- .../src/components/lists/uncertainty.js       |  13 +-
- client-report/src/components/overview.js      |  37 ++-
- .../participantsGraph/participantsGraph.js    |  36 ++-
- client-report/src/i18n.js                     |  34 +++
- client-report/src/index.js                    |   1 +
+ .../src/components/framework/heading.jsx      |   8 +-
+ .../src/components/framework/legend.jsx       |  10 +-
+ .../src/components/lists/commentList.jsx      |  36 +++--
+ .../src/components/lists/majorityStrict.jsx   |  13 +-
+ .../src/components/lists/metadata.jsx         |  10 +-
+ .../src/components/lists/participantGroup.jsx |  10 +-
+ .../src/components/lists/uncertainty.jsx      |  15 +-
+ client-report/src/i18n.js                     |  34 ++++
+ client-report/src/index.js                    |   3 +
  client-report/webpack.common.js               |   1 +
- 63 files changed, 2019 insertions(+), 315 deletions(-)
+ 57 files changed, 1811 insertions(+), 230 deletions(-)
  create mode 100644 client-admin/public/locales/en/client-admin.json
  create mode 100644 client-admin/public/locales/en/client-admin.json.headersJson
  create mode 100644 client-admin/public/locales/fi/client-admin.json
@@ -86,27 +80,27 @@ Subject: [PATCH 08/15] DF: add Finnish and Swedish translations
  create mode 100644 client-report/src/i18n.js
 
 diff --git a/client-admin/package-lock.json b/client-admin/package-lock.json
-index c840b64b..5d5fd57d 100644
+index 2b106309..fec1b174 100644
 --- a/client-admin/package-lock.json
 +++ b/client-admin/package-lock.json
 @@ -9,12 +9,16 @@
        "version": "0.0.1",
        "dependencies": {
-         "d3-scale": "~3.2.3",
+         "d3-scale": "~3.3.0",
 +        "i18next": "^23.7.6",
 +        "i18next-browser-languagedetector": "^7.2.0",
 +        "i18next-http-backend": "^2.4.1",
-         "jquery": "~2.1.4",
+         "jquery": "~2.2.4",
          "lodash": "~4.17.21",
-         "prop-types": "~15.7.2",
+         "prop-types": "~15.8.1",
          "react": "~16.14.0",
          "react-dom": "~16.14.0",
          "react-easy-emoji": "~1.8.1",
 +        "react-i18next": "^13.5.0",
-         "react-redux": "7.2.2",
-         "react-router-dom": "~5.2.0",
-         "redux": "~4.0.5",
-@@ -1769,11 +1773,11 @@
+         "react-redux": "7.2.9",
+         "react-router-dom": "~5.3.4",
+         "redux": "~4.2.1",
+@@ -1717,11 +1721,11 @@
        }
      },
      "node_modules/@babel/runtime": {
@@ -122,8 +116,8 @@ index c840b64b..5d5fd57d 100644
        },
        "engines": {
          "node": ">=6.9.0"
-@@ -3936,6 +3940,14 @@
-         "url": "https://github.com/sponsors/sindresorhus"
+@@ -4562,6 +4566,14 @@
+         "node": ">=10"
        }
      },
 +    "node_modules/cross-fetch": {
@@ -135,9 +129,9 @@ index c840b64b..5d5fd57d 100644
 +      }
 +    },
      "node_modules/cross-spawn": {
-       "version": "7.0.3",
-       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
-@@ -6250,6 +6262,14 @@
+       "version": "7.0.6",
+       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
+@@ -6983,6 +6995,15 @@
          "node": ">=12"
        }
      },
@@ -145,15 +139,16 @@ index c840b64b..5d5fd57d 100644
 +      "version": "3.0.1",
 +      "resolved": "https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz",
 +      "integrity": "sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==",
++      "license": "MIT",
 +      "dependencies": {
 +        "void-elements": "3.1.0"
 +      }
 +    },
-     "node_modules/html-void-elements": {
-       "version": "1.0.5",
-       "resolved": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-1.0.5.tgz",
-@@ -6389,6 +6409,44 @@
-         "node": ">=10.17.0"
+     "node_modules/html-webpack-plugin": {
+       "version": "5.6.3",
+       "resolved": "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-5.6.3.tgz",
+@@ -7154,6 +7175,44 @@
+         "node": ">=10.18"
        }
      },
 +    "node_modules/i18next": {
@@ -197,7 +192,7 @@ index c840b64b..5d5fd57d 100644
      "node_modules/iconv-lite": {
        "version": "0.4.24",
        "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
-@@ -7554,6 +7612,25 @@
+@@ -9189,6 +9248,25 @@
          "tslib": "^2.0.3"
        }
      },
@@ -221,11 +216,11 @@ index c840b64b..5d5fd57d 100644
 +      }
 +    },
      "node_modules/node-forge": {
-       "version": "0.10.0",
-       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz",
-@@ -8395,6 +8472,27 @@
-       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz",
-       "integrity": "sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw=="
+       "version": "1.3.1",
+       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-1.3.1.tgz",
+@@ -9937,6 +10015,27 @@
+       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz",
+       "integrity": "sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ=="
      },
 +    "node_modules/react-i18next": {
 +      "version": "13.5.0",
@@ -251,7 +246,7 @@ index c840b64b..5d5fd57d 100644
      "node_modules/react-is": {
        "version": "16.13.1",
        "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
-@@ -8638,9 +8736,9 @@
+@@ -10193,9 +10292,9 @@
        }
      },
      "node_modules/regenerator-runtime": {
@@ -263,21 +258,22 @@ index c840b64b..5d5fd57d 100644
 +      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
      },
      "node_modules/regenerator-transform": {
-       "version": "0.15.1",
-@@ -10216,6 +10314,11 @@
-         "node": ">=6"
+       "version": "0.15.2",
+@@ -11617,6 +11716,12 @@
+         "node": ">=0.6"
        }
      },
 +    "node_modules/tr46": {
 +      "version": "0.0.3",
 +      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
-+      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
++      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
++      "license": "MIT"
 +    },
-     "node_modules/trim": {
-       "version": "0.0.1",
-       "resolved": "https://registry.npmjs.org/trim/-/trim-0.0.1.tgz",
-@@ -11209,6 +11312,14 @@
-         "react": "^16.6.0 || ^17.0.0"
+     "node_modules/tree-dump": {
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/tree-dump/-/tree-dump-1.0.2.tgz",
+@@ -12656,6 +12761,14 @@
+         "react": ">=16.6.0"
        }
      },
 +    "node_modules/void-elements": {
@@ -289,21 +285,22 @@ index c840b64b..5d5fd57d 100644
 +      }
 +    },
      "node_modules/watchpack": {
-       "version": "2.4.0",
-       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
-@@ -11241,6 +11352,11 @@
-         "url": "https://github.com/sponsors/wooorm"
+       "version": "2.4.2",
+       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.2.tgz",
+@@ -12679,6 +12792,12 @@
+         "minimalistic-assert": "^1.0.0"
        }
      },
 +    "node_modules/webidl-conversions": {
 +      "version": "3.0.1",
 +      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
-+      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
++      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==",
++      "license": "BSD-2-Clause"
 +    },
      "node_modules/webpack": {
-       "version": "5.75.0",
-       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.75.0.tgz",
-@@ -11812,6 +11928,15 @@
+       "version": "5.98.0",
+       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.98.0.tgz",
+@@ -12955,6 +13074,15 @@
          "node": ">=0.8.0"
        }
      },
@@ -319,200 +316,38 @@ index c840b64b..5d5fd57d 100644
      "node_modules/which": {
        "version": "2.0.2",
        "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
-@@ -13146,11 +13271,11 @@
-       }
-     },
-     "@babel/runtime": {
--      "version": "7.20.7",
--      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.20.7.tgz",
--      "integrity": "sha512-UF0tvkUtxwAgZ5W/KrkHf0Rn0fdnLDU9ScxBrEVNUprE/MzirjK4MJUX1/BVDv00Sv8cljtukVK1aky++X1SjQ==",
-+      "version": "7.23.9",
-+      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz",
-+      "integrity": "sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==",
-       "requires": {
--        "regenerator-runtime": "^0.13.11"
-+        "regenerator-runtime": "^0.14.0"
-       }
-     },
-     "@babel/template": {
-@@ -14884,6 +15009,14 @@
-         }
-       }
-     },
-+    "cross-fetch": {
-+      "version": "4.0.0",
-+      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
-+      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
-+      "requires": {
-+        "node-fetch": "^2.6.12"
-+      }
-+    },
-     "cross-spawn": {
-       "version": "7.0.3",
-       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
-@@ -16677,6 +16810,14 @@
-         "terser": "^5.10.0"
-       }
-     },
-+    "html-parse-stringify": {
-+      "version": "3.0.1",
-+      "resolved": "https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.0.1.tgz",
-+      "integrity": "sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==",
-+      "requires": {
-+        "void-elements": "3.1.0"
-+      }
-+    },
-     "html-void-elements": {
-       "version": "1.0.5",
-       "resolved": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-1.0.5.tgz",
-@@ -16771,6 +16912,30 @@
-       "integrity": "sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==",
-       "dev": true
-     },
-+    "i18next": {
-+      "version": "23.8.1",
-+      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.8.1.tgz",
-+      "integrity": "sha512-Yhe6oiJhigSh64ev7nVVywu7vHjuUG41MRmFKNwphbkadqTL1ozZFBQISflY7/ju+gL6I/SPfI1GgWQh1yYArA==",
-+      "requires": {
-+        "@babel/runtime": "^7.23.2"
-+      }
-+    },
-+    "i18next-browser-languagedetector": {
-+      "version": "7.2.0",
-+      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.0.tgz",
-+      "integrity": "sha512-U00DbDtFIYD3wkWsr2aVGfXGAj2TgnELzOX9qv8bT0aJtvPV9CRO77h+vgmHFBMe7LAxdwvT/7VkCWGya6L3tA==",
-+      "requires": {
-+        "@babel/runtime": "^7.23.2"
-+      }
-+    },
-+    "i18next-http-backend": {
-+      "version": "2.4.2",
-+      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.4.2.tgz",
-+      "integrity": "sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==",
-+      "requires": {
-+        "cross-fetch": "4.0.0"
-+      }
-+    },
-     "iconv-lite": {
-       "version": "0.4.24",
-       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
-@@ -17609,6 +17774,14 @@
-         "tslib": "^2.0.3"
-       }
-     },
-+    "node-fetch": {
-+      "version": "2.7.0",
-+      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
-+      "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
-+      "requires": {
-+        "whatwg-url": "^5.0.0"
-+      }
-+    },
-     "node-forge": {
-       "version": "0.10.0",
-       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz",
-@@ -18237,6 +18410,15 @@
-       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz",
-       "integrity": "sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw=="
-     },
-+    "react-i18next": {
-+      "version": "13.5.0",
-+      "resolved": "https://registry.npmjs.org/react-i18next/-/react-i18next-13.5.0.tgz",
-+      "integrity": "sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==",
-+      "requires": {
-+        "@babel/runtime": "^7.22.5",
-+        "html-parse-stringify": "^3.0.1"
-+      }
-+    },
-     "react-is": {
-       "version": "16.13.1",
-       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
-@@ -18427,9 +18609,9 @@
-       }
-     },
-     "regenerator-runtime": {
--      "version": "0.13.11",
--      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz",
--      "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg=="
-+      "version": "0.14.1",
-+      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz",
-+      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
-     },
-     "regenerator-transform": {
-       "version": "0.15.1",
-@@ -19675,6 +19857,11 @@
-       "integrity": "sha512-gduQwd1rOdDMGxFG1gEvhV88Oirdo2p+KjoYFU7k2g+i7n6AFFbDQ5kMPUsW0pNbfQsB/cwXvT1i4Bue0s9g5g==",
-       "dev": true
-     },
-+    "tr46": {
-+      "version": "0.0.3",
-+      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
-+      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
-+    },
-     "trim": {
-       "version": "0.0.1",
-       "resolved": "https://registry.npmjs.org/trim/-/trim-0.0.1.tgz",
-@@ -20479,6 +20666,11 @@
-         "victory-core": "^35.11.4"
-       }
-     },
-+    "void-elements": {
-+      "version": "3.1.0",
-+      "resolved": "https://registry.npmjs.org/void-elements/-/void-elements-3.1.0.tgz",
-+      "integrity": "sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w=="
-+    },
-     "watchpack": {
-       "version": "2.4.0",
-       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
-@@ -20504,6 +20696,11 @@
-       "integrity": "sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==",
-       "dev": true
-     },
-+    "webidl-conversions": {
-+      "version": "3.0.1",
-+      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
-+      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
-+    },
-     "webpack": {
-       "version": "5.75.0",
-       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.75.0.tgz",
-@@ -20896,6 +21093,15 @@
-       "integrity": "sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==",
-       "dev": true
-     },
-+    "whatwg-url": {
-+      "version": "5.0.0",
-+      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
-+      "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
-+      "requires": {
-+        "tr46": "~0.0.3",
-+        "webidl-conversions": "^3.0.0"
-+      }
-+    },
-     "which": {
-       "version": "2.0.2",
-       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
 diff --git a/client-admin/package.json b/client-admin/package.json
-index 69740106..7e7736ed 100644
+index 1422d843..a751396e 100644
 --- a/client-admin/package.json
 +++ b/client-admin/package.json
-@@ -54,12 +54,16 @@
-   },
+@@ -50,6 +50,9 @@
    "dependencies": {
-     "d3-scale": "~3.2.3",
+     "d3-scale": "~3.3.0",
+     "jquery": "~2.2.4",
 +    "i18next": "^23.7.6",
 +    "i18next-browser-languagedetector": "^7.2.0",
 +    "i18next-http-backend": "^2.4.1",
-     "jquery": "~2.1.4",
      "lodash": "~4.17.21",
-     "prop-types": "~15.7.2",
+     "prop-types": "~15.8.1",
      "react": "~16.14.0",
-     "react-dom": "~16.14.0",
-     "react-easy-emoji": "~1.8.1",
-+    "react-i18next": "^13.5.0",
-     "react-redux": "7.2.2",
-     "react-router-dom": "~5.2.0",
-     "redux": "~4.0.5",
+@@ -60,6 +63,16 @@
+     "redux": "~4.2.1",
+     "redux-thunk": "~2.4.2",
+     "theme-ui": "0.13.1",
+-    "victory": "~37.3.6"
++    "victory": "~37.3.6",
++    "react-i18next": "^13.5.0"
++  },
++  "jest": {
++    "collectCoverage": true,
++    "collectCoverageFrom": "src/**/*.js",
++    "coverageReporters": [
++      "json",
++      "lcov",
++      "text-summary"
++    ]
+   }
+ }
 diff --git a/client-admin/public/locales/en/client-admin.json b/client-admin/public/locales/en/client-admin.json
 new file mode 100644
 index 00000000..578a26cb
@@ -1088,7 +923,7 @@ index b050b22f..f5bb3512 100644
 +const App = withTranslation()(AppTranslated);
 +export default withTranslation()(App);
 diff --git a/client-admin/src/components/conversation-admin/comment-moderation/comment.js b/client-admin/src/components/conversation-admin/comment-moderation/comment.js
-index af51b377..d040aa4d 100644
+index 848fbef7..e75f9dd8 100644
 --- a/client-admin/src/components/conversation-admin/comment-moderation/comment.js
 +++ b/client-admin/src/components/conversation-admin/comment-moderation/comment.js
 @@ -5,12 +5,14 @@ import PropTypes from 'prop-types'
@@ -1113,9 +948,9 @@ index af51b377..d040aa4d 100644
    render() {
 +    const { t } = this.props;
      return (
-       <Card sx={{ mb: [3], minWidth: '35em' }}>
+       <Card sx={{ mb: [3], minWidth: '35em' }} data-test-id="pending-comment">
          <Box>
-@@ -53,12 +56,12 @@ class Comment extends React.Component {
+@@ -54,12 +57,12 @@ class Comment extends React.Component {
                  target="_blank"
                  sx={{ mr: [2] }}
                  href="https://compdemocracy.org/metadata">
@@ -1130,7 +965,7 @@ index af51b377..d040aa4d 100644
                    ref={(c) => (this.is_meta = c)}
                    checked={this.props.comment.is_meta}
                    onChange={this.onIsMetaClicked.bind(this)}
-@@ -72,7 +75,7 @@ class Comment extends React.Component {
+@@ -73,7 +76,7 @@ class Comment extends React.Component {
    }
  }
  
@@ -1139,14 +974,15 @@ index af51b377..d040aa4d 100644
    dispatch: PropTypes.func,
    acceptClickHandler: PropTypes.func,
    rejectClickHandler: PropTypes.func,
-@@ -82,10 +85,13 @@ Comment.propTypes = {
+@@ -83,6 +86,7 @@ Comment.propTypes = {
    rejectButton: PropTypes.bool,
    rejectButtonText: PropTypes.string,
    isMetaCheckbox: PropTypes.bool,
 +  t: PropTypes.func.isRequired,
    comment: PropTypes.shape({
+     active: PropTypes.bool,
      txt: PropTypes.string,
-     is_meta: PropTypes.bool
+@@ -90,4 +94,6 @@ Comment.propTypes = {
    })
  }
  
@@ -1156,7 +992,7 @@ index af51b377..d040aa4d 100644
 +export default withTranslation()(Comment);
 \ No newline at end of file
 diff --git a/client-admin/src/components/conversation-admin/comment-moderation/index.js b/client-admin/src/components/conversation-admin/comment-moderation/index.js
-index 012b4980..caba3616 100644
+index 162c37dd..fc678f9f 100644
 --- a/client-admin/src/components/conversation-admin/comment-moderation/index.js
 +++ b/client-admin/src/components/conversation-admin/comment-moderation/index.js
 @@ -15,6 +15,8 @@ import ModerateCommentsRejected from './moderate-comments-rejected'
@@ -1195,7 +1031,7 @@ index 012b4980..caba3616 100644
          </Heading>
          <Flex sx={{ mb: [4] }}>
            <Link
-@@ -74,7 +78,7 @@ class CommentModeration extends React.Component {
+@@ -75,7 +79,7 @@ class CommentModeration extends React.Component {
                variant: url ? 'links.nav' : 'links.activeNav'
              }}
              to={`${match.url}`}>
@@ -1204,7 +1040,7 @@ index 012b4980..caba3616 100644
              {this.props.unmoderated.unmoderated_comments
                ? this.props.unmoderated.unmoderated_comments.length
                : null}
-@@ -85,7 +89,7 @@ class CommentModeration extends React.Component {
+@@ -87,7 +91,7 @@ class CommentModeration extends React.Component {
                variant: url === 'accepted' ? 'links.activeNav' : 'links.nav'
              }}
              to={`${match.url}/accepted`}>
@@ -1213,7 +1049,7 @@ index 012b4980..caba3616 100644
              {this.props.accepted.accepted_comments
                ? this.props.accepted.accepted_comments.length
                : null}
-@@ -96,7 +100,7 @@ class CommentModeration extends React.Component {
+@@ -99,7 +103,7 @@ class CommentModeration extends React.Component {
                variant: url === 'rejected' ? 'links.activeNav' : 'links.nav'
              }}
              to={`${match.url}/rejected`}>
@@ -1222,7 +1058,7 @@ index 012b4980..caba3616 100644
              {this.props.rejected.rejected_comments
                ? this.props.rejected.rejected_comments.length
                : null}
-@@ -126,4 +130,6 @@ class CommentModeration extends React.Component {
+@@ -129,4 +133,6 @@ class CommentModeration extends React.Component {
    }
  }
  
@@ -1231,7 +1067,7 @@ index 012b4980..caba3616 100644
 +const CommentModeration = withTranslation()(CommentModerationTranslated);
 +export default withTranslation()(CommentModeration);
 diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
-index b4501bcd..e126977a 100644
+index 69542871..1bfdc636 100644
 --- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
 +++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-accepted.js
 @@ -9,8 +9,10 @@ import {
@@ -1267,7 +1103,7 @@ index b4501bcd..e126977a 100644
    render() {
 +    const { t } = this.props;
      return (
-       <div>
+       <div data-test-id="approved-comments">
          {this.props.accepted_comments !== null
            ? this.createCommentMarkup()
 -          : 'Loading accepted comments...'}
@@ -1289,7 +1125,7 @@ index b4501bcd..e126977a 100644
 +const ModerateCommentsAccepted = withTranslation()(ModerateCommentsAcceptedTranslated);
 +export default withTranslation()(ModerateCommentsAccepted);
 diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
-index d9dd7774..3b29c25d 100644
+index 922b52a4..f30238ab 100644
 --- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
 +++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-rejected.js
 @@ -9,8 +9,10 @@ import {
@@ -1325,7 +1161,7 @@ index d9dd7774..3b29c25d 100644
    render() {
 +    const { t } = this.props;
      return (
-       <div>
+       <div data-test-id="rejected-comments">
          {this.props.rejected_comments !== null
            ? this.createCommentMarkup()
 -          : 'Loading rejected comments...'}
@@ -1347,7 +1183,7 @@ index d9dd7774..3b29c25d 100644
 +const ModerateCommentsRejected = withTranslation()(ModerateCommentsRejectedTranslated);
 +export default withTranslation()(ModerateCommentsRejected);
 diff --git a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
-index 45dc29b0..303ef3c3 100644
+index 3d7bb649..cec24e98 100644
 --- a/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
 +++ b/client-admin/src/components/conversation-admin/comment-moderation/moderate-comments-todo.js
 @@ -10,8 +10,10 @@ import {
@@ -1389,7 +1225,7 @@ index 45dc29b0..303ef3c3 100644
 +    const { t } = this.props;
 +    const max = 500;
      return (
-       <div>
+       <div data-test-id="pending-comment">
          <div>
 -          <p> Displays maximum {max} comments </p> 
 +          {t('moderate.display_max', { param1: max})}
@@ -1415,7 +1251,7 @@ index 45dc29b0..303ef3c3 100644
 +const ModerateCommentsTodo = withTranslation()(ModerateCommentsTodoTranslated);
 +export default withTranslation()(ModerateCommentsTodo);
 diff --git a/client-admin/src/components/conversation-admin/index.js b/client-admin/src/components/conversation-admin/index.js
-index df0ad410..70c8c6d5 100644
+index 2754ece7..b6fe619c 100644
 --- a/client-admin/src/components/conversation-admin/index.js
 +++ b/client-admin/src/components/conversation-admin/index.js
 @@ -17,8 +17,10 @@ import ShareAndEmbed from './share-and-embed'
@@ -1430,7 +1266,7 @@ index df0ad410..70c8c6d5 100644
    loadZidMetadata() {
      this.props.dispatch(
        populateZidMetadataStore(this.props.match.params.conversation_id)
-@@ -45,20 +47,22 @@ class ConversationAdminContainer extends React.Component {
+@@ -47,20 +49,22 @@ class ConversationAdminContainer extends React.Component {
      const { match, location } = this.props
  
      const url = location.pathname.split('/')[3]
@@ -1455,7 +1291,7 @@ index df0ad410..70c8c6d5 100644
              </Link>
            </Box>
            <Box sx={{ mb: [3] }}>
-@@ -67,7 +71,7 @@ class ConversationAdminContainer extends React.Component {
+@@ -69,7 +73,7 @@ class ConversationAdminContainer extends React.Component {
                  variant: url === 'share' ? 'links.activeNav' : 'links.nav'
                }}
                to={`${match.url}/share`}>
@@ -1464,16 +1300,16 @@ index df0ad410..70c8c6d5 100644
              </Link>
            </Box>
            <Box sx={{ mb: [3] }}>
-@@ -76,7 +80,7 @@ class ConversationAdminContainer extends React.Component {
-                 variant: url === 'comments' ? 'links.activeNav' : 'links.nav'
+@@ -79,7 +83,7 @@ class ConversationAdminContainer extends React.Component {
                }}
+               data-test-id="moderate-comments"
                to={`${match.url}/comments`}>
 -              Moderate
 +              {t('conv_nav.moderate')}
              </Link>
            </Box>
            <Box sx={{ mb: [3] }}>
-@@ -85,7 +89,7 @@ class ConversationAdminContainer extends React.Component {
+@@ -88,7 +92,7 @@ class ConversationAdminContainer extends React.Component {
                  variant: url === 'stats' ? 'links.activeNav' : 'links.nav'
                }}
                to={`${match.url}/stats`}>
@@ -1482,7 +1318,7 @@ index df0ad410..70c8c6d5 100644
              </Link>
            </Box>
            <Box sx={{ mb: [3] }}>
-@@ -94,7 +98,7 @@ class ConversationAdminContainer extends React.Component {
+@@ -97,7 +101,7 @@ class ConversationAdminContainer extends React.Component {
                  variant: url === 'reports' ? 'links.activeNav' : 'links.nav'
                }}
                to={`${match.url}/reports`}>
@@ -1491,7 +1327,7 @@ index df0ad410..70c8c6d5 100644
              </Link>
            </Box>
          </Box>
-@@ -128,4 +132,6 @@ class ConversationAdminContainer extends React.Component {
+@@ -131,4 +135,6 @@ class ConversationAdminContainer extends React.Component {
    }
  }
  
@@ -1500,10 +1336,10 @@ index df0ad410..70c8c6d5 100644
 +const ConversationAdminContainer = withTranslation()(ConversationAdminContainerTranslated);
 +export default withTranslation()(ConversationAdminContainer);
 diff --git a/client-admin/src/components/conversation-admin/report/reports-list.js b/client-admin/src/components/conversation-admin/report/reports-list.js
-index 04ac1d10..6a57cafa 100644
+index abd7a560..c4eec000 100644
 --- a/client-admin/src/components/conversation-admin/report/reports-list.js
 +++ b/client-admin/src/components/conversation-admin/report/reports-list.js
-@@ -9,8 +9,10 @@ import { Heading, Box, Button } from 'theme-ui'
+@@ -10,8 +10,10 @@ import { populateZidMetadataStore } from '../../../actions'
  import ComponentHelpers from '../../../util/component-helpers'
  import NoPermission from '../no-permission'
  
@@ -1515,20 +1351,19 @@ index 04ac1d10..6a57cafa 100644
    constructor(props) {
      super(props)
      this.state = {
-@@ -53,9 +55,11 @@ class ReportsList extends React.Component {
-     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
+@@ -71,8 +73,10 @@ class ReportsList extends React.Component {
        return <NoPermission />
      }
-+    
-+    const { t } = this.props;
  
++    const { t } = this.props;
++
      if (this.state.loading) {
 -      return <div>Loading Reports...</div>
 +      return <div>{t('reports.loading')}</div>
      }
      return (
        <Box>
-@@ -66,11 +70,11 @@ class ReportsList extends React.Component {
+@@ -83,11 +87,11 @@ class ReportsList extends React.Component {
              lineHeight: 'body',
              mb: [3, null, 4]
            }}>
@@ -1542,17 +1377,18 @@ index 04ac1d10..6a57cafa 100644
            </Button>
          </Box>
          {this.state.reports.map((report) => {
-@@ -90,7 +94,8 @@ class ReportsList extends React.Component {
+@@ -107,8 +111,9 @@ class ReportsList extends React.Component {
    }
  }
  
 -ReportsList.propTypes = {
 +ReportsListTranslated.propTypes = {
+   dispatch: PropTypes.func,
 +  t: PropTypes.func.isRequired,
    match: PropTypes.shape({
      params: PropTypes.shape({
        conversation_id: PropTypes.string
-@@ -101,4 +106,6 @@ ReportsList.propTypes = {
+@@ -119,4 +124,6 @@ ReportsList.propTypes = {
    })
  }
  
@@ -1625,12 +1461,12 @@ index 26c34609..3404b4b2 100644
  
  // value={this.props.seedText}
 diff --git a/client-admin/src/components/conversation-admin/share-and-embed.js b/client-admin/src/components/conversation-admin/share-and-embed.js
-index 482014dc..89d6eee4 100644
+index e0fdee40..58146422 100644
 --- a/client-admin/src/components/conversation-admin/share-and-embed.js
 +++ b/client-admin/src/components/conversation-admin/share-and-embed.js
-@@ -10,8 +10,10 @@ import { Heading } from 'theme-ui'
- import ComponentHelpers from '../../util/component-helpers'
+@@ -11,8 +11,10 @@ import ComponentHelpers from '../../util/component-helpers'
  import NoPermission from './no-permission'
+ import ParticipantXids from './participant-xids'
  
 +import { withTranslation } from 'react-i18next';
 +
@@ -1640,16 +1476,16 @@ index 482014dc..89d6eee4 100644
    constructEmbeddedOnMarkup() {
      return (
        <p data-test-id="embed-page">
-@@ -30,6 +32,8 @@ class ShareAndEmbed extends React.Component {
-     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
+@@ -32,6 +34,8 @@ class ShareAndEmbed extends React.Component {
        return <NoPermission />
      }
-+    
-+    const { t } = this.props;
  
++    const { t } = this.props;
++
      const { match } = this.props
      return (
-@@ -41,14 +45,14 @@ class ShareAndEmbed extends React.Component {
+       <div>
+@@ -42,7 +46,7 @@ class ShareAndEmbed extends React.Component {
              lineHeight: 'body',
              mb: [3, null, 4]
            }}>
@@ -1658,37 +1494,37 @@ index 482014dc..89d6eee4 100644
          </Heading>
          <ConversationHasCommentsCheck
            conversation_id={match.params.conversation_id}
-           strict_moderation={this.props.zid_metadata.strict_moderation}
-         />
-         <div>
--          <p> Share </p>
-+          <p>{t('distribute.share')}</p>
-           <p>
-             <a
-               target="blank"
-@@ -58,7 +62,7 @@ class ShareAndEmbed extends React.Component {
-           </p>
-         </div>
-         <div>
--          <p> Embed</p>
-+          <p>{t('distribute.embed')}</p>
+@@ -54,7 +58,7 @@ class ShareAndEmbed extends React.Component {
+               display: 'block',
+               mb: [2]
+             }}>
+-            Share
++            {t('distribute.share')}
+           </Text>
+           <Text
+             sx={{
+@@ -74,7 +78,7 @@ class ShareAndEmbed extends React.Component {
+               display: 'block',
+               mb: [2]
+             }}>
+-            Embed
++            {t('distribute.embed')}
+           </Text>
            <div>
              <pre>
-               {'<div'}
-@@ -69,9 +73,10 @@ class ShareAndEmbed extends React.Component {
-             </pre>
-           </div>
-           <p>
+@@ -91,9 +95,9 @@ class ShareAndEmbed extends React.Component {
+               maxWidth: '35em',
+               mt: [2]
+             }}>
 -            This embed code can only be used to embed a single conversation.{' '}
-+            
 +            {t('distribute.desc')}{' '}
              <Link to="/integrate">
 -              I want to integrate pol.is on my entire site.
 +              {t('distribute.link')}
              </Link>
-           </p>
+           </Text>
            <div>
-@@ -85,16 +90,19 @@ class ShareAndEmbed extends React.Component {
+@@ -109,16 +113,19 @@ class ShareAndEmbed extends React.Component {
    }
  }
  
@@ -1815,7 +1651,7 @@ index 278f5604..cc972df8 100644
 +const NumberCards = withTranslation()(NumberCardsTranslated);
 +export default withTranslation()(NumberCards);
 diff --git a/client-admin/src/components/conversation-admin/stats/index.js b/client-admin/src/components/conversation-admin/stats/index.js
-index 428b94ab..32cca9f3 100644
+index c3b937e1..89eaa944 100644
 --- a/client-admin/src/components/conversation-admin/stats/index.js
 +++ b/client-admin/src/components/conversation-admin/stats/index.js
 @@ -12,10 +12,12 @@ import { Heading, Box, jsx } from 'theme-ui'
@@ -1832,7 +1668,7 @@ index 428b94ab..32cca9f3 100644
    constructor(props) {
      super(props)
      const times = dateSetupUtil()
-@@ -80,7 +82,9 @@ class ConversationStats extends React.Component {
+@@ -105,7 +107,9 @@ class ConversationStats extends React.Component {
        !conversation_stats.firstCommentTimes ||
        !conversation_stats.firstVoteTimes
  
@@ -1843,7 +1679,7 @@ index 428b94ab..32cca9f3 100644
  
      return (
        <div>
-@@ -91,7 +95,7 @@ class ConversationStats extends React.Component {
+@@ -116,7 +120,7 @@ class ConversationStats extends React.Component {
              lineHeight: 'body',
              mb: [3, null, 4]
            }}>
@@ -1852,7 +1688,7 @@ index 428b94ab..32cca9f3 100644
          </Heading>
          <NumberCards data={conversation_stats} />
          <Voters
-@@ -109,4 +113,6 @@ class ConversationStats extends React.Component {
+@@ -134,4 +138,6 @@ class ConversationStats extends React.Component {
    }
  }
  
@@ -1898,7 +1734,7 @@ index f6f57a4b..df58377b 100644
 +const Voters = withTranslation()(VotersTranslated);
 +export default withTranslation()(Voters);
 diff --git a/client-admin/src/components/conversations-and-account/account.js b/client-admin/src/components/conversations-and-account/account.js
-index 94b7ef8f..0a7b5c38 100644
+index 5433617c..9a7e4d3d 100644
 --- a/client-admin/src/components/conversations-and-account/account.js
 +++ b/client-admin/src/components/conversations-and-account/account.js
 @@ -7,9 +7,13 @@ import { Box, Heading } from 'theme-ui'
@@ -1910,13 +1746,13 @@ index 94b7ef8f..0a7b5c38 100644
  @connect((state) => state.user)
 -class Account extends React.Component {
 +class AccountTranslated extends React.Component {
-+  
++
    buildAccountMarkup() {
 +    const { t } = this.props;
      return (
        <>
          <Box>
-@@ -20,14 +24,14 @@ class Account extends React.Component {
+@@ -20,9 +24,9 @@ class Account extends React.Component {
                lineHeight: 'body',
                mb: [3, null, 4]
              }}>
@@ -1928,14 +1764,7 @@ index 94b7ef8f..0a7b5c38 100644
            <Box>
              <p>{this.props.user.hname}</p>
              <p>{this.props.user.email}</p>
--            <p>Social:</p>
--            <p>{this.props.user.hasFacebook ? 'Facebook is connected' : ''} </p>
-+            <p>{this.props.user.hasFacebook || this.props.user.hasTwitter ? 'Social:' : ''}</p>
-+            <p>{this.props.user.hasFacebook ? 'Facebook is connected' : ''}</p>
-             <p>{this.props.user.hasTwitter ? 'Twitter is connected' : ''}</p>
-           </Box>
-         </Box>
-@@ -44,13 +48,16 @@ class Account extends React.Component {
+@@ -41,11 +45,14 @@ class Account extends React.Component {
    }
  }
  
@@ -1944,8 +1773,6 @@ index 94b7ef8f..0a7b5c38 100644
    user: PropTypes.shape({
      hname: PropTypes.string,
      email: PropTypes.string,
-     hasFacebook: PropTypes.bool,
-     hasTwitter: PropTypes.bool
 -  })
 +  }),
 +  t: PropTypes.func.isRequired
@@ -2175,24 +2002,22 @@ index 39bdcfd3..9afee915 100644
 +export default withTranslation()(InteriorHeader);
 +
 diff --git a/client-admin/src/components/landers/createuser.js b/client-admin/src/components/landers/createuser.js
-index 23d7e08a..a3915e81 100644
+index ec1e5502..7803b0f6 100644
 --- a/client-admin/src/components/landers/createuser.js
 +++ b/client-admin/src/components/landers/createuser.js
-@@ -10,10 +10,12 @@ import { Link } from 'react-router-dom'
+@@ -10,8 +10,10 @@ import { Link } from 'react-router-dom'
  import StaticLayout from './lander-layout'
  import strings from '../../strings/strings'
  
 +import { withTranslation } from 'react-i18next';
 +
- const fbAppId = process.env.FB_APP_ID
- 
  @connect((state) => state.signin)
 -class Createuser extends React.Component {
 +class CreateuserTranslated extends React.Component {
    getDest() {
      return this.props.location.pathname.slice('/createuser'.length)
    }
-@@ -60,6 +62,7 @@ class Createuser extends React.Component {
+@@ -41,6 +43,7 @@ class Createuser extends React.Component {
    }
  
    drawForm() {
@@ -2200,7 +2025,7 @@ index 23d7e08a..a3915e81 100644
      return (
        <Box>
          <form sx={{ mb: [4] }}>
-@@ -76,7 +79,7 @@ class Createuser extends React.Component {
+@@ -57,7 +60,7 @@ class Createuser extends React.Component {
                }}
                id="createUserNameInput"
                ref={(c) => (this.hname = c)}
@@ -2209,7 +2034,7 @@ index 23d7e08a..a3915e81 100644
                type="text"
              />
            </Box>
-@@ -93,7 +96,7 @@ class Createuser extends React.Component {
+@@ -74,7 +77,7 @@ class Createuser extends React.Component {
                }}
                id="createUserEmailInput"
                ref={(c) => (this.email = c)}
@@ -2218,7 +2043,7 @@ index 23d7e08a..a3915e81 100644
                type="email"
              />
            </Box>
-@@ -110,7 +113,7 @@ class Createuser extends React.Component {
+@@ -91,7 +94,7 @@ class Createuser extends React.Component {
                }}
                id="createUserPasswordInput"
                ref={(c) => (this.password = c)}
@@ -2227,7 +2052,7 @@ index 23d7e08a..a3915e81 100644
                type="password"
              />
            </Box>
-@@ -127,21 +130,21 @@ class Createuser extends React.Component {
+@@ -108,21 +111,21 @@ class Createuser extends React.Component {
                }}
                id="createUserPasswordRepeatInput"
                ref={(c) => (this.password2 = c)}
@@ -2254,12 +2079,12 @@ index 23d7e08a..a3915e81 100644
              </a>
              .
            </Box>
-@@ -149,16 +152,16 @@ class Createuser extends React.Component {
+@@ -130,16 +133,16 @@ class Createuser extends React.Component {
              sx={{ my: [2] }}
              id="createUserButton"
              onClick={this.handleLoginClicked.bind(this)}>
 -            {this.props.pending ? 'Creating Account...' : 'Create Account'}
-+            {this.props.pending ? t('createuser.creating') : t('createuser.create')} 
++            {this.props.pending ? t('createuser.creating') : t('createuser.create')}
            </Button>
          </form>
          <Box sx={{ mb: [4] }}>
@@ -2273,8 +2098,8 @@ index 23d7e08a..a3915e81 100644
 +            {t('createuser.signin')}
            </Link>
          </Box>
- 
-@@ -206,11 +209,12 @@ class Createuser extends React.Component {
+       </Box>
+@@ -147,11 +150,12 @@ class Createuser extends React.Component {
    }
  
    render() {
@@ -2286,9 +2111,9 @@ index 23d7e08a..a3915e81 100644
 -            Create Account
 +            {t('createuser.title')}
            </Heading>
-           {this.props.facebookError !== 'polis_err_user_with_this_email_exists'
-             ? this.drawForm()
-@@ -221,4 +225,6 @@ class Createuser extends React.Component {
+           {this.drawForm()}
+         </div>
+@@ -160,4 +164,6 @@ class Createuser extends React.Component {
    }
  }
  
@@ -2626,7 +2451,7 @@ index 0364afcf..5c4aa906 100644
    }
  }
 diff --git a/client-participation/js/strings.js b/client-participation/js/strings.js
-index e22e972d..f906e67f 100644
+index fe8d8518..3d6f385e 100644
 --- a/client-participation/js/strings.js
 +++ b/client-participation/js/strings.js
 @@ -4,6 +4,10 @@ var preloadHelper = require("./util/preloadHelper");
@@ -2639,8 +2464,8 @@ index e22e972d..f906e67f 100644
 +  sv: require("./strings/sv.js"),
    // Arabic
    ar: require("./strings/ar.js"),
-   // Welsh
-@@ -79,7 +83,16 @@ preloadHelper.acceptLanguagePromise.then(function() {
+   // Bosnian
+@@ -88,7 +92,16 @@ preloadHelper.acceptLanguagePromise.then(function() {
    prioritized.forEach(function (languageCode) {
      if (languageCode.match(/^en/)) {
        _.extend(strings, translations.en_us);
@@ -2943,10 +2768,10 @@ index 00000000..e928a202
 +
 +module.exports = s;
 diff --git a/client-participation/js/templates/vote-view.handlebars b/client-participation/js/templates/vote-view.handlebars
-index a76464bd..b63936ee 100644
+index afdb9676..6c4e3f64 100644
 --- a/client-participation/js/templates/vote-view.handlebars
 +++ b/client-participation/js/templates/vote-view.handlebars
-@@ -90,7 +90,7 @@
+@@ -49,7 +49,7 @@
        </form>
      {{else}} {{!-- !canSubscribe --}}
        <div><strong>{{txt1}}</strong></div>
@@ -3355,10 +3180,10 @@ index 00000000..6b3b5556
 +{"x-amz-acl":"public-read","Content-Type":"application/json; charset=UTF-8","Cache-Control":"no-cache"}
 \ No newline at end of file
 diff --git a/client-report/package-lock.json b/client-report/package-lock.json
-index c5a534ce..e0b5151a 100644
+index 5c77b29e..fa22f06a 100644
 --- a/client-report/package-lock.json
 +++ b/client-report/package-lock.json
-@@ -13,6 +13,9 @@
+@@ -13,12 +13,16 @@
          "d3-contour": "~1.1.2",
          "d3-scale-chromatic": "~1.1.1",
          "hull.js": "~0.2.11",
@@ -3368,46 +3193,14 @@ index c5a534ce..e0b5151a 100644
          "jquery": "~3.6.3",
          "lodash": "~4.17.21",
          "prop-types": "~15.8.1",
-@@ -20,6 +23,7 @@
-         "react": "~17.0.2",
-         "react-dom": "~17.0.2",
+         "react": "^18.3.1",
+         "react-dom": "~18.3.1",
          "react-fontawesome": "~0.3.3",
 +        "react-i18next": "^13.3.1",
          "react-redux": "~7.2.9",
          "redux": "~3.0.5",
          "redux-thunk": "~1.0.3",
-@@ -1746,11 +1750,11 @@
-       "dev": true
-     },
-     "node_modules/@babel/runtime": {
--      "version": "7.21.0",
--      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.21.0.tgz",
--      "integrity": "sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==",
-+      "version": "7.23.9",
-+      "resolved": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.9.tgz",
-+      "integrity": "sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==",
-       "dependencies": {
--        "regenerator-runtime": "^0.13.11"
-+        "regenerator-runtime": "^0.14.0"
-       },
-       "engines": {
-         "node": ">=6.9.0"
-@@ -3526,6 +3530,14 @@
-       "resolved": "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.3.tgz",
-       "integrity": "sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ=="
-     },
-+    "node_modules/cross-fetch": {
-+      "version": "4.0.0",
-+      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
-+      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
-+      "dependencies": {
-+        "node-fetch": "^2.6.12"
-+      }
-+    },
-     "node_modules/cross-spawn": {
-       "version": "7.0.3",
-       "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
-@@ -5632,6 +5644,14 @@
+@@ -6999,6 +7003,14 @@
          "node": ">= 12"
        }
      },
@@ -3420,16 +3213,16 @@ index c5a534ce..e0b5151a 100644
 +      }
 +    },
      "node_modules/html-webpack-plugin": {
-       "version": "5.5.3",
-       "resolved": "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-5.5.3.tgz",
-@@ -5814,6 +5834,44 @@
-       "resolved": "https://registry.npmjs.org/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz",
-       "integrity": "sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ=="
+       "version": "5.6.3",
+       "resolved": "https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-5.6.3.tgz",
+@@ -7181,6 +7193,52 @@
+         "node": ">=10.17.0"
+       }
      },
 +    "node_modules/i18next": {
-+      "version": "23.8.1",
-+      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.8.1.tgz",
-+      "integrity": "sha512-Yhe6oiJhigSh64ev7nVVywu7vHjuUG41MRmFKNwphbkadqTL1ozZFBQISflY7/ju+gL6I/SPfI1GgWQh1yYArA==",
++      "version": "23.16.8",
++      "resolved": "https://registry.npmjs.org/i18next/-/i18next-23.16.8.tgz",
++      "integrity": "sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg==",
 +      "funding": [
 +        {
 +          "type": "individual",
@@ -3449,51 +3242,63 @@ index c5a534ce..e0b5151a 100644
 +      }
 +    },
 +    "node_modules/i18next-browser-languagedetector": {
-+      "version": "7.2.0",
-+      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.0.tgz",
-+      "integrity": "sha512-U00DbDtFIYD3wkWsr2aVGfXGAj2TgnELzOX9qv8bT0aJtvPV9CRO77h+vgmHFBMe7LAxdwvT/7VkCWGya6L3tA==",
++      "version": "7.2.2",
++      "resolved": "https://registry.npmjs.org/i18next-browser-languagedetector/-/i18next-browser-languagedetector-7.2.2.tgz",
++      "integrity": "sha512-6b7r75uIJDWCcCflmbof+sJ94k9UQO4X0YR62oUfqGI/GjCLVzlCwu8TFdRZIqVLzWbzNcmkmhfqKEr4TLz4HQ==",
 +      "dependencies": {
 +        "@babel/runtime": "^7.23.2"
 +      }
 +    },
 +    "node_modules/i18next-http-backend": {
-+      "version": "2.4.2",
-+      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.4.2.tgz",
-+      "integrity": "sha512-wKrgGcaFQ4EPjfzBTjzMU0rbFTYpa0S5gv9N/d8WBmWS64+IgJb7cHddMvV+tUkse7vUfco3eVs2lB+nJhPo3w==",
++      "version": "2.7.3",
++      "resolved": "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.7.3.tgz",
++      "integrity": "sha512-FgZxrXdRA5u44xfYsJlEBL4/KH3f2IluBpgV/7riW0YW2VEyM8FzVt2XHAOi6id0Ppj7vZvCZVpp5LrGXnc8Ig==",
 +      "dependencies": {
 +        "cross-fetch": "4.0.0"
++      }
++    },
++    "node_modules/i18next-http-backend/node_modules/cross-fetch": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz",
++      "integrity": "sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==",
++      "dependencies": {
++        "node-fetch": "^2.6.12"
 +      }
 +    },
      "node_modules/iconv-lite": {
        "version": "0.4.24",
        "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
-@@ -6742,6 +6800,25 @@
-         "tslib": "^2.0.3"
-       }
+@@ -9422,7 +9480,6 @@
+       "version": "2.7.0",
+       "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
+       "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "whatwg-url": "^5.0.0"
+@@ -9443,21 +9500,18 @@
+       "version": "0.0.3",
+       "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
+       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
+-      "dev": true,
+       "license": "MIT"
      },
-+    "node_modules/node-fetch": {
-+      "version": "2.7.0",
-+      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
-+      "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
-+      "dependencies": {
-+        "whatwg-url": "^5.0.0"
-+      },
-+      "engines": {
-+        "node": "4.x || >=6.0.0"
-+      },
-+      "peerDependencies": {
-+        "encoding": "^0.1.0"
-+      },
-+      "peerDependenciesMeta": {
-+        "encoding": {
-+          "optional": true
-+        }
-+      }
-+    },
-     "node_modules/node-forge": {
-       "version": "1.3.1",
-       "resolved": "https://registry.npmjs.org/node-forge/-/node-forge-1.3.1.tgz",
-@@ -7543,6 +7620,27 @@
+     "node_modules/node-fetch/node_modules/webidl-conversions": {
+       "version": "3.0.1",
+       "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
+       "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==",
+-      "dev": true,
+       "license": "BSD-2-Clause"
+     },
+     "node_modules/node-fetch/node_modules/whatwg-url": {
+       "version": "5.0.0",
+       "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
+       "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
+-      "dev": true,
+       "license": "MIT",
+       "dependencies": {
+         "tr46": "~0.0.3",
+@@ -10444,6 +10498,27 @@
          "react": ">=0.12.0"
        }
      },
@@ -3519,35 +3324,10 @@ index c5a534ce..e0b5151a 100644
 +      }
 +    },
      "node_modules/react-is": {
-       "version": "16.13.1",
-       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
-@@ -7639,9 +7737,9 @@
-       }
-     },
-     "node_modules/regenerator-runtime": {
--      "version": "0.13.11",
--      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz",
--      "integrity": "sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg=="
-+      "version": "0.14.1",
-+      "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz",
-+      "integrity": "sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw=="
-     },
-     "node_modules/regenerator-transform": {
-       "version": "0.15.1",
-@@ -8631,6 +8729,11 @@
-         "node": ">=0.10.0"
-       }
-     },
-+    "node_modules/tr46": {
-+      "version": "0.0.3",
-+      "resolved": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
-+      "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
-+    },
-     "node_modules/tslib": {
-       "version": "2.6.0",
-       "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.6.0.tgz",
-@@ -8815,6 +8918,14 @@
-         "uuid": "dist/bin/uuid"
+       "version": "17.0.2",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz",
+@@ -12284,6 +12359,14 @@
+         "node": ">= 0.8"
        }
      },
 +    "node_modules/void-elements": {
@@ -3558,42 +3338,14 @@ index c5a534ce..e0b5151a 100644
 +        "node": ">=0.10.0"
 +      }
 +    },
-     "node_modules/watchpack": {
-       "version": "2.4.0",
-       "resolved": "https://registry.npmjs.org/watchpack/-/watchpack-2.4.0.tgz",
-@@ -8837,6 +8948,11 @@
-         "minimalistic-assert": "^1.0.0"
-       }
-     },
-+    "node_modules/webidl-conversions": {
-+      "version": "3.0.1",
-+      "resolved": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
-+      "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
-+    },
-     "node_modules/webpack": {
-       "version": "5.88.2",
-       "resolved": "https://registry.npmjs.org/webpack/-/webpack-5.88.2.tgz",
-@@ -9476,6 +9592,15 @@
-         "node": ">=0.8.0"
-       }
-     },
-+    "node_modules/whatwg-url": {
-+      "version": "5.0.0",
-+      "resolved": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
-+      "integrity": "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==",
-+      "dependencies": {
-+        "tr46": "~0.0.3",
-+        "webidl-conversions": "^3.0.0"
-+      }
-+    },
-     "node_modules/which": {
-       "version": "2.0.2",
-       "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+     "node_modules/w3c-xmlserializer": {
+       "version": "4.0.0",
+       "resolved": "https://registry.npmjs.org/w3c-xmlserializer/-/w3c-xmlserializer-4.0.0.tgz",
 diff --git a/client-report/package.json b/client-report/package.json
-index 4b50e8df..0b22b481 100644
+index e6d63206..ef172f87 100644
 --- a/client-report/package.json
 +++ b/client-report/package.json
-@@ -37,6 +37,9 @@
+@@ -45,12 +45,16 @@
      "d3-contour": "~1.1.2",
      "d3-scale-chromatic": "~1.1.1",
      "hull.js": "~0.2.11",
@@ -3603,141 +3355,22 @@ index 4b50e8df..0b22b481 100644
      "jquery": "~3.6.3",
      "lodash": "~4.17.21",
      "prop-types": "~15.8.1",
-@@ -44,6 +47,7 @@
-     "react": "~17.0.2",
-     "react-dom": "~17.0.2",
+     "react": "^18.3.1",
+     "react-dom": "~18.3.1",
      "react-fontawesome": "~0.3.3",
 +    "react-i18next": "^13.3.1",
      "react-redux": "~7.2.9",
      "redux": "~3.0.5",
      "redux-thunk": "~1.0.3",
-diff --git a/client-report/src/components/beeswarm/beeswarm.js b/client-report/src/components/beeswarm/beeswarm.js
-index a8427ad0..0046095c 100644
---- a/client-report/src/components/beeswarm/beeswarm.js
-+++ b/client-report/src/components/beeswarm/beeswarm.js
-@@ -4,6 +4,7 @@ import React from "react";
- import CommentList from "../lists/commentList";
- import * as globals from "../globals";
- import _ from "lodash";
-+import { withTranslation } from 'react-i18next';
- // import Flex from "../framework/flex"
- 
- // function type(d) {
-@@ -103,7 +104,7 @@ class VoronoiCells extends React.Component {
-   }
- }
- 
--class Beeswarm extends React.Component {
-+class BeeswarmTranslated extends React.Component {
-   constructor(props) {
-     super(props);
- 
-@@ -179,14 +180,14 @@ class Beeswarm extends React.Component {
-       })
-   }
-   render() {
-+    const { t } = this.props;
-     return (
-       <div style={{width: this.svgWidth}}>
--        <p style={globals.primaryHeading}> How divisive was the conversation? </p>
--        <p style={globals.paragraph}>
--          Statements (here as little circles) to the left were voted on the same way—either everyone agreed or everyone disagreed. Statements to the right were divisive—participants were split between agreement and disagreement.
--        </p>
--        <p style={globals.paragraph}>
--          <strong>How to use this:</strong> Hover to see the statement text. Start on the far right to find out what the most divisive statement was.
-+        <p style={globals.primaryHeading}> {t('beeswarm.title')} </p>
-+        <p style={globals.paragraph}> {t('beeswarm.text')} </p>
-+        <p style={globals.paragraph}> 
-+        <strong>{t('beeswarm.howto_strong')} </strong>
-+        {t('beeswarm.howto')} 
-         </p>
-         <svg width={this.svgWidth} height={this.svgHeight}>
-           <g id="beeswarmAxisAttachPointD3" transform={"translate(" + this.margin.left + "," + this.margin.top + ")"}>
-@@ -203,8 +204,8 @@ class Beeswarm extends React.Component {
-           <line x1="0" y1={this.svgHeight - 10} x2={this.svgWidth} y2={this.svgHeight - 10} strokeWidth="1" stroke="black"/>
-         </svg>
-         <div style={{display: "flex", justifyContent: "space-between", margin: 0}}>
--          <p style={{margin: 0}}> Consensus statements </p>
--          <p style={{margin: 0}}> Divisive statements</p>
-+          <p style={{margin: 0}}> {t('beeswarm.consensus')} </p>
-+          <p style={{margin: 0}}> {t('beeswarm.divisive')} </p>
-         </div>
-         {/*<ProbabilityLegend/>*/}
- 
-@@ -227,7 +228,9 @@ class Beeswarm extends React.Component {
-   }
- }
- 
--export default Beeswarm;
-+//export default Beeswarm;
-+const Beeswarm = withTranslation()(BeeswarmTranslated);
-+export default withTranslation()(Beeswarm);
- 
- // <text
- //   style={{textAnchor: "middle"}}
-diff --git a/client-report/src/components/controls/controls.js b/client-report/src/components/controls/controls.js
-index 630c6abd..02b6b263 100644
---- a/client-report/src/components/controls/controls.js
-+++ b/client-report/src/components/controls/controls.js
-@@ -5,7 +5,9 @@ import Checkbox from '../framework/checkbox';
- import React from "react";
- import settings from "../../settings";
- 
--class Controls extends React.Component {
-+import { withTranslation } from 'react-i18next';
-+
-+class ControlsTranslated extends React.Component {
- 
-   constructor(props) {
-     super(props);
-@@ -25,10 +27,19 @@ class Controls extends React.Component {
-   // }
- 
-   render() {
-+    const { t, i18n } = this.props;
-+    document.documentElement.lang = i18n.language; //This is too slow for google translate
-+    const changeLanguage = (lng) => {
-+        i18n.changeLanguage(lng);
-+        document.documentElement.lang = lng;
-+    };
-     return (
-       <div>
-+      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('fi')}>FI</button>
-+      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('sv')}>SV</button>
-+      <button style={{margin: "10px"}} type="button" onClick={() => changeLanguage('en')}>EN</button>
-       <Checkbox
--        label= {"auto-refresh"}
-+        label= {t('controls.auto_refresh')}
-         disabled={false}
-         ref={this.autoRefreshEnabledRef}
-         checked={ this.props.autoRefreshEnabled}
-@@ -37,7 +48,7 @@ class Controls extends React.Component {
-         labelWrapperColor={settings.darkerGray}
-         color={settings.polisBlue}/>
-       <Checkbox
--        label= {"color blind mode"}
-+        label= {t('controls.color_blind_mode')}
-         disabled={false}
-         ref={this.colorBlindModeRef}
-         checked={ this.props.colorBlindMode}
-@@ -52,4 +63,7 @@ class Controls extends React.Component {
- }
-         // <Checkbox value="pineapple"/>
- 
--export default Controls;
-+//export default Controls;
-+const Controls = withTranslation()(ControlsTranslated);
-+
-+export default withTranslation()(Controls);
-diff --git a/client-report/src/components/framework/heading.js b/client-report/src/components/framework/heading.js
-index 30a5716b..44d4265a 100644
---- a/client-report/src/components/framework/heading.js
-+++ b/client-report/src/components/framework/heading.js
+diff --git a/client-report/src/components/framework/heading.jsx b/client-report/src/components/framework/heading.jsx
+index ff89af6e..44d4265a 100644
+--- a/client-report/src/components/framework/heading.jsx
++++ b/client-report/src/components/framework/heading.jsx
 @@ -1,12 +1,15 @@
  // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  import React from "react";
--import SmallLogo from "./logoSmallLong";
+-import SmallLogo from "./logoSmallLong.jsx";
 +//import SmallLogo from "./logoSmallLong";
  import Url from "../../util/url";
  
@@ -3764,10 +3397,10 @@ index 30a5716b..44d4265a 100644
        </p>
        <p style={{
            fontSize: 24,
-diff --git a/client-report/src/components/framework/legend.js b/client-report/src/components/framework/legend.js
+diff --git a/client-report/src/components/framework/legend.jsx b/client-report/src/components/framework/legend.jsx
 index 4f963604..5fbc0d3e 100644
---- a/client-report/src/components/framework/legend.js
-+++ b/client-report/src/components/framework/legend.js
+--- a/client-report/src/components/framework/legend.jsx
++++ b/client-report/src/components/framework/legend.jsx
 @@ -1,17 +1,19 @@
  // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
@@ -3792,74 +3425,12 @@ index 4f963604..5fbc0d3e 100644
      </svg>
    )
  }
-diff --git a/client-report/src/components/lists/allCommentsModeratedIn.js b/client-report/src/components/lists/allCommentsModeratedIn.js
-index 5c14fe71..56e5dca3 100644
---- a/client-report/src/components/lists/allCommentsModeratedIn.js
-+++ b/client-report/src/components/lists/allCommentsModeratedIn.js
-@@ -5,6 +5,7 @@ import _ from "lodash";
- import CommentList from "./commentList";
- import * as globals from "../globals";
- 
-+import { withTranslation } from 'react-i18next';
- 
- function sortByTid(comments) {
-   return _.map(comments, (comment) => comment.tid).sort((a, b) => a - b);
-@@ -26,7 +27,7 @@ function sortByPctPassed(comments) {
-   return _.map(_.reverse(_.sortBy(comments, (c) => {return c["pctPassed"];})), (c) => {return c.tid;});
- }
- 
--class allCommentsModeratedIn extends React.Component {
-+class allCommentsModeratedInTranslated extends React.Component {
- 
-   constructor(props) {
-     super(props);
-@@ -63,21 +64,19 @@ class allCommentsModeratedIn extends React.Component {
-     } else {
-       console.error('missing sort function', this.state.sortStyle);
-     }
--
-+    const { t } = this.props;
-     return (
-       <div>
--        <p style={globals.primaryHeading}> All statements </p>
--        <p style={globals.paragraph}>
--          Group votes across all statements, excluding those statements which were moderated out.
--        </p>
--        <label htmlFor="allCommentsSortMode">Sort by: </label>
-+        <p style={globals.primaryHeading}>{t('all_comments.title')}</p>
-+        <p style={globals.paragraph}>{t('all_comments.text')}</p>
-+        <label htmlFor="allCommentsSortMode">{t('all_comments.sortby')}</label>
-         <select id="allCommentsSortMode" onChange={this.onSortChanged.bind(this)} value={this.state.sortStyle}>
--          <option value="tid">Statement Id</option>
--          <option value="consensus">Group-informed Consensus</option>
--          <option value="numvotes">Number of votes</option>
--          <option value="pctAgreed">% Agreed</option>
--          <option value="pctDisagreed">% Disagreed</option>
--          <option value="pctPassed">% Passed</option>
-+          <option value="tid">{t('all_comments.tid')}</option>
-+          <option value="consensus">{t('all_comments.consensus')}</option>
-+          <option value="numvotes">{t('all_comments.numvotes')}</option>
-+          <option value="pctAgreed">% {t('all_comments.agreed')}</option>
-+          <option value="pctDisagreed">% {t('all_comments.disagreed')}</option>
-+          <option value="pctPassed">% {t('all_comments.passed')}</option>
-         </select>
-         <div style={{marginTop: 50}}>
-           <CommentList
-@@ -94,4 +93,6 @@ class allCommentsModeratedIn extends React.Component {
-   }
- }
- 
--export default allCommentsModeratedIn;
-+//export default allCommentsModeratedIn;
-+const allCommentsModeratedIn = withTranslation()(allCommentsModeratedInTranslated);
-+export default withTranslation()(allCommentsModeratedIn);
-\ No newline at end of file
-diff --git a/client-report/src/components/lists/commentList.js b/client-report/src/components/lists/commentList.js
-index 722eeaaf..d09da435 100644
---- a/client-report/src/components/lists/commentList.js
-+++ b/client-report/src/components/lists/commentList.js
-@@ -4,6 +4,8 @@ import React from "react";
- import _ from "lodash";
+diff --git a/client-report/src/components/lists/commentList.jsx b/client-report/src/components/lists/commentList.jsx
+index e705e29b..cce489f0 100644
+--- a/client-report/src/components/lists/commentList.jsx
++++ b/client-report/src/components/lists/commentList.jsx
+@@ -3,6 +3,8 @@
+ import React from "react";
  import * as globals from "../globals";
  
 +import { useTranslation, withTranslation } from 'react-i18next';
@@ -3867,7 +3438,7 @@ index 722eeaaf..d09da435 100644
  const BarChartCompact = ({ comment, voteCounts, nMembers, voteColors }) => {
    if (!comment) return null;
  
-@@ -32,21 +34,19 @@ const BarChartCompact = ({ comment, voteCounts, nMembers, voteColors }) => {
+@@ -31,21 +33,19 @@ const BarChartCompact = ({ comment, voteCounts, nMembers, voteColors }) => {
    const disagreeSaw = (disagrees / sawTheComment) * w;
    const passSaw = (passes / sawTheComment) * w;
  
@@ -3898,61 +3469,59 @@ index 722eeaaf..d09da435 100644
        }
      >
        <svg width={101} height={10} style={{ marginRight: 30 }}>
-@@ -159,7 +159,7 @@ const CommentRow = ({ comment, groups, voteColors }) => {
+@@ -90,7 +90,7 @@ const CommentRow = ({ comment, groups, voteColors }) => {
+     const nMembers = g["n-members"];
+     totalMembers += nMembers;
+     const gVotes = g.votes[comment.tid];
+-  
++
+     BarCharts.push(
+       <BarChartCompact
+         key={i}
+@@ -151,7 +151,9 @@ const CommentRow = ({ comment, groups, voteColors }) => {
    );
  };
  
--class CommentList extends React.Component {
-+class CommentListTranslated extends React.Component {
-   getGroupLabels() {
+-const CommentList = ({ comments, math, ptptCount, tidsToRender, voteColors }) => {
++const CommentListTranslated = ({ comments, math, ptptCount, tidsToRender, voteColors }) => {
++
++  const { t } = useTranslation();
+ 
+   const getGroupLabels = () => {
      function makeLabel(key, label, numMembers) {
-       return (
-@@ -186,9 +186,11 @@ class CommentList extends React.Component {
-       );
-     }
+@@ -181,7 +183,7 @@ const CommentList = ({ comments, math, ptptCount, tidsToRender, voteColors }) =>
      let labels = [];
-+    
-+    const { t } = this.props;
  
      // totals
--    labels.push(makeLabel(99, "Overall", this.props.ptptCount));
-+    labels.push(makeLabel(99, t('comment_list.overall'), this.props.ptptCount));
+-    labels.push(makeLabel(99, "Overall", ptptCount));
++    labels.push(makeLabel(99, t('comment_list.overall'), ptptCount));
  
-     _.each(this.props.math["group-votes"], (g, i) => {
-       labels.push(makeLabel(i, globals.groupLabels[i], g["n-members"]));
-@@ -199,7 +201,7 @@ class CommentList extends React.Component {
+     Object.entries(math["group-votes"]).forEach(([key, g]) => {
+       const i = parseInt(key, 10);
+@@ -216,7 +218,7 @@ const CommentList = ({ comments, math, ptptCount, tidsToRender, voteColors }) =>
+             textTransform: "uppercase",
+           }}
+         >
+-          Statement
++          {t('comment_list.statement')}
+         </span>
  
-   render() {
-     const comments = _.keyBy(this.props.comments, "tid");
--
-+    const { t } = this.props;
-     return (
-       <div>
-         <div
-@@ -220,7 +222,7 @@ class CommentList extends React.Component {
-               textTransform: "uppercase",
-             }}
-           >
--            Statement
-+            {t('comment_list.statement')}
-           </span>
- 
-           {this.getGroupLabels()}
-@@ -241,4 +243,6 @@ class CommentList extends React.Component {
-   }
+         {getGroupLabels()}
+@@ -236,4 +238,6 @@ const CommentList = ({ comments, math, ptptCount, tidsToRender, voteColors }) =>
+   );
  }
  
 -export default CommentList;
 +//export default CommentList;
 +const CommentList = withTranslation()(CommentListTranslated);
 +export default withTranslation()(CommentList);
-diff --git a/client-report/src/components/lists/majorityStrict.js b/client-report/src/components/lists/majorityStrict.js
-index a379beed..61c0f5a1 100644
---- a/client-report/src/components/lists/majorityStrict.js
-+++ b/client-report/src/components/lists/majorityStrict.js
+diff --git a/client-report/src/components/lists/majorityStrict.jsx b/client-report/src/components/lists/majorityStrict.jsx
+index cf8d7454..e32d9808 100644
+--- a/client-report/src/components/lists/majorityStrict.jsx
++++ b/client-report/src/components/lists/majorityStrict.jsx
 @@ -5,6 +5,8 @@ import * as globals from "../globals";
- import CommentList from "./commentList";
- import Legend from "../framework/legend";
+ import CommentList from "./commentList.jsx";
+ import Legend from "../framework/legend.jsx";
  
 +import { useTranslation } from 'react-i18next';
 +
@@ -3979,14 +3548,14 @@ index a379beed..61c0f5a1 100644
        <Legend voteColors={voteColors} />
        <div style={{ marginTop: 20 }}>
          <CommentList
-diff --git a/client-report/src/components/lists/metadata.js b/client-report/src/components/lists/metadata.js
-index ecc016f2..a93ffb4f 100644
---- a/client-report/src/components/lists/metadata.js
-+++ b/client-report/src/components/lists/metadata.js
+diff --git a/client-report/src/components/lists/metadata.jsx b/client-report/src/components/lists/metadata.jsx
+index 7af09ff0..9bd55328 100644
+--- a/client-report/src/components/lists/metadata.jsx
++++ b/client-report/src/components/lists/metadata.jsx
 @@ -3,6 +3,7 @@
  import React from "react";
- import CommentList from "./commentList";
- import * as globals from "../globals";
+ import CommentList from "./commentList.jsx";
+ import * as globals from "../globals.js";
 +import { useTranslation } from 'react-i18next';
  
  const Metadata = ({ conversation, comments, ptptCount, formatTid, math, voteColors }) => {
@@ -4009,20 +3578,20 @@ index ecc016f2..a93ffb4f 100644
        <div style={{ marginTop: 50 }}>
          <CommentList
            conversation={conversation}
-diff --git a/client-report/src/components/lists/participantGroup.js b/client-report/src/components/lists/participantGroup.js
-index 19f580a0..aeae1017 100644
---- a/client-report/src/components/lists/participantGroup.js
-+++ b/client-report/src/components/lists/participantGroup.js
-@@ -6,6 +6,8 @@ import * as globals from "../globals";
- // import style from "../../util/style";
- import CommentList from "./commentList";
+diff --git a/client-report/src/components/lists/participantGroup.jsx b/client-report/src/components/lists/participantGroup.jsx
+index 6527c75c..90c9373b 100644
+--- a/client-report/src/components/lists/participantGroup.jsx
++++ b/client-report/src/components/lists/participantGroup.jsx
+@@ -4,6 +4,8 @@ import React from "react";
+ import * as globals from "../globals.js";
+ import CommentList from "./commentList.jsx";
  
 +import { useTranslation } from 'react-i18next';
 +
  const ParticipantGroup = ({
    gid,
    groupComments,
-@@ -21,10 +23,10 @@ const ParticipantGroup = ({
+@@ -16,10 +18,10 @@ const ParticipantGroup = ({
    math,
    voteColors,
  }) => {
@@ -4035,7 +3604,7 @@ index 19f580a0..aeae1017 100644
    }
  
    return (
-@@ -33,9 +35,9 @@ const ParticipantGroup = ({
+@@ -28,9 +30,9 @@ const ParticipantGroup = ({
          width: "100%",
        }}>
        <p style={globals.secondaryHeading}>
@@ -4047,66 +3616,21 @@ index 19f580a0..aeae1017 100644
        <CommentList
          conversation={conversation}
          ptptCount={ptptCount}
-diff --git a/client-report/src/components/lists/participantGroups.js b/client-report/src/components/lists/participantGroups.js
-index d2bed697..6141fd98 100644
---- a/client-report/src/components/lists/participantGroups.js
-+++ b/client-report/src/components/lists/participantGroups.js
-@@ -6,8 +6,9 @@ import Group from "./participantGroup";
+diff --git a/client-report/src/components/lists/uncertainty.jsx b/client-report/src/components/lists/uncertainty.jsx
+index 3d8b40c3..4d8975e3 100644
+--- a/client-report/src/components/lists/uncertainty.jsx
++++ b/client-report/src/components/lists/uncertainty.jsx
+@@ -5,6 +5,7 @@ import CommentList from "./commentList.jsx";
+ import * as globals from "../globals.js";
  // import style from "../../util/style";
- import * as globals from "../globals";
- import Metadata from "./metadata";
-+import { withTranslation } from 'react-i18next';
- 
--class ParticipantGroups extends React.Component {
-+class ParticipantGroupsTranslated extends React.Component {
-   constructor(props) {
-     super(props);
-     this.state = {
-@@ -26,6 +27,9 @@ class ParticipantGroups extends React.Component {
-     if (!this.props.conversation) {
-       return <div>Loading Groups</div>;
-     }
-+    const { t } = this.props;
-+    const ptptCount=this.props.ptptCount;
-+    const groups=this.props.math["group-votes"].length;
-     return (
-       <div style={Object.assign(
-         {},
-@@ -33,10 +37,8 @@ class ParticipantGroups extends React.Component {
-         this.props.style
-       )}>
-       <div>
--        <p style={globals.primaryHeading}> Opinion Groups </p>
--        <p style={globals.paragraph}>
--          Across {this.props.ptptCount} total participants, {this.props.math["group-votes"].length} opinion groups emerged. There are two factors that define an opinion group. First, each opinion group is made up of a number of participants who tended to vote similarly on multiple statements. Second, each group of participants who voted similarly will have also voted distinctly differently from other groups.
--        </p>
-+        <p style={globals.primaryHeading}>{t('participant_groups.title')}</p>
-+        <p style={globals.paragraph}>{t('participant_groups.text', { param1: ptptCount, param2: groups })}</p>
-       <Metadata
-         math={this.props.math}
-         comments={this.props.comments}
-@@ -105,4 +107,6 @@ class ParticipantGroups extends React.Component {
-   }
- }
- 
--export default ParticipantGroups;
-+//export default ParticipantGroups;
-+const ParticipantGroups = withTranslation()(ParticipantGroupsTranslated);
-+export default withTranslation()(ParticipantGroups);
-diff --git a/client-report/src/components/lists/uncertainty.js b/client-report/src/components/lists/uncertainty.js
-index dd84d18b..3ddf46e2 100644
---- a/client-report/src/components/lists/uncertainty.js
-+++ b/client-report/src/components/lists/uncertainty.js
-@@ -4,22 +4,19 @@ import React from "react";
- import CommentList from "./commentList";
- import * as globals from "../globals";
- // import style from "../../util/style";
+ import Narrative from "../narrative/index.jsx";
 +import { useTranslation } from 'react-i18next';
  
- const Uncertainty = ({conversation, comments, ptptCount, uncertainty, formatTid, math, voteColors}) => {
- 
+ const Uncertainty = ({
+   conversation,
+@@ -19,17 +20,13 @@ const Uncertainty = ({
    if (!conversation) {
-     return <div>Loading Uncertainty...</div>
+     return <div>Loading Uncertainty...</div>;
    }
 +  const { t } = useTranslation();
    return (
@@ -4119,196 +3643,14 @@ index dd84d18b..3ddf46e2 100644
 -      <p style={globals.paragraph}>
 -        Areas of uncertainty can provide avenues to educate and open dialogue with your community.
 -      </p>
+-      <div style={{ marginTop: 50 }}>
 +      <p style={globals.primaryHeading}>{t('uncertainty.title')}</p>
 +      <p style={globals.paragraph}>{t('uncertainty.text', { param1: ptptCount})}</p>
 +      <p style={globals.paragraph}>{t('uncertainty.desc')}</p>
-       <div style={{marginTop: 50}}>
++      <div style={{marginTop: 50}}>
          <CommentList
            conversation={conversation}
-diff --git a/client-report/src/components/overview.js b/client-report/src/components/overview.js
-index 160fd9eb..814e4685 100644
---- a/client-report/src/components/overview.js
-+++ b/client-report/src/components/overview.js
-@@ -4,6 +4,8 @@ import React from "react";
- import _ from "lodash";
- import * as globals from "./globals";
- 
-+import { useTranslation } from 'react-i18next';
-+
- const computeVoteTotal = (users) => {
-   let voteTotal = 0;
- 
-@@ -39,38 +41,31 @@ const Overview = ({
-   //stats,
-   computedStats,
- }) => {
-+  const { t } = useTranslation();
-   return (
-     <div >
--      <p style={globals.primaryHeading}>Overview</p>
--      <p style={globals.paragraph}>
--        Pol.is is a real-time survey system that helps identify the different ways a large group of people think about a divisive or complicated topic. Here’s a basic breakdown of some terms you’ll need to know in order to understand this report.
--      </p>
--      <p style={globals.paragraph}>
--        <strong>Participants:</strong> These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.
--      </p>
--      <p style={globals.paragraph}>
--        <strong>Statements:</strong> Participants may submit statements for other participants to vote on. Statements are assigned a number in the order they’re submitted.
--      </p>
--      <p style={globals.paragraph}>
--        <strong>Opinion groups:</strong> Groups are made of participants who voted similarly to each other, and differently from the other groups.
--      </p>
-+      <p style={globals.primaryHeading}>{t('overview.title')}</p>
-+      <p style={globals.paragraph}>{t('overview.text')}</p>
-+      <p style={globals.paragraph}><strong>{t('overview.term_participants_title')}:</strong> {t('overview.term_participants_text')}</p>
-+      <p style={globals.paragraph}><strong>{t('overview.term_statements_title')}:</strong> {t('overview.term_statements_text')}</p>
-+      <p style={globals.paragraph}><strong>{t('overview.term_opinion_groups_title')}:</strong> {t('overview.term_opinion_groups_text')}</p>
- 
-       <p style={globals.paragraph}>
--        {conversation && conversation.ownername ? "This pol.is conversation was run by "+conversation.ownername+". " : null}
--        {conversation && conversation.topic ? "The topic was '"+conversation.topic+"'. " : null}
-+        {conversation && conversation.ownername ? t('overview.ownername_text')+"'"+conversation.ownername+"'. " : null}
-+        {conversation && conversation.topic ? t('overview.topic_text')+"'"+conversation.topic+"'. " : null}
-       </p>
-       <div style={{maxWidth: 1200, display: "flex", justifyContent: "space-between"}}>
--        <Number number={ptptCountTotal} label={"people voted"} />
--        <Number number={ptptCount} label={"people grouped"} />
-+        <Number number={ptptCountTotal} label={t('overview.people_voted')} />
-+        <Number number={ptptCount} label={t('overview.people_grouped')} />
- 
-         <Number
-           number={ computeVoteTotal(math["user-vote-counts"]) }
--          label={"votes were cast"} />
-+          label={t('overview.votes_cast')} />
-         {/* Leaving this out for now until we get smarter conversationStats */}
-         {/* <Number number={comments.length} label={"people submitted statements"} /> */}
--        <Number number={math["n-cmts"]} label={"statements were submitted"} />
--        <Number number={computedStats.votesPerVoterAvg.toFixed(2)} label={"votes per voter on average"} />
--        <Number number={computedStats.commentsPerCommenterAvg.toFixed(2)} label={"statements per author on average"} />
-+        <Number number={math["n-cmts"]} label={t('overview.statements_submitted')} />
-+        <Number number={computedStats.votesPerVoterAvg.toFixed(2)} label={t('overview.votes_per_voter_avg')} />
-+        <Number number={computedStats.commentsPerCommenterAvg.toFixed(2)} label={t('overview.statements_per_author_avg')} />
- 
-       </div>
- 
-diff --git a/client-report/src/components/participantsGraph/participantsGraph.js b/client-report/src/components/participantsGraph/participantsGraph.js
-index e48c9f97..28bf47b3 100644
---- a/client-report/src/components/participantsGraph/participantsGraph.js
-+++ b/client-report/src/components/participantsGraph/participantsGraph.js
-@@ -11,6 +11,7 @@ import * as d3chromatic from "d3-scale-chromatic";
- import Comments from "../commentsGraph/comments";
- import Hull from "./hull";
- import CommentList from "../lists/commentList";
-+import { withTranslation } from 'react-i18next';
- 
- const pointsPerSquarePixelMax = 0.0017; /* choose dynamically ? */
- const contourBandwidth = 20;
-@@ -68,7 +69,7 @@ const Participants = ({ points, math }) => {
-   );
- };
- 
--class ParticipantsGraph extends React.Component {
-+class ParticipantsGraphTranslated extends React.Component {
-   constructor(props) {
-     super(props);
-     this.Viewer = null;
-@@ -128,20 +129,13 @@ class ParticipantsGraph extends React.Component {
-       .size([globals.side, globals.side])
-       // .bandwidth(10)(baseClustersScaled)
-       .bandwidth(contourBandwidth)(baseClustersScaled);
--
-+    const { t } = this.props;
-     return (
-       <div style={{ position: "relative" }}>
-         <div>
--          <p style={globals.primaryHeading}> Graph </p>
--          <p style={globals.paragraph}>
--            Which statements were voted on similarly? How do participants relate to each other?
--          </p>
--          <p style={globals.paragraph}>
--            In this graph, statements are positioned more closely to statements which were voted on
--            similarly. Participants, in turn, are positioned more closely to statements on which
--            they agreed, and further from statements on which they disagreed. This means
--            participants who voted similarly are closer together.
--          </p>
-+          <p style={globals.primaryHeading}>{t('graph.title')}</p>
-+          <p style={globals.paragraph}>{t('graph.text')}</p>
-+          <p style={globals.paragraph}>{t('graph.desc')}</p>
-         </div>
-         <div>
-           {
-@@ -177,7 +171,7 @@ class ParticipantsGraph extends React.Component {
-               this.setState({ showAxes: !this.state.showAxes });
-             }}
-           >
--            Axes
-+            {t('graph.axes')}
-           </button>
-           <button
-             style={{
-@@ -195,7 +189,7 @@ class ParticipantsGraph extends React.Component {
-               });
-             }}
-           >
--            Radial axes
-+            {t('graph.radial_axes')}
-           </button>
-           {/* <button
-             style={{
-@@ -227,7 +221,7 @@ class ParticipantsGraph extends React.Component {
-               this.setState({ showComments: !this.state.showComments });
-             }}
-           >
--            Statements
-+            {t('graph.statements')}
-           </button>
-           <button
-             style={{
-@@ -243,7 +237,7 @@ class ParticipantsGraph extends React.Component {
-               this.setState({ showParticipants: !this.state.showParticipants });
-             }}
-           >
--            Participants (bucketized)
-+            {t('graph.participants_bucketized')}
-           </button>
-           <button
-             style={{
-@@ -259,7 +253,7 @@ class ParticipantsGraph extends React.Component {
-               this.setState({ showGroupOutline: !this.state.showGroupOutline });
-             }}
-           >
--            Group outline
-+            {t('graph.group_outline')}
-           </button>
-           <button
-             style={{
-@@ -275,7 +269,7 @@ class ParticipantsGraph extends React.Component {
-               this.setState({ showGroupLabels: !this.state.showGroupLabels });
-             }}
-           >
--            Group labels
-+            {t('graph.group_labels')}
-           </button>
-         </div>
- 
-@@ -291,7 +285,7 @@ class ParticipantsGraph extends React.Component {
-               voteColors={this.props.voteColors}
-             />
-           ) : (
--            <p>Click a statement, identified by its number, to explore regions of the graph.</p>
-+            <p>{t('graph.click_text')}</p>
-           )}
-         </div>
- 
-@@ -448,4 +442,6 @@ class ParticipantsGraph extends React.Component {
-   }
- }
- 
--export default ParticipantsGraph;
-+//export default ParticipantsGraph;
-+const ParticipantsGraph = withTranslation()(ParticipantsGraphTranslated);
-+export default withTranslation()(ParticipantsGraph);
-\ No newline at end of file
+           ptptCount={ptptCount}
 diff --git a/client-report/src/i18n.js b/client-report/src/i18n.js
 new file mode 100644
 index 00000000..3f3f57b4
@@ -4350,22 +3692,24 @@ index 00000000..3f3f57b4
 +export default i18n;
 +
 diff --git a/client-report/src/index.js b/client-report/src/index.js
-index 115707ba..a46a8d16 100644
+index 79c6568a..983d406c 100644
 --- a/client-report/src/index.js
 +++ b/client-report/src/index.js
-@@ -5,6 +5,7 @@ import React from "react";
- import ReactDOM from "react-dom";
+@@ -5,6 +5,9 @@ import React from "react";
+ import { createRoot } from 'react-dom/client';
  import './index.css';
- import App from "./components/app";
+ import App from "./components/app.jsx";
 +import './i18n';
++
++// const store = configureStore();
  
- // const store = configureStore();
- 
+ class Root extends React.Component {
+   render() {
 diff --git a/client-report/webpack.common.js b/client-report/webpack.common.js
-index 9dcb91e3..68afa165 100644
+index e8fedd60..ee3baac5 100644
 --- a/client-report/webpack.common.js
 +++ b/client-report/webpack.common.js
-@@ -23,6 +23,7 @@ module.exports = {
+@@ -28,6 +28,7 @@ module.exports = {
      new CopyWebpackPlugin({
        patterns: [
          { from: 'public/favicon.ico', to: 'favicon.ico' },

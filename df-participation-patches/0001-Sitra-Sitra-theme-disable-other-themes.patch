@@ -1,7 +1,7 @@
-From d7e541433f262faba9be7c660ed3d1b738436ade Mon Sep 17 00:00:00 2001
+From 633ef0302ce61f5bbe302d9137ae723ad6ea5e62 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
 Date: Mon, 7 Apr 2025 09:20:49 +0300
-Subject: [PATCH 1/3] Sitra: Sitra theme, disable other themes
+Subject: [PATCH 1/8] Sitra: Sitra theme, disable other themes
 
 ---
  next.config.mjs                               |  19 -
@@ -1259,7 +1259,7 @@ index 32eda74..9929c09 100644
    )
 diff --git a/src/app/fonts/RationalTextBook.ttf b/src/app/fonts/RationalTextBook.ttf
 new file mode 100644
-index 0000000..b138d92
+index 0000000..972596d
 --- /dev/null
 +++ b/src/app/fonts/RationalTextBook.ttf
 @@ -0,0 +1,660 @@
@@ -1926,7 +1926,7 @@ index 0000000..b138d92
 \ No newline at end of file
 diff --git a/src/app/fonts/RationalTextBookItalic.ttf b/src/app/fonts/RationalTextBookItalic.ttf
 new file mode 100644
-index 0000000..05f3d94
+index 0000000..d7681da
 --- /dev/null
 +++ b/src/app/fonts/RationalTextBookItalic.ttf
 @@ -0,0 +1,580 @@
@@ -2513,7 +2513,7 @@ index 0000000..05f3d94
 \ No newline at end of file
 diff --git a/src/app/fonts/RationalTextExtraBold.ttf b/src/app/fonts/RationalTextExtraBold.ttf
 new file mode 100644
-index 0000000..034780e
+index 0000000..849962a
 --- /dev/null
 +++ b/src/app/fonts/RationalTextExtraBold.ttf
 @@ -0,0 +1,473 @@
@@ -2993,7 +2993,7 @@ index 0000000..034780e
 \ No newline at end of file
 diff --git a/src/app/fonts/RationalTextExtraBoldItalic.ttf b/src/app/fonts/RationalTextExtraBoldItalic.ttf
 new file mode 100644
-index 0000000..41c50b3
+index 0000000..a81f3e4
 --- /dev/null
 +++ b/src/app/fonts/RationalTextExtraBoldItalic.ttf
 @@ -0,0 +1,484 @@
@@ -3484,7 +3484,7 @@ index 0000000..41c50b3
 \ No newline at end of file
 diff --git a/src/app/fonts/RationalTextMedium.ttf b/src/app/fonts/RationalTextMedium.ttf
 new file mode 100644
-index 0000000..4f2d238
+index 0000000..9684b8b
 --- /dev/null
 +++ b/src/app/fonts/RationalTextMedium.ttf
 @@ -0,0 +1,521 @@
@@ -4012,7 +4012,7 @@ index 0000000..4f2d238
 \ No newline at end of file
 diff --git a/src/app/fonts/RationalTextMediumItalic.ttf b/src/app/fonts/RationalTextMediumItalic.ttf
 new file mode 100644
-index 0000000..0af5a55
+index 0000000..db7eada
 --- /dev/null
 +++ b/src/app/fonts/RationalTextMediumItalic.ttf
 @@ -0,0 +1,453 @@

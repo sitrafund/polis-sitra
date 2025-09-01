@@ -1,0 +1,59 @@
+From f04e4f50d0903417f45cc53e57d82475dc8433e1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Mon, 1 Sep 2025 09:57:07 +0300
+Subject: [PATCH 7/8] Sitra: Change Polis to Voxit
+
+---
+ src/app/locales/en/common.json | 4 ++--
+ src/app/locales/fi/common.json | 4 ++--
+ src/app/locales/sv/common.json | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/app/locales/en/common.json b/src/app/locales/en/common.json
+index d0a40e3..1f89fa6 100644
+--- a/src/app/locales/en/common.json
++++ b/src/app/locales/en/common.json
+@@ -75,8 +75,8 @@
+     "pass": "Skip"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra and DigiFinland have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "title": "Voxit",
++    "desc": "The purpose of Voxit is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
+     "disclaimer": "",
+     "links": {
+       "title": "About the service",
+diff --git a/src/app/locales/fi/common.json b/src/app/locales/fi/common.json
+index e78bc2b..7fcab77 100644
+--- a/src/app/locales/fi/common.json
++++ b/src/app/locales/fi/common.json
+@@ -75,8 +75,8 @@
+     "pass": "Ohita"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra ja DigiFinland ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "title": "Voxit",
++    "desc": "Voxit-verkkoalustan tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
+     "disclaimer": "",
+     "links": {
+       "title": "Tietoa palvelusta",
+diff --git a/src/app/locales/sv/common.json b/src/app/locales/sv/common.json
+index 7dcfd45..39740c6 100644
+--- a/src/app/locales/sv/common.json
++++ b/src/app/locales/sv/common.json
+@@ -75,8 +75,8 @@
+     "pass": "Hoppa över"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra och DigiFinland har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "title": "Voxit",
++    "desc": "Voxit syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
+     "disclaimer": "",
+     "links": {
+       "title": "Information om tjänsten",
+-- 
+2.45.1
+

@@ -3,6 +3,7 @@ Polis Deployment for Sitra
 
 Polis is an open-source online platform designed to enable a constructive exchange of opinions around a given topic. Sitra is introducing this democracy innovation in Finland in co-operation with DigiFinland.
 More information about Polis can be found at https://pol.is/home and at Sitra's website https://www.sitra.fi/en/projects/polis-platform-experiments/.
+Sitra's deployment of Polis was renamed as "Voxit" on 2025-09-01.
 
 This project contains set of deploy scripts, settings files, custom patches, translations and utilities for running Polis deployments for Sitra.
 
@@ -27,7 +28,9 @@ Project uses [Digifinland's participation frontend](https://github.com/polis-dig
 
 5. Make a copy of sitra-example.env and modify to suit your local environment
 
-6. Start the dev server using Docker Compose
+6. Add NEXT_PUBLIC_RECAPTCHA_SITE_KEY to .env.development
+
+7. Start the dev server using Docker Compose
 
     ```
     ./scripts/docker-compose_start.sh <env>
@@ -35,7 +38,7 @@ Project uses [Digifinland's participation frontend](https://github.com/polis-dig
     
 (where `<env>` is the name of your `sitra-<env>.env` environment)
 
-7. Browse to https://polis.local
+8. Browse to https://polis.local
 
 ## Database setup
 

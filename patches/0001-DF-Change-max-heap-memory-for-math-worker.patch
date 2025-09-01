@@ -1,7 +1,7 @@
-From 0ec3b743755cb9fa6fc41434aa11b10d6f8d6230 Mon Sep 17 00:00:00 2001
+From 7eee922d37e42b7a12b4459b27a095ee3f7c44ed Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:17:38 +0300
-Subject: [PATCH 01/15] DF: Change max heap memory for math worker
+Subject: [PATCH 01/19] DF: Change max heap memory for math worker
 
 ---
  math/bin/run | 2 +-

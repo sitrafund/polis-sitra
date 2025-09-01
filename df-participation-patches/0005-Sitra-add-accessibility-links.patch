@@ -1,0 +1,72 @@
+From 804bea39196da4168b2a01e9b14fa060f73df069 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Fri, 29 Aug 2025 11:52:04 +0300
+Subject: [PATCH 5/8] Sitra add accessibility links
+
+---
+ src/app/components/Footer.tsx  | 1 +
+ src/app/locales/en/common.json | 4 +++-
+ src/app/locales/fi/common.json | 4 +++-
+ src/app/locales/sv/common.json | 4 +++-
+ 4 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/src/app/components/Footer.tsx b/src/app/components/Footer.tsx
+index cb762b3..7487703 100644
+--- a/src/app/components/Footer.tsx
++++ b/src/app/components/Footer.tsx
+@@ -25,6 +25,7 @@ export default async function Footer({ locale }: FooterProps) {
+             <ul className="flex flex-col w-full sm:w-1/3 list-none lg:px-12">
+               <li><h2 className="text-2xl font-bold m-0">{t('footer.links.title')}</h2></li>
+               <li className="m-2.5"><a target="_blank" rel="noreferrer" className="border-0" href={t('footer.links.privacy_href')}>{t('footer.links.privacy')}</a></li>
++              <li className="m-2.5"><a target="_blank" rel="noreferrer" className="border-0" href={t('footer.links.accessibility_href')}>{t('footer.links.accessibility')}</a></li>
+               <li className="m-2.5"><a target="_blank" rel="noreferrer" className="border-0" href={t('footer.links.info_href')}>{t('footer.links.info')}</a></li>
+               <li className="m-2.5"><a target="_blank" rel="noreferrer" className="border-0" href="https://compdemocracy.org/Welcome/">The Computational Democracy Project</a></li>
+               <li className="m-2.5"><a target="_blank" rel="noreferrer" className="border-0" href="https://github.com/polis-digifinland/polis-digifinland">{t('footer.links.source')}</a></li>
+diff --git a/src/app/locales/en/common.json b/src/app/locales/en/common.json
+index f04de07..d0a40e3 100644
+--- a/src/app/locales/en/common.json
++++ b/src/app/locales/en/common.json
+@@ -84,7 +84,9 @@
+       "privacy_href": "https://www.sitra.fi/en/privacy-policy-concerning-the-polis-service/",
+       "info": "More information",
+       "info_href": "https://www.sitra.fi/en/projects/polis-platform-experiments/",
+-      "source": "Source Code"
++      "source": "Source Code",
++      "accessibility": "Accessibility statement",
++      "accessibility_href": "https://www.sitra.fi/en/voxit-sitra-fi-accessibility-statement"
+     },
+     "provider": "Service provider",
+     "version": "Version",
+diff --git a/src/app/locales/fi/common.json b/src/app/locales/fi/common.json
+index d63aa57..e78bc2b 100644
+--- a/src/app/locales/fi/common.json
++++ b/src/app/locales/fi/common.json
+@@ -84,7 +84,9 @@
+       "privacy_href": "https://www.sitra.fi/seloste-henkilotietojen-kasittelysta-polis-palvelussa/",
+       "info": "Tietoa palvelusta",
+       "info_href": "https://www.sitra.fi/hankkeet/polis-alustan-kokeilut/",
+-      "source": "Lähdekoodi"
++      "source": "Lähdekoodi",
++      "accessibility": "Saavutettavuusseloste",
++      "accessibility_href": "https://www.sitra.fi/voxit-sitra-fi-saavutettavuusseloste/"
+     },
+     "provider": "Palveluntuottaja",
+     "version": "Versio",
+diff --git a/src/app/locales/sv/common.json b/src/app/locales/sv/common.json
+index 603d07f..7dcfd45 100644
+--- a/src/app/locales/sv/common.json
++++ b/src/app/locales/sv/common.json
+@@ -84,7 +84,9 @@
+       "privacy_href": "https://www.sitra.fi/sv/beskrivning-av-behandlingen-av-personuppgifter-i-polis-tjansten/",
+       "info": "Mer information",
+       "info_href": "https://www.sitra.fi/sv/projekt/forsok-med-polis-plattformen/",
+-      "source": "Källkod"
++      "source": "Källkod",
++      "accessibility": "Tillgänglighetsutredning",
++      "accessibility_href": "https://www.sitra.fi/sv/voxit-sitra-fi-tillganglighetsutredning/"
+     },
+     "provider": "Tjänsteleverantör",
+     "version": "Version",
+-- 
+2.45.1
+

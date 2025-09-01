@@ -1,16 +1,16 @@
-From e7fea5af5885ff6eb4d5d9dae0fe4f31265e8ad8 Mon Sep 17 00:00:00 2001
+From a9679995a420cb1f7a31963f68c74749aedcc5b4 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:29:41 +0300
-Subject: [PATCH 07/15] DF: custom footer
+Subject: [PATCH 07/19] DF: custom footer
 
 ---
  .../css/polis/modules/_footer.scss            | 131 +++++++++++-------
  client-participation/css/polis/polis.scss     |   2 +-
- client-participation/js/strings/en_us.js      |  10 ++
+ client-participation/js/strings/en_us.js      |  14 ++
  .../js/templates/footer.handlebars            |  53 ++++++-
  .../js/templates/participation.handlebars     |  30 +---
- .../src/components/framework/Footer.js        |  43 ++++--
- 6 files changed, 179 insertions(+), 90 deletions(-)
+ .../src/components/framework/Footer.jsx       |  43 ++++--
+ 6 files changed, 183 insertions(+), 90 deletions(-)
 
 diff --git a/client-participation/css/polis/modules/_footer.scss b/client-participation/css/polis/modules/_footer.scss
 index 2b476616..063bda43 100644
@@ -180,10 +180,10 @@ index 67056c8a..67d7be1a 100644
  // @import 'modules/formSwitch';
  // @import 'modules/header';
 diff --git a/client-participation/js/strings/en_us.js b/client-participation/js/strings/en_us.js
-index b8fcfc37..5b333b23 100644
+index 9adc3cbe..17c570b2 100644
 --- a/client-participation/js/strings/en_us.js
 +++ b/client-participation/js/strings/en_us.js
-@@ -149,6 +149,16 @@ s.topic_bad_01_reason = "people from various teams will be voting on the respons
+@@ -180,6 +180,20 @@ s.topic_bad_01_reason =
  s.topic_bad_02 = "what are our launch blockers?";
  s.topic_bad_02_reason = "";
  
@@ -197,9 +197,13 @@ index b8fcfc37..5b333b23 100644
 +s.footer_links_info = "Information";
 +s.footer_links_source = "Sourcecode";
 +
- // Old unused error message from when Polis was a demo <3
++// Old unused error message from when Polis was a demo <3
++
++s.notSentSinceDemo = "(not really, this is a demo)";
++
+ module.exports = s;
  
- s.notSentSinceDemo = "(not really, this is a demo)";
+ 
 diff --git a/client-participation/js/templates/footer.handlebars b/client-participation/js/templates/footer.handlebars
 index 3c27bccf..192b7e0d 100644
 --- a/client-participation/js/templates/footer.handlebars
@@ -260,10 +264,10 @@ index 3c27bccf..192b7e0d 100644
 +    </div>
 +</footer>
 diff --git a/client-participation/js/templates/participation.handlebars b/client-participation/js/templates/participation.handlebars
-index 116647d9..24f7e554 100644
+index b420d290..19e24cb5 100644
 --- a/client-participation/js/templates/participation.handlebars
 +++ b/client-participation/js/templates/participation.handlebars
-@@ -187,7 +187,7 @@
+@@ -146,7 +146,7 @@
           position: relative;
           top: -5px;
           left: 6px;
@@ -272,7 +276,7 @@ index 116647d9..24f7e554 100644
        {{/unless}}
        </h2>
      {{/ifDefined}}
-@@ -437,35 +437,9 @@
+@@ -342,35 +342,9 @@
  {{!  ------------ BEGIN FOOTER ---------------  }}
  {{#unless no_footer}}
  
@@ -309,24 +313,24 @@ index 116647d9..24f7e554 100644
  {{!  ------------ END FOOTER ---------------  }}
  
  </div> {{! END PARTICIPATION VIEW DIV }}
-diff --git a/client-report/src/components/framework/Footer.js b/client-report/src/components/framework/Footer.js
-index 70e5d7e0..95d2d960 100644
---- a/client-report/src/components/framework/Footer.js
-+++ b/client-report/src/components/framework/Footer.js
+diff --git a/client-report/src/components/framework/Footer.jsx b/client-report/src/components/framework/Footer.jsx
+index ac6ce158..af6adc04 100644
+--- a/client-report/src/components/framework/Footer.jsx
++++ b/client-report/src/components/framework/Footer.jsx
 @@ -1,18 +1,41 @@
  // Copyright (C) 2012-present, The Authors. This program is free software: you can redistribute it and/or  modify it under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
  import React from "react";
--import LargeLogo from "./logoLargeShort";
+-import LargeLogo from "./logoLargeShort.jsx";
 +import { useTranslation } from 'react-i18next';
- 
--const Footer = (/*{conversation}*/) => {
++
 +const Footer = () => {
 +
 +//document.documentElement.style.backgroundColor = "#003d6d"; // Change HTML-elements background color to fit the footer color
 +
 + const { t } = useTranslation();
-+ 
+ 
+-const Footer = (/*{conversation}*/) => {
   return (
 -   <div style={{
 -       display: "flex",

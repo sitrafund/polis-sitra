@@ -172,6 +172,8 @@ services:
         GIT_HASH: "${GIT_HASH:-placeholder}"
         SERVICE_URL: ${EMBED_SERVICE_HOSTNAME}
         NODE_ENV: production
+      cache_from: []
+      no_cache: true
     environment:
       - EMBED_SERVICE_HOSTNAME=${EMBED_SERVICE_HOSTNAME}
       #- FB_APP_ID=${FB_APP_ID}

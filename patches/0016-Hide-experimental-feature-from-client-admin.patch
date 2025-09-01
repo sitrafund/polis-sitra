@@ -1,0 +1,44 @@
+From 85bc869e85d9d811f4d3676d65d0f17547541c46 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Mon, 5 May 2025 13:11:04 +0300
+Subject: [PATCH 16/19] Hide experimental feature from client-admin
+
+- Force content background to white
+---
+ client-admin/public/index.html                                | 3 +++
+ .../src/components/conversation-admin/conversation-config.js  | 4 ++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/client-admin/public/index.html b/client-admin/public/index.html
+index 04a5d563..73c316f6 100644
+--- a/client-admin/public/index.html
++++ b/client-admin/public/index.html
+@@ -18,6 +18,9 @@
+     * {
+       font-variant-ligatures: none;
+     }
++    body {
++      background-color: #fff;
++    }
+   </style>
+ </head>
+ 
+diff --git a/client-admin/src/components/conversation-admin/conversation-config.js b/client-admin/src/components/conversation-admin/conversation-config.js
+index 4667d1c2..cc9b1a6a 100644
+--- a/client-admin/src/components/conversation-admin/conversation-config.js
++++ b/client-admin/src/components/conversation-admin/conversation-config.js
+@@ -145,9 +145,9 @@ class ConversationConfigTranslated extends React.Component {
+           {t('configure.customize_ui')}
+         </Heading>
+ 
+-        <CheckboxField field="importance_enabled" label="Importance Enabled">
++        {/* <CheckboxField field="importance_enabled" label="Importance Enabled">
+           [EXPERIMENTAL FEATURE] Participants can see the &quot;This comment is important&quot; checkbox
+-        </CheckboxField>
++        </CheckboxField> */}
+ 
+         <CheckboxField field="vis_type" label="Visualization" isIntegerBool>
+           {t('configure.vis_type')}
+-- 
+2.45.1
+

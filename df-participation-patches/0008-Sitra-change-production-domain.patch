@@ -1,0 +1,27 @@
+From 0d7f06754bc90053c2e87983c8b96a7e16fd28a8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Mon, 1 Sep 2025 14:35:50 +0300
+Subject: [PATCH 8/8] Sitra: change production domain
+
+---
+ src/app/api/ct/route.tsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/app/api/ct/route.tsx b/src/app/api/ct/route.tsx
+index 2c3f278..b32d0a8 100644
+--- a/src/app/api/ct/route.tsx
++++ b/src/app/api/ct/route.tsx
+@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
+ const allowedOrigins = [
+     "https://polis.local",
+     "https://polis.local:3000",
+-    "https://polis.sitra.fi",
+-    "https://voxit-pilot.sitra.fi"
++    "https://voxit-pilot.sitra.fi",
++    "https://voxit.sitra.fi"
+ ];
+ 
+ export async function GET(request: NextRequest) {
+-- 
+2.45.1
+

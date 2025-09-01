@@ -1,12 +1,12 @@
-From 87dd898b93c5c9cb53744d53012b1973c7cb663a Mon Sep 17 00:00:00 2001
+From c1a1405b6cb90254c0595e920a8f4dcb7a9145cc Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
 Date: Tue, 8 Apr 2025 15:19:00 +0300
-Subject: [PATCH 14/15] DF: Hide embedding
+Subject: [PATCH 14/19] DF: Hide embedding
 
 ---
- client-admin/src/app.js                       | 13 ----------
- .../conversation-admin/share-and-embed.js     | 26 +------------------
- 2 files changed, 1 insertion(+), 38 deletions(-)
+ client-admin/src/app.js                       | 13 -------
+ .../conversation-admin/share-and-embed.js     | 36 -------------------
+ 2 files changed, 49 deletions(-)
 
 diff --git a/client-admin/src/app.js b/client-admin/src/app.js
 index f5bb3512..6194c120 100644
@@ -47,24 +47,21 @@ index f5bb3512..6194c120 100644
                    </Flex>
                  )
 diff --git a/client-admin/src/components/conversation-admin/share-and-embed.js b/client-admin/src/components/conversation-admin/share-and-embed.js
-index 89d6eee4..1c3856c6 100644
+index 58146422..b5cca5d2 100644
 --- a/client-admin/src/components/conversation-admin/share-and-embed.js
 +++ b/client-admin/src/components/conversation-admin/share-and-embed.js
-@@ -32,7 +32,7 @@ class ShareAndEmbedTranslated extends React.Component {
-     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
-       return <NoPermission />
-     }
--    
-+
-     const { t } = this.props;
- 
-     const { match } = this.props
-@@ -61,30 +61,6 @@ class ShareAndEmbedTranslated extends React.Component {
+@@ -72,42 +72,6 @@ class ShareAndEmbedTranslated extends React.Component {
              </a>
-           </p>
-         </div>
--        <div>
--          <p>{t('distribute.embed')}</p>
+           </Text>
+         </Box>
+-        <Box sx={{ mb: [5] }}>
+-          <Text
+-            sx={{
+-              display: 'block',
+-              mb: [2]
+-            }}>
+-            {t('distribute.embed')}
+-          </Text>
 -          <div>
 -            <pre>
 -              {'<div'}
@@ -74,19 +71,25 @@ index 89d6eee4..1c3856c6 100644
 -              {"<script async src='" + Url.urlPrefix + "embed.js'></script>"}
 -            </pre>
 -          </div>
--          <p>
--            
+-          <Text
+-            sx={{
+-              display: 'block',
+-              maxWidth: '35em',
+-              mt: [2]
+-            }}>
 -            {t('distribute.desc')}{' '}
 -            <Link to="/integrate">
 -              {t('distribute.link')}
 -            </Link>
--          </p>
+-          </Text>
 -          <div>
 -            {this.props.zid_metadata.parent_url
 -              ? this.constructEmbeddedOnMarkup()
 -              : ''}
 -          </div>
--        </div>
+-        </Box>
+-
+-        <ParticipantXids conversation_id={match.params.conversation_id} />
        </div>
      )
    }

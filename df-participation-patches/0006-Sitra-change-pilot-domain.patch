@@ -1,0 +1,27 @@
+From 65c1b8e653fbcfcfd2df0aabf157d507f372e66d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Fri, 29 Aug 2025 11:52:19 +0300
+Subject: [PATCH 6/8] Sitra change pilot domain
+
+---
+ src/app/api/ct/route.tsx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/app/api/ct/route.tsx b/src/app/api/ct/route.tsx
+index b02890e..2c3f278 100644
+--- a/src/app/api/ct/route.tsx
++++ b/src/app/api/ct/route.tsx
+@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
+ const allowedOrigins = [
+     "https://polis.local",
+     "https://polis.local:3000",
+-    "https://polis-pilot.sitra.fi",
+-    "https://polis.sitra.fi"
++    "https://polis.sitra.fi",
++    "https://voxit-pilot.sitra.fi"
+ ];
+ 
+ export async function GET(request: NextRequest) {
+-- 
+2.45.1
+

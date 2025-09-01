@@ -1,7 +1,7 @@
-From c0750c2b4fe3821fbe8e474ed765ba3674fbc34a Mon Sep 17 00:00:00 2001
+From ec8d93b8bf31cb5ae65454521d2872daa65b2217 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Mon, 2 Sep 2024 11:41:04 +0300
-Subject: [PATCH 12/15] Sitra: Replace privacy policy link on admin page footer
+Subject: [PATCH 12/19] Sitra: Replace privacy policy link on admin page footer
 
 ---
  client-admin/src/components/landers/lander-footer.js | 6 +++---

@@ -1,0 +1,102 @@
+From 187b95daced14b2f7ee9838dd3d8fa5428e0df7d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Wed, 7 May 2025 16:44:48 +0300
+Subject: [PATCH 17/19] Add recaptcha verfication to voting
+
+- Remove experimental report csv export
+---
+ client-report/src/components/app.jsx |  2 +-
+ server/app.ts                        |  1 +
+ server/src/d.ts                      |  1 +
+ server/src/server.ts                 | 33 +++++++++++++++++++++++++++-
+ 4 files changed, 35 insertions(+), 2 deletions(-)
+
+diff --git a/client-report/src/components/app.jsx b/client-report/src/components/app.jsx
+index eb7bb496..b938336a 100644
+--- a/client-report/src/components/app.jsx
++++ b/client-report/src/components/app.jsx
+@@ -629,7 +629,7 @@ const App = (props) => {
+           />
+         )}
+ 
+-        {!isNarrativeReport && <RawDataExport conversation={conversation} report_id={report_id} />}
++        {/* {!isNarrativeReport && <RawDataExport conversation={conversation} report_id={report_id} />} */}
+ 
+         {isNarrativeReport ? (
+           <>
+diff --git a/server/app.ts b/server/app.ts
+index c5a1dffe..f7bc26fa 100644
+--- a/server/app.ts
++++ b/server/app.ts
+@@ -823,6 +823,7 @@ helpersInitialized.then(
+       resolve_pidThing("pid", assignToP, "post:votes"),
+       want("xid", getStringLimitLength(1, 999), assignToP),
+       want("lang", getStringLimitLength(1, 10), assignToP), // language of the next comment to be returned
++      want("recaptcha_token", getStringLimitLength(1, 9999), assignToP),
+       handle_POST_votes
+     );
+ 
+diff --git a/server/src/d.ts b/server/src/d.ts
+index 2604af46..3d323641 100644
+--- a/server/src/d.ts
++++ b/server/src/d.ts
+@@ -176,4 +176,5 @@ export type Vote = {
+   starred: any;
+   parent_url: any;
+   high_priority: any;
++  recaptcha_token: any;
+ };
+diff --git a/server/src/server.ts b/server/src/server.ts
+index f5d1a0db..f045ef16 100644
+--- a/server/src/server.ts
++++ b/server/src/server.ts
+@@ -5223,7 +5223,7 @@ Email verified! You can close this tab or hit the back button.
+       });
+   }
+ 
+-  function handle_POST_votes(
++  async function handle_POST_votes(
+     req: {
+       p: Vote;
+       cookies: { [x: string]: any };
+@@ -5235,6 +5235,37 @@ Email verified! You can close this tab or hit the back button.
+     let zid = req.p.zid;
+     let pid = req.p.pid; // PID_FLOW pid may be undefined here.
+     let lang = req.p.lang;
++    let recaptchaToken = req.p.recaptcha_token;
++
++    // Verify recaptcha token
++    if (recaptchaToken) {
++      const verifyRecaptchaUrl = 'https://www.google.com/recaptcha/api/siteverify';
++      const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
++
++      try {
++        const response = await fetch(verifyRecaptchaUrl, {
++          method: 'POST',
++          headers: {
++            'Content-Type': 'application/x-www-form-urlencoded'
++          },
++          body: `secret=${recaptchaSecretKey}&response=${recaptchaToken}`
++        });
++
++        const recaptchaResult = await response.json();
++
++        if (!recaptchaResult.success || recaptchaResult.score < 0.5) {
++          fail(res, 403, "polis_err_vote_recaptcha_failed");
++          return;
++        }
++      } catch (err) {
++        console.error("Error verifying recaptcha:", err);
++        fail(res, 500, "polis_err_vote_recaptcha_error");
++        return;
++      }
++    } else {
++      fail(res, 403, "polis_err_vote_recaptcha_missing");
++      return;
++    }
+ 
+     // We allow viewing (and possibly writing) without cookies enabled, but voting requires cookies (except the auto-vote on your own comment, which seems ok)
+     let token = req.cookies[COOKIES.TOKEN];
+-- 
+2.45.1
+

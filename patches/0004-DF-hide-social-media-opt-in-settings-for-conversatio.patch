@@ -1,21 +1,21 @@
-From fd287d4433e9438b94fa46865d43674427588c26 Mon Sep 17 00:00:00 2001
+From f48eff7c662256ba241b0430a2404f24b8623090 Mon Sep 17 00:00:00 2001
 From: Calle Laakkonen <calle.laakkonen@sofokus.com>
 Date: Thu, 26 Sep 2024 15:22:50 +0300
-Subject: [PATCH 04/15] DF: hide social media opt in settings for conversation
+Subject: [PATCH 04/19] DF: hide social media opt in settings for conversation
  setup and set opt-in defaults as false
 
 ---
- .../conversation-admin/conversation-config.js | 107 +++++++++++-------
- server/src/utils/constants.ts                 |   8 +-
- 2 files changed, 69 insertions(+), 46 deletions(-)
+ .../conversation-admin/conversation-config.js | 49 +++++++++----------
+ server/src/utils/constants.ts                 |  2 +-
+ 2 files changed, 25 insertions(+), 26 deletions(-)
 
 diff --git a/client-admin/src/components/conversation-admin/conversation-config.js b/client-admin/src/components/conversation-admin/conversation-config.js
-index ae8d18cb..979a6fbb 100644
+index 7ae5760d..4667d1c2 100644
 --- a/client-admin/src/components/conversation-admin/conversation-config.js
 +++ b/client-admin/src/components/conversation-admin/conversation-config.js
-@@ -17,9 +17,11 @@ import { CheckboxField } from './CheckboxField'
+@@ -16,9 +16,11 @@ import emoji from 'react-easy-emoji'
+ import { CheckboxField } from './CheckboxField'
  import ModerateCommentsSeed from './seed-comment'
- // import ModerateCommentsSeedTweet from "./seed-tweet";
  
 +import { withTranslation } from 'react-i18next';
 +
@@ -27,15 +27,15 @@ index ae8d18cb..979a6fbb 100644
      return () => {
        let val = this[field].value
 @@ -50,6 +52,8 @@ class ConversationConfig extends React.Component {
-     if (ComponentHelpers.shouldShowPermissionsError(this.props)) {
        return <NoPermission />
      }
-+    
-+    const { t } = this.props;
  
++    const { t } = this.props;
++
      return (
        <Box>
-@@ -60,23 +64,23 @@ class ConversationConfig extends React.Component {
+         <Heading
+@@ -59,23 +63,23 @@ class ConversationConfig extends React.Component {
              lineHeight: 'body',
              mb: [3, null, 4]
            }}>
@@ -60,7 +60,7 @@ index ae8d18cb..979a6fbb 100644
          </CheckboxField>
  
          <Box sx={{ mb: [3] }}>
--          <Text sx={{ mb: [2] }}>Topic</Text>
+-          <Text sx={{ display: 'block', mb: [2] }}>Topic</Text>
 +          <Text sx={{ mb: [2] }}>{t('configure.topic')}</Text>
            <input
              ref={(c) => (this.topic = c)}
@@ -69,12 +69,12 @@ index ae8d18cb..979a6fbb 100644
          </Box>
  
          <Box sx={{ mb: [3] }}>
--          <Text sx={{ mb: [2] }}>Description</Text>
+-          <Text sx={{ display: 'block', mb: [2] }}>Description</Text>
 +          <Text sx={{ mb: [2] }}>{t('configure.description')}</Text>
            <textarea
              ref={(c) => (this.description = c)}
              sx={{
-@@ -124,7 +128,7 @@ class ConversationConfig extends React.Component {
+@@ -125,7 +129,7 @@ class ConversationConfig extends React.Component {
              lineHeight: 'body',
              my: [3, null, 4]
            }}>
@@ -83,13 +83,17 @@ index ae8d18cb..979a6fbb 100644
          </Heading>
          <ModerateCommentsSeed
            params={{ conversation_id: this.props.zid_metadata.conversation_id }}
-@@ -141,38 +145,47 @@ class ConversationConfig extends React.Component {
+@@ -138,7 +142,7 @@ class ConversationConfig extends React.Component {
              lineHeight: 'body',
              my: [3, null, 4]
            }}>
 -          Customize the user interface
 +          {t('configure.customize_ui')}
          </Heading>
+ 
+         <CheckboxField field="importance_enabled" label="Importance Enabled">
+@@ -146,26 +150,17 @@ class ConversationConfig extends React.Component {
+         </CheckboxField>
  
          <CheckboxField field="vis_type" label="Visualization" isIntegerBool>
 -          Participants can see the visualization
@@ -116,41 +120,9 @@ index ae8d18cb..979a6fbb 100644
 -          notifications when there are new comments to vote on.
 -        </CheckboxField>
  
--        <CheckboxField field="auth_opt_fb" label="Facebook login prompt">
--          Show Facebook login prompt
--        </CheckboxField>
-+        {
-+        // hide these settings to avoid accidentally collecting of PII data
-+        //
-+        // database schema altered to use subscription_type = 0 as default. (not implemented in polis-server constants.ts)
-+        // <CheckboxField
-+        //   field="subscribe_type"
-+        //   label="Prompt participants to subscribe to updates"
-+        //   isIntegerBool>
-+        //   Prompt participants to subscribe to updates. A prompt is shown to
-+        //   users once they finish voting on all available comments. If enabled,
-+        //   participants may optionally provide their email address to receive
-+        //   notifications when there are new comments to vote on.
-+        // </CheckboxField>
-+
-+        // changed also in polis-server constants.ts: auth_opt_fb = false
-+        // <CheckboxField field="auth_opt_fb" label="Facebook login prompt">
-+        //   Show Facebook login prompt
-+        // </CheckboxField>
-+
-+        // changed also in polis-server constants.ts: auth_opt_tw = false
-+        // <CheckboxField field="auth_opt_tw" label="Twitter login prompt">
-+        //   Show Twitter login prompt
-+        // </CheckboxField>
-+        }
- 
--        <CheckboxField field="auth_opt_tw" label="Twitter login prompt">
--          Show Twitter login prompt
--        </CheckboxField>
- 
          <Heading
            as="h6"
-@@ -181,30 +194,40 @@ class ConversationConfig extends React.Component {
+@@ -174,18 +169,22 @@ class ConversationConfig extends React.Component {
              lineHeight: 'body',
              my: [3, null, 4]
            }}>
@@ -162,35 +134,6 @@ index ae8d18cb..979a6fbb 100644
 -          No comments shown without moderator approval
 +          {t('configure.strict_moderation')}
          </CheckboxField>
- 
--        <CheckboxField
--          field="auth_needed_to_write"
--          label="Require Auth to Comment">
--          Participants cannot submit comments without first connecting either
--          Facebook or Twitter
--        </CheckboxField>
--
--        <CheckboxField field="auth_needed_to_vote" label="Require Auth to Vote">
--          Participants cannot vote without first connecting either Facebook or
--          Twitter
--        </CheckboxField>
-+        {
-+        // hide these settings to avoid accidentally collecting of PII data
-+
-+        // changed also in polis-server constants.ts: auth_needed_to_write = false
-+        // <CheckboxField
-+        //   field="auth_needed_to_write"
-+        //   label="Require Auth to Comment">
-+        //   Participants cannot submit comments without first connecting either
-+        //   Facebook or Twitter
-+        // </CheckboxField>
-+
-+        // changed also in polis-server constants.ts: auth_needed_to_vote = false
-+        // <CheckboxField field="auth_needed_to_vote" label="Require Auth to Vote">
-+        //   Participants cannot vote without first connecting either Facebook or
-+        //   Twitter
-+        // </CheckboxField>
-+        }
        </Box>
      )
    }
@@ -206,20 +149,15 @@ index ae8d18cb..979a6fbb 100644
  // checked={this.props.zid_metadata.is_data_open}
  // Comments, votes, and group data can be exported by any user
 diff --git a/server/src/utils/constants.ts b/server/src/utils/constants.ts
-index f0de7209..7ac6df3a 100644
+index 67735856..4f6b8137 100644
 --- a/server/src/utils/constants.ts
 +++ b/server/src/utils/constants.ts
-@@ -1,9 +1,9 @@
+@@ -1,7 +1,7 @@
  const DEFAULTS = {
    auth_needed_to_vote: false,
--  auth_needed_to_write: true,
+   auth_needed_to_write: false,
 -  auth_opt_allow_3rdparty: true,
--  auth_opt_fb: true,
--  auth_opt_tw: true,
-+  auth_needed_to_write: false,
-+  auth_opt_allow_3rdparty: false,
-+  auth_opt_fb: false, // default to false opting social media account (also hidden in client-participation UI)
-+  auth_opt_tw: false, // default to false opting social media account (also hidden in client-participation UI)
++  auth_opt_allow_3rdparty: false
  };
  
  export { DEFAULTS };

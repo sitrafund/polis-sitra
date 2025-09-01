@@ -1,0 +1,92 @@
+From f2ba4ee576a8ae5c0275e100a60e439d73fde23b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markku=20M=C3=A4kel=C3=A4?= <markku.makela@sofokus.com>
+Date: Mon, 1 Sep 2025 09:55:59 +0300
+Subject: [PATCH 19/19] Sitra: Change Polis to Voxit
+
+---
+ client-report/locales/en/client-report.json | 8 ++++----
+ client-report/locales/fi/client-report.json | 8 ++++----
+ client-report/locales/sv/client-report.json | 8 ++++----
+ 3 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/client-report/locales/en/client-report.json b/client-report/locales/en/client-report.json
+index bd466d38..ce1a51b0 100644
+--- a/client-report/locales/en/client-report.json
++++ b/client-report/locales/en/client-report.json
+@@ -9,9 +9,9 @@
+     "title": "Report"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra and DigiFinland have introduced the Polis online platform in Finland, based on open source code. The purpose of Polis is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
+-    "disclaimer": "Polis-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
++    "title": "Voxit",
++    "desc": "The purpose of Voxit is to enable large groups to participate in constructive exchanges of opinions around selected topics.",
++    "disclaimer": "Voxit-platform is in the experimental phase and does not yet meet all the requirements in terms of accessibility and usability.",
+     "version": "Version: {{param1}}",
+     "released": "Release date: {{param1}}",
+     "provider": "Service provider",
+@@ -29,7 +29,7 @@
+   },
+   "overview": {
+     "title": "Overview",
+-    "text": "Polis is a real-time survey system that helps identify the different ways a large group of people think about a divisive or complicated topic. Here’s a basic breakdown of some terms you’ll need to know in order to understand this report.",
++    "text": "Voxit is a real-time survey system that helps identify the different ways a large group of people think about a divisive or complicated topic. Here’s a basic breakdown of some terms you’ll need to know in order to understand this report.",
+     "term_participants_title": "Participants",
+     "term_participants_text": "These are the people who participated in the conversation by voting and writing statements. Based on how they voted, each participant is sorted into an opinion group.",
+     "term_statements_title": "statements",
+diff --git a/client-report/locales/fi/client-report.json b/client-report/locales/fi/client-report.json
+index 2e1b88ab..aca8eb76 100644
+--- a/client-report/locales/fi/client-report.json
++++ b/client-report/locales/fi/client-report.json
+@@ -9,9 +9,9 @@
+     "title": "Raportti"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra ja DigiFinland ovat tuoneet Suomeen avoimeen lähdekoodiin perustuvan Polis-verkkoalustan. Poliksen tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
+-    "disclaimer": "Polis-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
++    "title": "Voxit",
++    "desc": "Voxit-verkkoalustan tarkoituksena on mahdollistaa suurien ryhmien osallistuminen rakentavaan mielipiteiden vaihtoon, valitun aihepiirin ympärillä.",
++    "disclaimer": "Voxit-verkkoalusta on kokeiluvaiheessa ja se ei vielä täytä kaikkia vaatimuksia saavutettavuuden ja käytettävyyden osalta.",
+     "version": "Versio: {{param1}}",
+     "released": "Julkaisu pvm: {{param1}}",
+     "provider": "Palveluntuottaja",
+@@ -29,7 +29,7 @@
+   },
+   "overview": {
+     "title": "Yleiskatsaus",
+-    "text": "Polis on reaaliaikainen kyselyjärjestelmä, joka auttaa tunnistamaan miten eri tavoin suuri joukko ihmisiä ajattelee mielipiteitä jakavasta tai monimutkaisesta aiheesta. Seuraavassa esitellään joitakin termejä, jotka sinun on tunnettava tämän raportin ymmärtämiseksi.",
++    "text": "Voxit on reaaliaikainen kyselyjärjestelmä, joka auttaa tunnistamaan miten eri tavoin suuri joukko ihmisiä ajattelee mielipiteitä jakavasta tai monimutkaisesta aiheesta. Seuraavassa esitellään joitakin termejä, jotka sinun on tunnettava tämän raportin ymmärtämiseksi.",
+     "term_participants_title": "Osallistujat",
+     "term_participants_text": "Henkilöt, jotka osallistuivat keskusteluun äänestämällä ja kirjoittamalla lausuntoja. Osallistujat lajitellaan mielipideryhmiin heidän antamiensa äänten mukaisesti.",
+     "term_statements_title": "Lausunnot",
+diff --git a/client-report/locales/sv/client-report.json b/client-report/locales/sv/client-report.json
+index a179adbf..156a0594 100644
+--- a/client-report/locales/sv/client-report.json
++++ b/client-report/locales/sv/client-report.json
+@@ -9,9 +9,9 @@
+     "title": "Rapport"
+   },
+   "footer": {
+-    "title": "Polis",
+-    "desc": "Sitra och DigiFinland har introducerat Polis-webbplattformen baserad på öppen källkod till Finland. Polis syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
+-    "disclaimer": "Polis-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
++    "title": "Voxit",
++    "desc": "Voxit syftar till att möjliggöra konstruktivt utbyte av åsikter för stora grupper runt ett valt ämne.",
++    "disclaimer": "Voxit-plattformen är i ett testskede och uppfyller ännu inte alla krav när det gäller tillgänglighet och användarvänlighet.",
+     "version": "Version: {{param1}}",
+     "released": "Publiceringsdatum: {{param1}}",
+     "provider": "Tjänsteleverantör",
+@@ -29,7 +29,7 @@
+   },
+   "overview": {
+     "title": "Översikt",
+-    "text": "Polis är ett undersökningssystem i realtid som hjälper till att identifiera de olika sätten som en stor grupp människor tänker på ett kontroversiellt eller komplicerat ämne. Här följer grundläggande förklaringar av några termer du behöver känna till för att förstå denna rapport.",
++    "text": "Voxit är ett undersökningssystem i realtid som hjälper till att identifiera de olika sätten som en stor grupp människor tänker på ett kontroversiellt eller komplicerat ämne. Här följer grundläggande förklaringar av några termer du behöver känna till för att förstå denna rapport.",
+     "term_participants_title": "Deltagare",
+     "term_participants_text": "Dessa är personerna som deltog i konversationen genom att rösta och skriva påståenden. Varje deltagare placeras i en åsiktsgrupp enligt hur de röstade.",
+     "term_statements_title": "påståenden",
+-- 
+2.45.1
+
